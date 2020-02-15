@@ -1,6 +1,27 @@
 <!DOCTYPE HTML>
 <TITLE>Tetris</TITLE>
 <LINK REL="stylesheet" HREF="https://webdevkit.net/styles.css">
+<!-- LISTENERS -->
+<SCRIPT>
+function listen(element, types, listener, options) {
+	types = types.split(" ")
+	for (let type of types) element.addEventListener(type, listener, options)
+}
+</SCRIPT>
+<!-- MOUSE -->
+<SCRIPT>
+let Mouse = undefined
+listen(document, "click mousemove", (event) => {
+	Mouse = {
+		update(event) {
+			Mouse.x = Math.round(event.clientX / window.innerWidth * 100) / 100,
+			Mouse.y = Math.round(event.clientY / window.innerHeight * 100) / 100
+		}
+	}
+	listen(document, "mousemove", Mouse.update)
+	listen(document, "click", Mouse.update)
+},	{ once: true })
+</SCRIPT>
 
 <STYLE>
 #Tetris {
@@ -21,25 +42,26 @@ background: url("Artwork/Logo Shadow.png") center no-repeat; background-size: 10
 #Tetris HEADER A::after { content: ""; display: block;
 position: absolute; top: 0; left: 0; width: 100%; height: 100%;
 background: url("Artwork/Logo Fill.png") center no-repeat; background-size: 100% 100%; }
-#Tetris HEADER A { --stack: 0; --x: 0; --y: 0; --maxX: 2; --maxY: 3; --offsetX: calc(var(--x) * 2 - 1); --offsetY: calc(var(--y) * 2 - 1);
-transform: perspective(100vmax)
+#Tetris HEADER A { --stack: 0;  --x: 0.5; --y: 0.5;  --maxX: 0.75; --maxY: 0.75;  --offsetX: calc(var(--x) * 2 - 1); --offsetY: calc(var(--y) * 2 - 1);
+box-shadow: calc(var(--offsetX) * var(--maxX) * -2vmin + 1vmin)
+            calc(var(--offsetY) * var(--maxY) * -2vmin + 1vmin)
+            2vmin rgba(0,0,0,0.25); 
+transform: perspective(100vmin)
            rotateX(calc(var(--offsetY) * var(--maxY) * -1deg))
            rotateY(calc(var(--offsetX) * var(--maxX) * 1deg)) }
-#Tetris HEADER A::before { --stack: 1;
-transform: translateX(calc(var(--stack) * var(--offsetX) * var(--maxX) * -0.05vmin))
-           translateY(calc(var(--stack) * var(--offsetY) * var(--maxY) * -0.05vmin)); }
-#Tetris HEADER A::after { --stack: 2;
-transform: translateX(calc(var(--stack) * var(--offsetX) * var(--maxX) * -0.05vmin))
-           translateY(calc(var(--stack) * var(--offsetY) * var(--maxY) * -0.05vmin)); }
+#Tetris HEADER A::before { --stack: 1 }
+#Tetris HEADER A::after { --stack: 2 } 
+#Tetris HEADER A::before, #Tetris HEADER A::after {
+transform: translateX(calc(var(--stack) * var(--offsetX) * var(--maxX) * 0.2vmin))
+           translateY(calc(var(--stack) * var(--offsetY) * var(--maxY) * 0.2vmin)) }
 /* 
 #tetris HEADER A { animation: 11s test linear infinite
 #tetris HEADER A::before { animation: 11s stack linear infinite }
 #tetris HEADER A::after { --stack: 1.5; animation: 11s stack linear infinite }
-*/
 @keyframes test {
 from { transform: perspective(100vmax) 
-                  rotateX(calc(var(--offsetX) * var(--maxX) * 1deg)) 
-                  rotateY(calc(var(--offsetY) * var(--maxY) * -1deg)) }
+                rotateX(calc(var(--offsetX) * var(--maxX) * 1deg)) 
+                rotateY(calc(var(--offsetY) * var(--maxY) * -1deg)) }
 25% { transform: perspective(100vmax) 
                  rotateX(calc(var(--offsetX) * var(--maxX) * 1deg)) 
                  rotateY(calc(var(--offsetY) * var(--maxY) * 1deg)) }
@@ -59,7 +81,7 @@ from { transform: translateX(calc(var(--stack) * -2px)) translateY(calc(var(--st
 50% { transform: translateX(calc(var(--stack) * 1px)) translateY(calc(var(--stack) * -2px)) }
 75% { transform: translateX(calc(var(--stack) * -2px)) translateY(calc(var(--stack) * -2px)) }
 to { transform: translateX(calc(var(--stack) * -2px)) translateY(calc(var(--stack) * 1px)) }
-}
+} */
 #debug { position: fixed; z-index: 1; top: 0; left: 0; width: 100vw; height: 100vh; padding: 1em; background: transparent; color: var(--color, black); border: none; pointer-events: none;
 font-family: "IBM Plex Mono", monospace; font-weight: 100; font-size: 8pt }
 </STYLE>
@@ -68,26 +90,29 @@ font-family: "IBM Plex Mono", monospace; font-weight: 100; font-size: 8pt }
 <H1><A HREF="Artwork.jpg"><IMG ALT="Tetris" SRC="Artwork.jpg" WIDTH="512" HEIGHT="512"/></A></H1>
 </HEADER>
 <SCRIPT>
-let $el = document.querySelector("#Tetris HEADER A")
-document.addEventListener("mousemove", (e) => {
-  $el.style.setProperty("--x", (e.screenX / window.innerWidth).toFixed(2))
-  $el.style.setProperty("--y", (e.screenY / window.innerHeight).toFixed(2))
-});
+let $header = document.querySelector("#Tetris HEADER A")
+listen(document, "mousemove", (e) => {
+	if (!Mouse) return
+	$header.style.setProperty("--x", Mouse.x)
+	$header.style.setProperty("--y", Mouse.y)
+})
 </SCRIPT>
+
 <!-- DEBUGGER -->
 <DIV ID="debug" STYLE="opacity: 1">&nbsp;</DIV>
 <SCRIPT>
 let $debug = document.querySelector("#debug");
 if ($debug.style.opacity) {
-	document.addEventListener("mousemove", debug);
+	listen(document, "mousemove", debug);
 
-	function debug(e) { $debug.innerText = `Debugger:
-		Window X/Y: ${window.innerWidth}, ${window.innerHeight}
-		Mouse Screen X/Y: ${e.screenX}, ${e.screenY}
-		Mouse Client X/Y: ${e.clientX}, ${e.clientY}
-		Mouse Normal X/Y: ${(e.screenX / window.innerWidth).toFixed(2)}, ${(e.screenY / window.innerHeight).toFixed(2)}`;
+	function debug(event) { 
+		$debug.innerText = "Debugger:\n"
+		if (window) $debug.innerText += `Window X/Y: ${window.innerWidth}, ${window.innerHeight}\n`
+		if (event) $debug.innerText += `Mouse Screen X/Y: ${event.screenX}, ${event.screenY}\n`
+		if (event) $debug.innerText += `Mouse Client X/Y: ${event.clientX}, ${event.clientY}\n`
+		if (Mouse) $debug.innerText += `Mouse Normal X/Y: ${Mouse.x}, ${Mouse.y}\n`
 	}
-	debug({screenX:0, screenY: 0, clientX: 0, clientY: 0})
+	debug()
 }
 </SCRIPT>
 </ARTICLE>
