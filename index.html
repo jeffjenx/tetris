@@ -3,41 +3,55 @@
 <LINK REL="stylesheet" HREF="https://webdevkit.net/styles.css">
 
 <STYLE>
-#tetris {
+#Tetris {
 font-family: "IBM Plex Serif", sans-serif; font-size: 2.4vh; line-height: 1.4;
 max-width: 80ch; margin: 0 auto; padding: 0 2em }
-#tetris H1 { text-align: center }
-#tetris HEADER {
+#Tetris H1 { text-align: center }
+#Tetris HEADER {
 min-height: 100vh; transform: translateY(-2em); align-content: center; justify-items: center;
 display: grid; grid-template-columns: 1fr; grid-template-rows: repeat(3,min-content) }
-#tetris HEADER H1 { margin: 0 }
-#tetris HEADER A, #tetris HEADER IMG { border-radius: 4pt }
-#tetris HEADER IMG { opacity: 0 }
-#tetris HEADER A { background: url("Artwork/Background.jpg"); background-size: contain }
-#tetris HEADER A { display: inline-flex; box-shadow: 0 1em 1em rgba(0,0,0,0.33) }
-#tetris HEADER A::before { content: ""; display: block;
+#Tetris HEADER H1 { margin: 0 }
+#Tetris HEADER A, #tetris HEADER IMG { border-radius: 4pt }
+#Tetris HEADER IMG { opacity: 0 }
+#Tetris HEADER A { background: url("Artwork/Background.jpg"); background-size: contain }
+#Tetris HEADER A { display: inline-flex; box-shadow: 0 1em 1em rgba(0,0,0,0.33) }
+#Tetris HEADER A::before { content: ""; display: block;
 position: absolute; top: 0; left: 0; width: 100%; height: 100%;
 background: url("Artwork/Logo Shadow.png") center no-repeat; background-size: 100% 100%; }
-#tetris HEADER A::after { content: ""; display: block;
+#Tetris HEADER A::after { content: ""; display: block;
 position: absolute; top: 0; left: 0; width: 100%; height: 100%;
 background: url("Artwork/Logo Fill.png") center no-repeat; background-size: 100% 100%; }
-#tetris HEADER A { --stack: 0; --x: 0; --y: 0; --maxX: 12; --maxY: 13; --offsetX: calc(var(--x) * 2 - 1); --offsetY: calc(var(--y) * 2 - 1);
-transform: perspective(100vmax) rotateX(calc(var(--offsetY) * var(--maxY) * -1deg)) rotateY(calc(var(--offsetX) * var(--maxX) * 1deg)) }
-#tetris HEADER A::before { --stack: 1;
-transform: translateX(calc(var(--stack) * var(--offsetX) * -0.3vmin)) translateY(calc(var(--stack) * var(--offsetY) * -0.3vmin)); }
-#tetris HEADER A::after { --stack: 2;
-transform: translateX(calc(var(--stack) * var(--offsetX) * -2px)) translateY(calc(var(--stack) * var(--offsetY) * 1px)); }
+#Tetris HEADER A { --stack: 0; --x: 0; --y: 0; --maxX: 2; --maxY: 3; --offsetX: calc(var(--x) * 2 - 1); --offsetY: calc(var(--y) * 2 - 1);
+transform: perspective(100vmax)
+           rotateX(calc(var(--offsetY) * var(--maxY) * -1deg))
+           rotateY(calc(var(--offsetX) * var(--maxX) * 1deg)) }
+#Tetris HEADER A::before { --stack: 1;
+transform: translateX(calc(var(--stack) * var(--offsetX) * var(--maxX) * -0.05vmin))
+           translateY(calc(var(--stack) * var(--offsetY) * var(--maxY) * -0.05vmin)); }
+#Tetris HEADER A::after { --stack: 2;
+transform: translateX(calc(var(--stack) * var(--offsetX) * var(--maxX) * -0.05vmin))
+           translateY(calc(var(--stack) * var(--offsetY) * var(--maxY) * -0.05vmin)); }
 /* 
 #tetris HEADER A { animation: 11s test linear infinite
 #tetris HEADER A::before { animation: 11s stack linear infinite }
 #tetris HEADER A::after { --stack: 1.5; animation: 11s stack linear infinite }
 */
 @keyframes test {
-from { transform: perspective(100vmax) rotateX(calc(var(--offsetX) * var(--maxX) * 1deg)) rotateY(calc(var(--offsetY) * var(--maxY) * -1deg)) }
-25% { transform: perspective(100vmax) rotateX(calc(var(--offsetX) * var(--maxX) * 1deg)) rotateY(calc(var(--offsetY) * var(--maxY) * 1deg)) }
-50% { transform: perspective(100vmax) rotateX(calc(var(--offsetX) * var(--maxX) * -1deg)) rotateY(calc(var(--offsetY) * var(--maxY) * 1deg)) }
-75% { transform: perspective(100vmax) rotateX(calc(var(--offsetX) * var(--maxX) * -1deg)) rotateY(calc(var(--offsetY) * var(--maxY) * 1deg)) }
-to { transform: perspective(100vmax) rotateX(calc(var(--offsetX) * var(--maxX) * 1deg)) rotateY(calc(var(--offsetY) * var(--maxY) * -1deg)) }
+from { transform: perspective(100vmax) 
+                  rotateX(calc(var(--offsetX) * var(--maxX) * 1deg)) 
+                  rotateY(calc(var(--offsetY) * var(--maxY) * -1deg)) }
+25% { transform: perspective(100vmax) 
+                 rotateX(calc(var(--offsetX) * var(--maxX) * 1deg)) 
+                 rotateY(calc(var(--offsetY) * var(--maxY) * 1deg)) }
+50% { transform: perspective(100vmax) 
+                 rotateX(calc(var(--offsetX) * var(--maxX) * -1deg)) 
+                 rotateY(calc(var(--offsetY) * var(--maxY) * 1deg)) }
+75% { transform: perspective(100vmax) 
+                 rotateX(calc(var(--offsetX) * var(--maxX) * -1deg)) 
+                 rotateY(calc(var(--offsetY) * var(--maxY) * 1deg)) }
+to { transform: perspective(100vmax) 
+                rotateX(calc(var(--offsetX) * var(--maxX) * 1deg)) 
+                rotateY(calc(var(--offsetY) * var(--maxY) * -1deg)) }
 }
 @keyframes stack {
 from { transform: translateX(calc(var(--stack) * -2px)) translateY(calc(var(--stack) * 1px)) }
@@ -46,28 +60,34 @@ from { transform: translateX(calc(var(--stack) * -2px)) translateY(calc(var(--st
 75% { transform: translateX(calc(var(--stack) * -2px)) translateY(calc(var(--stack) * -2px)) }
 to { transform: translateX(calc(var(--stack) * -2px)) translateY(calc(var(--stack) * 1px)) }
 }
-#debug { position: fixed; z-index: 1; top: 0; left: 0; width: 100vw; height: 100vh; background: transparent; color: white; border: none; pointer-events: none;
+#debug { position: fixed; z-index: 1; top: 0; left: 0; width: 100vw; height: 100vh; padding: 1em; background: transparent; color: var(--color, black); border: none; pointer-events: none;
 font-family: "IBM Plex Mono", monospace; font-weight: 100; font-size: 8pt }
 </STYLE>
-<ARTICLE ID="tetris">
+<ARTICLE ID="Tetris">
 <HEADER>
 <H1><A HREF="Artwork.jpg"><IMG ALT="Tetris" SRC="Artwork.jpg" WIDTH="512" HEIGHT="512"/></A></H1>
 </HEADER>
-<div id="debug">&nbsp;</div>
+<SCRIPT>
+let $el = document.querySelector("#Tetris HEADER A")
+document.addEventListener("mousemove", (e) => {
+  $el.style.setProperty("--x", (e.screenX / window.innerWidth).toFixed(2))
+  $el.style.setProperty("--y", (e.screenY / window.innerHeight).toFixed(2))
+});
+</SCRIPT>
+<!-- DEBUGGER -->
+<DIV ID="debug" STYLE="opacity: 1">&nbsp;</DIV>
 <SCRIPT>
 let $debug = document.querySelector("#debug");
-document.addEventListener("mousemove", debug);
+if ($debug.style.opacity) {
+	document.addEventListener("mousemove", debug);
 
-let $test = document.querySelector("#tetris HEADER A")
-
-function debug(e) {
-  $test.style.setProperty("--x", (e.screenX / window.innerWidth).toFixed(2))
-  $test.style.setProperty("--y", (e.screenY / window.innerHeight).toFixed(2))
-  $debug.innerText = `
-    Window X/Y: ${window.innerWidth}, ${window.innerHeight}
-    Mouse Screen X/Y: ${e.screenX}, ${e.screenY}
-    Mouse Client X/Y: ${e.clientX}, ${e.clientY}
-    Mouse Normal X/Y: ${(e.screenX / window.innerWidth).toFixed(2)}, ${(e.screenY / window.innerHeight).toFixed(2)}`;
+	function debug(e) { $debug.innerText = `Debugger:
+		Window X/Y: ${window.innerWidth}, ${window.innerHeight}
+		Mouse Screen X/Y: ${e.screenX}, ${e.screenY}
+		Mouse Client X/Y: ${e.clientX}, ${e.clientY}
+		Mouse Normal X/Y: ${(e.screenX / window.innerWidth).toFixed(2)}, ${(e.screenY / window.innerHeight).toFixed(2)}`;
+	}
+	debug({screenX:0, screenY: 0, clientX: 0, clientY: 0})
 }
 </SCRIPT>
 </ARTICLE>
