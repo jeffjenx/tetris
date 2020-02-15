@@ -21,16 +21,23 @@ background: url("Artwork/Logo Shadow.png") center no-repeat; background-size: 10
 #tetris HEADER A::after { content: ""; display: block;
 position: absolute; top: 0; left: 0; width: 100%; height: 100%;
 background: url("Artwork/Logo Fill.png") center no-repeat; background-size: 100% 100%; }
-#tetris HEADER A { --stack: 0; --x: 0; --y: 0; --maxX: 12; --maxY: 13; /*animation: 11s test linear infinite*/
-transform: perspective(100vmax) rotateX(calc(calc(var(--y) * 2 - 1) * var(--maxY) * -1deg)) rotateY(calc(calc(var(--x) * 2 - 1) * var(--maxX) * 1deg)) }
-/* #tetris HEADER A::before { --stack: 1; animation: 11s stack linear infinite }
-#tetris HEADER A::after { --stack: 1.5; animation: 11s stack linear infinite } */
+#tetris HEADER A { --stack: 0; --x: 0; --y: 0; --maxX: 12; --maxY: 13; --offsetX: calc(var(--x) * 2 - 1); --offsetY: calc(var(--y) * 2 - 1);
+transform: perspective(100vmax) rotateX(calc(var(--offsetY) * var(--maxY) * -1deg)) rotateY(calc(var(--offsetX) * var(--maxX) * 1deg)) }
+#tetris HEADER A::before { --stack: 1;
+transform: translateX(calc(var(--stack) * var(--offsetX) * -0.3vmin)) translateY(calc(var(--stack) * var(--offsetY) * -0.3vmin)); }
+#tetris HEADER A::after { --stack: 2;
+transform: translateX(calc(var(--stack) * var(--offsetX) * -2px)) translateY(calc(var(--stack) * var(--offsetY) * 1px)); }
+/* 
+#tetris HEADER A { animation: 11s test linear infinite
+#tetris HEADER A::before { animation: 11s stack linear infinite }
+#tetris HEADER A::after { --stack: 1.5; animation: 11s stack linear infinite }
+*/
 @keyframes test {
-from { transform: perspective(100vmax) rotateX(calc(calc(var(--x) * 2 - 1) * var(--maxX) * 1deg)) rotateY(calc(calc(var(--y) * 2 - 1) * var(--maxY) * -1deg)) }
-25% { transform: perspective(100vmax) rotateX(calc(calc(var(--x) * 2 - 1) * var(--maxX) * 1deg)) rotateY(calc(calc(var(--y) * 2 - 1) * var(--maxY) * 1deg)) }
-50% { transform: perspective(100vmax) rotateX(calc(calc(var(--x) * 2 - 1) * var(--maxX) * -1deg)) rotateY(calc(calc(var(--y) * 2 - 1) * var(--maxY) * 1deg)) }
-75% { transform: perspective(100vmax) rotateX(calc(calc(var(--x) * 2 - 1) * var(--maxX) * -1deg)) rotateY(calc(calc(var(--y) * 2 - 1) * var(--maxY) * 1deg)) }
-to { transform: perspective(100vmax) rotateX(calc(calc(var(--x) * 2 - 1) * var(--maxX) * 1deg)) rotateY(calc(calc(var(--y) * 2 - 1) * var(--maxY) * -1deg)) }
+from { transform: perspective(100vmax) rotateX(calc(var(--offsetX) * var(--maxX) * 1deg)) rotateY(calc(var(--offsetY) * var(--maxY) * -1deg)) }
+25% { transform: perspective(100vmax) rotateX(calc(var(--offsetX) * var(--maxX) * 1deg)) rotateY(calc(var(--offsetY) * var(--maxY) * 1deg)) }
+50% { transform: perspective(100vmax) rotateX(calc(var(--offsetX) * var(--maxX) * -1deg)) rotateY(calc(var(--offsetY) * var(--maxY) * 1deg)) }
+75% { transform: perspective(100vmax) rotateX(calc(var(--offsetX) * var(--maxX) * -1deg)) rotateY(calc(var(--offsetY) * var(--maxY) * 1deg)) }
+to { transform: perspective(100vmax) rotateX(calc(var(--offsetX) * var(--maxX) * 1deg)) rotateY(calc(var(--offsetY) * var(--maxY) * -1deg)) }
 }
 @keyframes stack {
 from { transform: translateX(calc(var(--stack) * -2px)) translateY(calc(var(--stack) * 1px)) }
