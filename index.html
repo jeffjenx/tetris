@@ -4,12 +4,19 @@
 
 <!-- GLOBALS -->
 <SCRIPT>
-function $(selector) {
-	return document.querySelectorAll(selector);
+function query(selector) {
+	let elements = document.querySelectorAll(selector)
+	return elements.length > 1 ? elements : elements[0]
 }
-function listen(element, types, listener, options) {
-	types = types.split(" ")
-	for (let type of types) element.addEventListener(type, listener, options)
+function listen(elements, types, listener, options) {
+	if (types.indexOf(" ") > -1) types = types.split(" ")
+	else types = [types]
+
+	if (elements instanceof NodeList === false)
+		elements = [elements]
+	for (let type of types) 
+		for (let element of elements)
+			element.addEventListener(type, listener, options)
 }
 </SCRIPT>
 
@@ -42,198 +49,103 @@ listen(document, "keydown", (event) => {
 </SCRIPT>
 
 <STYLE>
-:ROOT { --x: 0.5; --y: 0.5; }
 Q::before { content: "\201C" }
 Q::after { content: "\201D" }
 
-#Tetris {
+BODY { margin: 0 }
+
+#Tetris { --x: 0.5; --y: 0.5;
 font-family: "IBM Plex Serif", sans-serif; font-size: 2.4vh; line-height: 1.4;
-max-width: 80ch; margin: 0 auto; padding: 0 2em 25vh }
-#Tetris H1 { text-align: center }
+max-width: 80ch; margin: 0 auto; padding: 0 2em 25vh; transition: opacity 1s }
+
+#Tetris:not(.loaded) { opacity: 0 }
+#Tetris.loaded { opacity: 1 }
+
 #Tetris HEADER {
-min-height: 100vh; transform: translateY(-2em); align-content: center; justify-items: center; display: grid }
-#Tetris HEADER H1, #Tetris HEADER H2 { grid-column: 1; grid-row: 1 }
-#Tetris HEADER H1, #Tetris HEADER H2 { margin: 0 }
-#Tetris HEADER A, #Tetris HEADER IMG { border-radius: 4pt }
-#Tetris HEADER H1 IMG { opacity: 0 }
-#Tetris HEADER H1 A { background: url("Artwork/Background.jpg"); background-size: contain }
-#Tetris HEADER A { display: inline-flex; box-shadow: 0 1em 1em rgba(0,0,0,0.33) }
-#Tetris HEADER H1 A::before { content: ""; display: block;
-position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-background: url("Artwork/Logo Shadow.png") center no-repeat; background-size: 100% 100%; }
-#Tetris HEADER H1 A::after { content: ""; display: block;
-position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-background: url("Artwork/Logo Fill.png") center no-repeat; background-size: 100% 100%; }
-#Tetris HEADER A { --stack: 0;  --maxX: 1; --maxY: 1;  --offsetX: calc(var(--x) * 2 - 1); --offsetY: calc(var(--y) * 2 - 1);
+min-height: 100vh; transition: transform 0.5s;
+display: grid; grid-template-columns: min-content; grid-template-rows: min-content; 
+justify-content: center; align-content: center }
+#Tetris HEADER H1, #Tetris HEADER H2 { margin: 0; display: inline-flex }
+#Tetris HEADER H2 { margin-top: -100% }
+#Tetris HEADER.focused { transform: scale(1.1) }
+
+/* CARDS */
+#Tetris .card { --flipped: 0; --direction: 1; --maxX: 1; --maxY: 1;
+                --offsetX: calc(var(--x) * 2 - 1); --offsetY: calc(var(--y) * 2 - 1);
+will-change: box-shadow, transform;
+backface-visibility: hidden;
+border-radius: 4pt; overflow: hidden; display: inline-flex;
 box-shadow: calc(var(--offsetX) * var(--maxX) * -1vmin + 0.5vmin)
             calc(var(--offsetY) * var(--maxY) * -1vmin + 0.5vmin)
-            2vmin rgba(0,0,0,0.25); 
-/* transition: all 0.5s ease-in-out; */
+            2vmin rgba(0,0,0,0.25);
+transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
 transform: perspective(100vmin)
-           rotateX(calc(var(--offsetY) * var(--maxY) * -2deg))
-           rotateY(calc(var(--offsetX) * var(--maxX) * 2deg)) }
-#Tetris HEADER H1 A::before { --stack: 1 }
-#Tetris HEADER H1 A::after { --stack: 2 } 
-#Tetris HEADER H1 A::before, #Tetris HEADER A::after {
+           rotateX(calc(var(--offsetY) * var(--maxY) * -3deg))
+           rotateY(calc(var(--offsetX) * var(--maxX) * 3deg + var(--direction) * var(--flipped) * 180deg)) }
+
+#Tetris .card:hover { --maxX: 5; --maxY: 1.5 }
+#Tetris .card.flipped { --flipped: 1 }
+
+#Tetris .card.front IMG { opacity: 0 }
+#Tetris .card.front { background: url("Artwork/Background.jpg"); background-size: contain; z-index: 1 }
+
+#Tetris .card.back { --flipped: -1 }
+#Tetris .card.back.flipped { --flipped: 0 }
+
+
+/* LAYERS */
+#Tetris .card.front::before,
+#Tetris .card.front::after { --stack: 0; content: ""; display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+will-change: filter, transform;
 filter: drop-shadow(calc(var(--offsetX) * -3px) calc(var(--offsetY) * -3px) 1px rgba(0,0,0,0.2));
+transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
 transform: perspective(100vmin)
            translateX(calc(var(--stack) * var(--offsetX) * var(--maxX) * 0.1vmin))
            translateY(calc(var(--stack) * var(--offsetY) * var(--maxY) * 0.1vmin)) }
-
-#Tetris HEADER H1 { transition: transform 0.25s ease-in-out; }
-#Tetris HEADER H1:hover { transform: scale(1.25) }
-#Tetris HEADER H1:hover A { --maxX: 10; --maxY: 1 }
-/*
-#Tetris HEADER H1 A { /*backface-visibility: hidden;* / opacity: 1;
-transform: /*perspective(100vmin) rotateY(0deg)* /
-           perspective(100vmin)
-			  scaleX(-1)
-           rotateX(calc(var(--offsetY) * var(--maxY) * -2deg))
-           rotateY(calc(var(--offsetX) * var(--maxX) * 2deg - 180deg)) }
-#Tetris HEADER H2 A { backface-visibility: hidden; opacity: -10;
-transform: /*perspective(100vmin) rotateY(180deg)* /
-			  perspective(100vmin)
-           rotateX(calc(var(--offsetY) * var(--maxY) * -2deg))
-           rotateY(calc(var(--offsetX) * var(--maxX) * 2deg + 180deg)) }
-
-#Tetris HEADER.hovered H1 { --maxX: 1; --maxY: 1; transform: perspective(100vmin)
-           rotateX(calc(var(--offsetY) * var(--maxY) * -1deg))
-           rotateY(calc(var(--offsetX) * var(--maxX) * 1deg)) }
-
-#Tetris HEADER.hovered H1 A { opacity: -10; transform: perspective(100vmin) scale(-1.25, 1.25)
-           rotateX(calc(var(--offsetY) * var(--maxY) * -2deg))
-           rotateY(calc(var(--offsetX) * var(--maxX) * 2deg - 0deg)) }
-#Tetris HEADER.hovered H2 A { opacity: 1; transform: perspective(100vmin) scale(1.25) 
-           rotateX(calc(var(--offsetY) * var(--maxY) * -2deg))
-           rotateY(calc(var(--offsetX) * var(--maxX) * 2deg)) }
-*/
-#Tetris H2 A { display: none }
-/* #Tetris { opacity: 0; transition: opacity 2s; transition-delay: 1s; }
-#Tetris.load { opacity: 1 }
-#Tetris H1 A { opacity: 1; animation: flipX2 1s ease-in-out; animation-fill-mode: forwards }
-#Tetris H2 A { opacity: -1; animation: flipX4 1s ease-in-out; animation-fill-mode:  forwards }
-#Tetris HEADER.hovered H1 A { animation: flipX 1s ease-in-out; animation-fill-mode:  forwards }
-#Tetris HEADER.hovered H2 A { animation: flipX3 1s ease-in-out; animation-fill-mode:  forwards } */
-/* 
-@keyframes flipX {
-from { opacity: 1;
-	transform: perspective(100vmin) scaleX(-1)
-           rotateX(calc(var(--offsetY) * var(--maxY) * -2deg))
-           rotateY(calc(var(--offsetX) * var(--maxX) * 2deg - 180deg))
-}
-to { opacity: 1; 
-	transform: perspective(100vmin) scale(-1.25, 1.25)
-           rotateX(calc(var(--offsetY) * var(--maxY) * -2deg))
-           rotateY(calc(var(--offsetX) * var(--maxX) * 2deg - 0deg)) }
-}
-
-@keyframes flipX2 {
-from { opacity: 1;
-	transform: perspective(100vmin) scale(-1.25, 1.25)
-           rotateX(calc(var(--offsetY) * var(--maxY) * -2deg))
-           rotateY(calc(var(--offsetX) * var(--maxX) * 2deg - 0deg))
-}
-to { opacity: 1; 
-	transform: perspective(100vmin) scaleX(-1)
-           rotateX(calc(var(--offsetY) * var(--maxY) * -2deg))
-           rotateY(calc(var(--offsetX) * var(--maxX) * 2deg - 180deg)) }
-}
-
-@keyframes flipX3 {
-from { opacity: -1;
-	transform: perspective(100vmin) scaleX(-1)
-           rotateX(calc(var(--offsetY) * var(--maxY) * -2deg))
-           rotateY(calc(var(--offsetX) * var(--maxX) * 2deg - 0deg))
-}
-50% { opacity: -1; }
-51% { opacity: 1; }
-to { opacity: 1; 
-	transform: perspective(100vmin) scale(-1.25, 1.25)
-           rotateX(calc(var(--offsetY) * var(--maxY) * -2deg))
-           rotateY(calc(var(--offsetX) * var(--maxX) * 2deg + 180deg)) }
-}
-
-@keyframes flipX4 {
-from { opacity: 1;
-	transform: perspective(100vmin) scale(-1.25, 1.25)
-           rotateX(calc(var(--offsetY) * var(--maxY) * -2deg))
-           rotateY(calc(var(--offsetX) * var(--maxX) * 2deg + 180deg))
-}
-49% { opacity: 1; }
-50% { opacity: -1; }
-to { opacity: -1; 
-	transform: perspective(100vmin) scaleX(-1)
-           rotateX(calc(var(--offsetY) * var(--maxY) * -2deg))
-           rotateY(calc(var(--offsetX) * var(--maxX) * 2deg - 0deg)) }
-} */
+#Tetris .card.front::before { --stack: 1;
+background: url("Artwork/Logo Shadow.png") center no-repeat; background-size: 100% 100% }
+#Tetris .card.front::after { --stack: 2;
+background: url("Artwork/Logo Fill.png") center no-repeat; background-size: 100% 100% }
 
 
-/* 
-#tetris HEADER A { animation: 11s test linear infinite
-#tetris HEADER A::before { animation: 11s stack linear infinite }
-#tetris HEADER A::after { --stack: 1.5; animation: 11s stack linear infinite }
-@keyframes test {
-from { transform: perspective(100vmax) 
-                rotateX(calc(var(--offsetX) * var(--maxX) * 1deg)) 
-                rotateY(calc(var(--offsetY) * var(--maxY) * -1deg)) }
-25% { transform: perspective(100vmax) 
-                 rotateX(calc(var(--offsetX) * var(--maxX) * 1deg)) 
-                 rotateY(calc(var(--offsetY) * var(--maxY) * 1deg)) }
-50% { transform: perspective(100vmax) 
-                 rotateX(calc(var(--offsetX) * var(--maxX) * -1deg)) 
-                 rotateY(calc(var(--offsetY) * var(--maxY) * 1deg)) }
-75% { transform: perspective(100vmax) 
-                 rotateX(calc(var(--offsetX) * var(--maxX) * -1deg)) 
-                 rotateY(calc(var(--offsetY) * var(--maxY) * 1deg)) }
-to { transform: perspective(100vmax) 
-                rotateX(calc(var(--offsetX) * var(--maxX) * 1deg)) 
-                rotateY(calc(var(--offsetY) * var(--maxY) * -1deg)) }
-}
-@keyframes stack {
-from { transform: translateX(calc(var(--stack) * -2px)) translateY(calc(var(--stack) * 1px)) }
-25% { transform: translateX(calc(var(--stack) * 1px)) translateY(calc(var(--stack) * 1px)) }
-50% { transform: translateX(calc(var(--stack) * 1px)) translateY(calc(var(--stack) * -2px)) }
-75% { transform: translateX(calc(var(--stack) * -2px)) translateY(calc(var(--stack) * -2px)) }
-to { transform: translateX(calc(var(--stack) * -2px)) translateY(calc(var(--stack) * 1px)) }
-} */
+/* DEBUG */
 #debug { position: fixed; z-index: 1; top: 0; left: 0; width: 100vw; height: 100vh; padding: 1em; background: transparent; color: var(--color, black); border: none; pointer-events: none;
 font-family: "IBM Plex Mono", monospace; font-weight: 100; font-size: 8pt }
 </STYLE>
 <ARTICLE ID="Tetris">
 <HEADER>
-<H1><A HREF="Artwork.jpg"><IMG ALT="Tetris" SRC="Artwork.jpg" WIDTH="512" HEIGHT="512"/></A></H1>
-<H2><A HREF="Description.jpg"><IMG ALT="From Russia with Fun!" SRC="Description.jpg" WIDTH="512" HEIGHT="512"/></A></H1>
+<H1><A CLASS="card front" HREF="Artwork.jpg"><IMG ALT="Tetris" SRC="Artwork.jpg" WIDTH="512" HEIGHT="512"/></A></H1>
+<H2><A CLASS="card back" HREF="Description.jpg"><IMG ALT="From Russia with Fun!" SRC="Description.jpg" WIDTH="512" HEIGHT="512"/></A></H1>
 </HEADER>
 <SCRIPT>
-listen(window, "load", () => { $("#Tetris")[0].classList.add("load") })
+let $tetris = query("#Tetris")
+listen(window, "load", () => { setTimeout(() => query("#Tetris").classList.add("loaded"), 500) }) // simulate loading
 listen(document, "mousemove", () => {
 	if (!Mouse) return
-	document.documentElement.style.setProperty("--x", Mouse.x)
-	document.documentElement.style.setProperty("--y", Mouse.y)
+	$tetris.style.setProperty("--x", Mouse.x)
+	$tetris.style.setProperty("--y", Mouse.y)
 })
-// let timeout
-// for (let $header of $("#Tetris HEADER A"))
-// 	listen($header, "mouseenter mouseleave", (event) => {
-// 		if (timeout) clearTimeout(timeout)
-// 		setTimeout(() => $("#Tetris HEADER")[0].classList.toggle("hovered", event.type === "mouseenter"), event.type === "mouseenter" ? 1000 : 3000)
-// 	})
-listen($("#Tetris H1 A")[0], "mouseenter", () => {
-	//console.log("mouseenter")
-})
-listen($("#Tetris H1 A")[0], "mouseleave", () => {
-	//console.log("mouseleave")
-})
-listen($("#Tetris H1 A")[0], "mousemove", () => {
-	//console.log(Mouse.x < 0.5 ? "left" : "right")
-})
-listen($("#Tetris H1 A")[0], "click", (event) => {
+
+
+// CARDS
+let timeout
+for (let card of query("#Tetris .card"))
+	listen(card, "mouseenter mouseleave", (event) => {
+		if (timeout) clearTimeout(timeout)
+		timeout = setTimeout(() => query("#Tetris HEADER").classList.toggle("focused", event.type === "mouseenter"), event.type === "mouseenter" ? 125 : 500)
+	})
+
+listen(query("#Tetris HEADER A"), "click", (event) => {
 	let normalize = (value, range) => (value * 2 - range) / range
 	let normalizedLayerX = normalize(event.layerX, event.target.offsetWidth)
 	if (Math.abs(normalizedLayerX) < 0.67) return
 
 	event.preventDefault()
-	if (normalizedLayerX < 0.5) console.log("clicked left")
-	else console.log("clicked right")
+	for (let card of query("#Tetris .card")) {
+		card.classList.toggle("flipped")	
+		// card.classList.toggle("forwards", normalizedLayerX > 0.5)
+		// card.classList.toggle("reversed", normalizedLayerX < 0.5)
+	}
 })
 </SCRIPT>
 
@@ -241,7 +153,6 @@ listen($("#Tetris H1 A")[0], "click", (event) => {
 <P>While the Tetris video game in general has an interesting and complicated history dating back as early as 1984, it was the Nintendo Game&nbsp;Boy version that I have the fondest memories of. Whether it was taking turns to get the high score with my mom, dad and brother or playing under the passing streetlights in the back of our van as we drove home from a family gathering, Tetris will always be one of remembered as one of my favorite video games of all time.</P>
 
 <P>The game&rsquo;s title, &ldquo;Tetris,&rdquo; is a portmanteau of <EM>tetromino</EM> (a shape that is comprised of four blocks, kind of like how a <EM>domino</EM> is a shape made up of two blocks) combined with “tennis”, Pajitnov’s favorite sport.</P>
-<!-- <H2><A HREF="Description.jpg"><IMG ALT="From Russia with Fun!" SRC="Description.jpg" WIDTH="512" HEIGHT="512"/></A></H1> -->
 </ARTICLE>
 
 <!-- DEBUGGER -->
