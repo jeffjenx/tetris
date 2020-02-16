@@ -17,19 +17,35 @@ function listen(element, types, listener, options) {
 <SCRIPT>
 let Mouse = undefined
 listen(document, "click mousemove", (event) => {
-	Mouse = {
-		update(event) {
-			Mouse.x = Math.round(event.clientX / window.innerWidth * 100) / 100,
-			Mouse.y = Math.round(event.clientY / window.innerHeight * 100) / 100
-		}
+	Mouse = {}
+	let update = (event) => {
+		Mouse.x = Math.round(event.clientX / window.innerWidth * 100) / 100,
+		Mouse.y = Math.round(event.clientY / window.innerHeight * 100) / 100
 	}
-	listen(document, "mousemove", Mouse.update)
-	listen(document, "click", Mouse.update)
+	update(event)
+	listen(document, "click mousemove", update)
 },	{ once: true })
+</SCRIPT>
+
+<!-- KEYBOARD -->
+<SCRIPT>
+let Keyboard = undefined
+listen(document, "keydown keyup", (event) => {
+	Keyboard = {}
+	let update = (event) => {
+		if (event.type === "keydown") Keyboard[event.key] = true
+		else if (event.type === "keyup") delete Keyboard[event.key]
+	}
+	update(event)
+	listen(document, "keydown keyup", update)
+}, { once: true })
 </SCRIPT>
 
 <STYLE>
 :ROOT { --x: 0.5; --y: 0.5; }
+Q::before { content: "\201C" }
+Q::after { content: "\201D" }
+
 #Tetris {
 font-family: "IBM Plex Serif", sans-serif; font-size: 2.4vh; line-height: 1.4;
 max-width: 80ch; margin: 0 auto; padding: 0 2em 25vh }
@@ -52,15 +68,21 @@ background: url("Artwork/Logo Fill.png") center no-repeat; background-size: 100%
 box-shadow: calc(var(--offsetX) * var(--maxX) * -1vmin + 0.5vmin)
             calc(var(--offsetY) * var(--maxY) * -1vmin + 0.5vmin)
             2vmin rgba(0,0,0,0.25); 
-transition: all 0.5s ease-in-out;
+/* transition: all 0.5s ease-in-out; */
 transform: perspective(100vmin)
            rotateX(calc(var(--offsetY) * var(--maxY) * -2deg))
            rotateY(calc(var(--offsetX) * var(--maxX) * 2deg)) }
 #Tetris HEADER H1 A::before { --stack: 1 }
 #Tetris HEADER H1 A::after { --stack: 2 } 
 #Tetris HEADER H1 A::before, #Tetris HEADER A::after {
-transform: translateX(calc(var(--stack) * var(--offsetX) * var(--maxX) * 0.1vmin))
+filter: drop-shadow(calc(var(--offsetX) * -3px) calc(var(--offsetY) * -3px) 1px rgba(0,0,0,0.2));
+transform: perspective(100vmin)
+           translateX(calc(var(--stack) * var(--offsetX) * var(--maxX) * 0.1vmin))
            translateY(calc(var(--stack) * var(--offsetY) * var(--maxY) * 0.1vmin)) }
+
+#Tetris HEADER H1 { transition: transform 0.25s ease-in-out; }
+#Tetris HEADER H1:hover { transform: scale(1.25) }
+#Tetris HEADER H1:hover A { --maxX: 10; --maxY: 1 }
 /*
 #Tetris HEADER H1 A { /*backface-visibility: hidden;* / opacity: 1;
 transform: /*perspective(100vmin) rotateY(0deg)* /
@@ -85,13 +107,14 @@ transform: /*perspective(100vmin) rotateY(180deg)* /
            rotateX(calc(var(--offsetY) * var(--maxY) * -2deg))
            rotateY(calc(var(--offsetX) * var(--maxX) * 2deg)) }
 */
-#Tetris { opacity: 0; transition: opacity 2s; transition-delay: 1s; }
+#Tetris H2 A { display: none }
+/* #Tetris { opacity: 0; transition: opacity 2s; transition-delay: 1s; }
 #Tetris.load { opacity: 1 }
 #Tetris H1 A { opacity: 1; animation: flipX2 1s ease-in-out; animation-fill-mode: forwards }
 #Tetris H2 A { opacity: -1; animation: flipX4 1s ease-in-out; animation-fill-mode:  forwards }
 #Tetris HEADER.hovered H1 A { animation: flipX 1s ease-in-out; animation-fill-mode:  forwards }
-#Tetris HEADER.hovered H2 A { animation: flipX3 1s ease-in-out; animation-fill-mode:  forwards }
-
+#Tetris HEADER.hovered H2 A { animation: flipX3 1s ease-in-out; animation-fill-mode:  forwards } */
+/* 
 @keyframes flipX {
 from { opacity: 1;
 	transform: perspective(100vmin) scaleX(-1)
@@ -142,7 +165,7 @@ to { opacity: -1;
 	transform: perspective(100vmin) scaleX(-1)
            rotateX(calc(var(--offsetY) * var(--maxY) * -2deg))
            rotateY(calc(var(--offsetX) * var(--maxX) * 2deg - 0deg)) }
-}
+} */
 
 
 /* 
@@ -188,15 +211,33 @@ listen(document, "mousemove", () => {
 	document.documentElement.style.setProperty("--x", Mouse.x)
 	document.documentElement.style.setProperty("--y", Mouse.y)
 })
-let timeout
-for (let $header of $("#Tetris HEADER A"))
-	listen($header, "mouseenter mouseleave", (event) => {
-		if (timeout) clearTimeout(timeout)
-		setTimeout(() => $("#Tetris HEADER")[0].classList.toggle("hovered", event.type === "mouseenter"), event.type === "mouseenter" ? 1000 : 3000)
-	})
+// let timeout
+// for (let $header of $("#Tetris HEADER A"))
+// 	listen($header, "mouseenter mouseleave", (event) => {
+// 		if (timeout) clearTimeout(timeout)
+// 		setTimeout(() => $("#Tetris HEADER")[0].classList.toggle("hovered", event.type === "mouseenter"), event.type === "mouseenter" ? 1000 : 3000)
+// 	})
+listen($("#Tetris H1 A")[0], "mouseenter", () => {
+	//console.log("mouseenter")
+})
+listen($("#Tetris H1 A")[0], "mouseleave", () => {
+	//console.log("mouseleave")
+})
+listen($("#Tetris H1 A")[0], "mousemove", () => {
+	//console.log(Mouse.x < 0.5 ? "left" : "right")
+})
+listen($("#Tetris H1 A")[0], "click", (event) => {
+	let normalize = (value, range) => (value * 2 - range) / range
+	let normalizedLayerX = normalize(event.layerX, event.target.offsetWidth)
+	if (Math.abs(normalizedLayerX) < 0.67) return
+
+	event.preventDefault()
+	if (normalizedLayerX < 0.5) console.log("clicked left")
+	else console.log("clicked right")
+})
 </SCRIPT>
 
-<P>Ahhh&hellip; Tetris. “The relentless building block video puzzle” game that launched with Nintendo&rsquo;s Game&nbsp;Boy in 1989.</P>
+<P>Ahhh&hellip; Tetris. <Q>The relentless building block video puzzle</Q> game that launched with Nintendo&rsquo;s Game&nbsp;Boy in 1989.</P>
 <P>While the Tetris video game in general has an interesting and complicated history dating back as early as 1984, it was the Nintendo Game&nbsp;Boy version that I have the fondest memories of. Whether it was taking turns to get the high score with my mom, dad and brother or playing under the passing streetlights in the back of our van as we drove home from a family gathering, Tetris will always be one of remembered as one of my favorite video games of all time.</P>
 
 <P>The game&rsquo;s title, &ldquo;Tetris,&rdquo; is a portmanteau of <EM>tetromino</EM> (a shape that is comprised of four blocks, kind of like how a <EM>domino</EM> is a shape made up of two blocks) combined with “tennis”, Pajitnov’s favorite sport.</P>
@@ -206,18 +247,44 @@ for (let $header of $("#Tetris HEADER A"))
 <!-- DEBUGGER -->
 <DIV ID="debug" STYLE="opacity: 1">&nbsp;</DIV>
 <SCRIPT>
+let platformIcon = 'platform' in navigator ? '\uF8FF' : ''
 let $debug = document.querySelector("#debug");
 if ($debug.style.opacity) {
-	listen(document, "click mousemove scroll", debug);
-
+	listen(window, "resize", debug)
+	listen(document, "click mousemove keydown keyup scroll", debug);
 	function debug(event) { 
 		$debug.innerText = ""
-		if (window && window.innerWidth) $debug.innerText += `Window Size X/Y: ${window.innerWidth}, ${window.innerHeight}\n`
-		if (window && window.scrollX) $debug.innerText += `Window Scroll X/Y: ${window.scrollX}, ${window.scrollY}\n`
-		if (event && event.screenX) $debug.innerText += `Mouse Screen X/Y: ${event.screenX}, ${event.screenY}\n`
-		if (event && event.clientX) $debug.innerText += `Mouse Client X/Y: ${event.clientX}, ${event.clientY}\n`
-		if (Mouse && Mouse.x) $debug.innerText += `Mouse Normal X/Y: ${Mouse.x}, ${Mouse.y}\n`
-		if (Mouse && Mouse.x) $debug.innerText += `Mouse Normal X/Y: ${Mouse.x}, ${Mouse.y}\n`
+		let printLine = (line) => $debug.innerText += `${line}\n`
+		printLine(`Platform: ${platformIcon ? platformIcon + ' ' : ''}${'platform' in navigator ? navigator.platform : '?'}`)
+		printLine(``)
+		printLine(`Screen Size: ${'screen' in window ? window.screen.width : '?'}, ${'screen' in window ? window.screen.height : '?'}`)
+		printLine(`Screen Color Depth: ${'screen' in window ? window.screen.colorDepth + '-bit' : '?'}`)
+		printLine(`Screen Pixel Depth: ${'screen' in window ? window.screen.pixelDepth + '-bit' : '?'}`)
+		printLine(``)
+		printLine(`Window Size: ${'innerWidth' in window ? window.innerWidth : '?'}, ${'innerHeight' in window ? window.innerHeight : '?'}`)
+		printLine(`Window Scroll: ${'scrollX' in window ? window.scrollX : '?'}, ${'scrollY' in window ? window.scrollY : '?'}`)
+		printLine(``)
+		printLine(`Mouse Client: ${event && 'clientX' in event ? event.clientX : '?'}, ${event && 'clientY' in event ? event.clientY : '?'}`)
+		printLine(`Mouse Layer: ${event && 'layerX' in event ? event.layerX : '?'}, ${event && 'layerY' in event ? event.layerY : '?'}`)
+		printLine(`Mouse Page: ${event && 'pageX' in event ? event.pageX : '?'}, ${event && 'pageY' in event ? event.pageY : '?'}`)
+		printLine(`Mouse Screen: ${event && 'screenX' in event ? event.screenX : '?'}, ${event && 'screenY' in event ? event.screenY : '?'}`)
+		printLine(``)
+		let keys = ``
+		if (Keyboard) {
+			keys = Object.keys(Keyboard)
+			// keys = Object.keys(Keyboard).map(key => {
+			// 	switch (key) {
+			// 	case "Shift": return '\u21E7'
+			// 	case "Control": return '\u2303'
+			// 	case "Alt": return '\u2325'
+			// 	case "Meta": return '\u2318'
+			// 	default: return key }
+			// })
+		}
+		printLine(`Keyboard: ${event && keys.length ? keys.join('') : '?'}`)
+
+		//if (Mouse) $debug.innerText += `Mouse Normal X/Y: ${Mouse.x}, ${Mouse.y}\n`
+		//if (Mouse) $debug.innerText += `Mouse Normal X/Y: ${Mouse.x}, ${Mouse.y}\n`
 	}
 	debug()
 }
