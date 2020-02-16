@@ -16,7 +16,7 @@ function listen(element, types, listener, options) {
 <!-- MOUSE -->
 <SCRIPT>
 let Mouse = undefined
-listen(document, "click mousemove", (event) => {
+listen(document, "mousemove", (event) => {
 	Mouse = {}
 	let update = (event) => {
 		Mouse.x = Math.round(event.clientX / window.innerWidth * 100) / 100,
@@ -30,11 +30,11 @@ listen(document, "click mousemove", (event) => {
 <!-- KEYBOARD -->
 <SCRIPT>
 let Keyboard = undefined
-listen(document, "keydown keyup", (event) => {
+listen(document, "keydown", (event) => {
 	Keyboard = {}
 	let update = (event) => {
 		if (event.type === "keydown") Keyboard[event.key] = true
-		else if (event.type === "keyup") delete Keyboard[event.key]
+		else delete Keyboard[event.key]
 	}
 	update(event)
 	listen(document, "keydown keyup", update)
@@ -264,24 +264,28 @@ if ($debug.style.opacity) {
 		printLine(`Window Size: ${'innerWidth' in window ? window.innerWidth : '?'}, ${'innerHeight' in window ? window.innerHeight : '?'}`)
 		printLine(`Window Scroll: ${'scrollX' in window ? window.scrollX : '?'}, ${'scrollY' in window ? window.scrollY : '?'}`)
 		printLine(``)
+		printLine(`Mouse: ${Mouse ? 'Active' : 'Inactive'}`)
 		printLine(`Mouse Client: ${event && 'clientX' in event ? event.clientX : '?'}, ${event && 'clientY' in event ? event.clientY : '?'}`)
 		printLine(`Mouse Layer: ${event && 'layerX' in event ? event.layerX : '?'}, ${event && 'layerY' in event ? event.layerY : '?'}`)
 		printLine(`Mouse Page: ${event && 'pageX' in event ? event.pageX : '?'}, ${event && 'pageY' in event ? event.pageY : '?'}`)
 		printLine(`Mouse Screen: ${event && 'screenX' in event ? event.screenX : '?'}, ${event && 'screenY' in event ? event.screenY : '?'}`)
 		printLine(``)
+		printLine(`Keyboard: ${Keyboard ? 'Active' : 'Inactive'}`)
 		let keys = ``
 		if (Keyboard) {
 			keys = Object.keys(Keyboard)
-			// keys = Object.keys(Keyboard).map(key => {
-			// 	switch (key) {
-			// 	case "Shift": return '\u21E7'
-			// 	case "Control": return '\u2303'
-			// 	case "Alt": return '\u2325'
-			// 	case "Meta": return '\u2318'
-			// 	default: return key }
-			// })
-		}
-		printLine(`Keyboard: ${event && keys.length ? keys.join('') : '?'}`)
+			keys = Object.keys(Keyboard).map(key => {
+				switch (key) {
+				case "Shift": return '\u21E7'
+				case "Control": return '\u2303'
+				case "Alt": return '\u2325'
+				case "Meta": return '\u2318'
+				default: return key }
+			})
+			printLine(`Keyboard: ${event && keys.length ? keys.join('') : 'No keys pressed'}`)
+		} else printLine(`Keyboard: ?`)
+		//printLine(JSON.stringify(Keyboard))
+
 
 		//if (Mouse) $debug.innerText += `Mouse Normal X/Y: ${Mouse.x}, ${Mouse.y}\n`
 		//if (Mouse) $debug.innerText += `Mouse Normal X/Y: ${Mouse.x}, ${Mouse.y}\n`
