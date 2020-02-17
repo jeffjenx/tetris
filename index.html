@@ -71,14 +71,14 @@ max-width: 80ch; margin: 0 auto; padding: 0 2em 25vh; transition: opacity 1s }
 #Tetris.loaded { opacity: 1 }
 #Tetris.visited { opacity: 1 !important }
 
-#Tetris HEADER {
+#Tetris MAIN HEADER {
 min-height: 100vh; transition: transform 1s ease-in-out;
 display: grid; grid-template-columns: min-content; grid-template-rows: min-content; 
 justify-content: center; align-content: center;
 transform: translateY(-5vh) }
-#Tetris HEADER H1, #Tetris HEADER H2 { margin: 0; display: inline-flex }
-#Tetris HEADER H2 { margin-top: -100% }
-#Tetris HEADER.focused { 
+#Tetris MAIN HEADER H1, #Tetris MAIN HEADER H2 { margin: 0; display: inline-flex }
+#Tetris MAIN HEADER H2 { margin-top: -100% }
+#Tetris MAIN HEADER.focused { 
 transition: transform 0.25s ease-in-out;
 transform: translateY(-5vh) scale(1.1) }
 
@@ -123,10 +123,10 @@ background: url("Artwork/Logo Shadow.png") center no-repeat; background-size: 10
 background: url("Artwork/Logo Fill.png") center no-repeat; background-size: 100% 100% }
 </STYLE>
 <ARTICLE ID="Tetris">
-<HEADER>
+<MAIN><HEADER>
 <H1><A CLASS="card front" HREF="Artwork.jpg"><IMG ALT="Tetris" SRC="Artwork.jpg" WIDTH="512" HEIGHT="512"/></A></H1>
 <H2><A CLASS="card back" HREF="Description.jpg"><IMG ALT="From Russia with Fun!" SRC="Description.jpg" WIDTH="512" HEIGHT="512"/></A></H1>
-</HEADER>
+</HEADER></MAIN>
 <SCRIPT>
 let $tetris = query("#Tetris")
 listen(window, "load", () => { setTimeout(() => query("#Tetris").classList.add("loaded"), 500) }) // simulate loading
@@ -145,10 +145,10 @@ let timeout
 for (let card of query("#Tetris .card"))
 	listen(card, "mouseenter mouseleave", (event) => {
 		if (timeout) clearTimeout(timeout)
-		timeout = setTimeout(() => query("#Tetris HEADER").classList.toggle("focused", event.type === "mouseenter"), event.type === "mouseenter" ? 0 : 1000)
+		timeout = setTimeout(() => query("#Tetris MAIN HEADER").classList.toggle("focused", event.type === "mouseenter"), event.type === "mouseenter" ? 0 : 1000)
 	})
 
-listen(query("#Tetris HEADER A"), "click", (event) => {
+listen(query("#Tetris MAIN HEADER A"), "click", (event) => {
 	let normalize = (value, range) => (value * 2 - range) / range
 	let normalizedLayerX = normalize(event.layerX, event.target.offsetWidth)
 	if (Math.abs(normalizedLayerX) < 0.5) return
@@ -163,24 +163,26 @@ listen(query("#Tetris HEADER A"), "click", (event) => {
 </SCRIPT>
 
 <STYLE>
-BLOCKQUOTE { font-size: smaller; margin-top: 5em }
+#Tetris BLOCKQUOTE { font-size: smaller; margin: 3em auto; max-width: 30em }
+#Tetris BLOCKQUOTE HEADER, #Tetris BLOCKQUOTE FOOTER { margin: 2em 0 }
 
-.commercial { border-radius: 4pt; overflow: hidden; display: inline-flex; float: right; margin: 1em; position: relative }
-.commercial::after { content: ""; position: absolute; top: 35%; left: 35%; width: 30%; height: 30%; 
+#Tetris .commercial { border-radius: 4pt; overflow: hidden; display: inline-flex; float: right; margin: 1em; position: relative }
+#Tetris .commercial::after { content: ""; position: absolute; top: 35%; left: 35%; width: 30%; height: 30%; 
 will-change: opacity; transition: opacity 0.2s ease-in-out;
 background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.23;
 background-image: url(https://upload.wikimedia.org/wikipedia/commons/e/e1/YouTube_play_buttom_icon_%282013-2017%29.svg) }
-.commercial:hover::after { opacity: 0.5 }
+#Tetris .commercial:hover::after { opacity: 0.5 }
 </STYLE>
 <A CLASS="commercial" HREF="https://youtube.com/watch?v=E-ej_8XBwmI"><IMG ALT="Nintendo Game Boy Commercial (1989)" SRC="https://img.youtube.com/vi/E-ej_8XBwmI/0.jpg" ALIGN="RIGHT" WIDTH="512"/></A>
 <P>Ahhh&hellip; <CITE>Tetris</CITE>. <Q CITE="https://mobygames.com/game/gameboy/tetris_gb/cover-art/gameCoverId,39235">The relentless building block video puzzle</Q> game that launched with Nintendo&rsquo;s Game&nbsp;Boy in 1989.</P>
 <P>The title comes from <EM>tetromino</EM> &mdash; a shape that is comprised of four blocks, kind of like how a <EM>domino</EM> is a shape made up of two blocks &mdash; combined with &ldquo;tennis&rdquo;, a favorite activity of the game&rsquo;s original creator, Alexey Pajitnov.</P>
-<P>While the Tetris game in general has an interesting and complicated history dating back as early as 1984, it was the <EM>Nintendo Game&nbsp;Boy</EM> version that I have the fondest memories of. Whether it was taking turns to get the high score with my mom, dad and brother or playing under the passing streetlights in the back of our van as we drove home from a family gathering, Tetris will always be one of remembered as one of my favorite video games of all time.</P>
+<P>While the Tetris franchise has an interesting and complicated history dating back as early as 1984, it was the <EM>Nintendo Game&nbsp;Boy</EM> version that I have the fondest memories of. Whether it was taking turns to get the high score with my mom, dad and brother or playing under the passing streetlights in the back of our van as we drove home from a family gathering, Tetris will always be one of remembered as one of my favorite video games of all time.</P>
 <BLOCKQUOTE CITE="https://mobygames.com/game/gameboy/tetris_gb/cover-art/gameCoverId,39236">
-<P><STRONG>The Soviet Game Sensation!</STRONG></P>
+<HEADER><P><STRONG>The Soviet Game Sensation!</STRONG></P></HEADER>
 <P>Beams, boxes, zig-zags and L-shaped blocks drop down a narrow passage.</P>
 <P>Feel your pulse quick as you spin, shift and align the shapes for a perfect fit. It's challenge and demands split second decision!</P>
 <P>Start at new heights for a tougher contest. Pick the music and set your pace from 20 progressive skill levels!</P>
+<FOOTER><P>&mdash;<CITE>Tetris Display Packaging</CITE>, 1989</P></FOOTER>
 </BLOCKQUOTE>
 
 
