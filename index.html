@@ -60,14 +60,18 @@ max-width: 80ch; margin: 0 auto; padding: 0 2em 25vh; transition: opacity 1s }
 
 #Tetris:not(.loaded) { opacity: 0 }
 #Tetris.loaded { opacity: 1 }
+#Tetris.visited { opacity: 1 !important }
 
 #Tetris HEADER {
-min-height: 100vh; transition: transform 0.5s;
+min-height: 100vh; transition: transform 1s ease-in-out;
 display: grid; grid-template-columns: min-content; grid-template-rows: min-content; 
-justify-content: center; align-content: center }
+justify-content: center; align-content: center;
+transform: translateY(-5vh) }
 #Tetris HEADER H1, #Tetris HEADER H2 { margin: 0; display: inline-flex }
 #Tetris HEADER H2 { margin-top: -100% }
-#Tetris HEADER.focused { transform: scale(1.1) }
+#Tetris HEADER.focused { 
+transition: transform 0.25s ease-in-out;
+transform: translateY(-5vh) scale(1.1) }
 
 /* CARDS */
 #Tetris .card { --flipped: 0; --direction: 1; --maxX: 1; --maxY: 1;
@@ -126,13 +130,16 @@ listen(document, "mousemove", () => {
 	$tetris.style.setProperty("--y", Mouse.y)
 })
 
+setTimeout(() => { localStorage.setItem("tetris", true) }, 4500)
+if (localStorage.getItem("tetris")) $tetris.classList.add("visited")
+
 
 // CARDS
 let timeout
 for (let card of query("#Tetris .card"))
 	listen(card, "mouseenter mouseleave", (event) => {
 		if (timeout) clearTimeout(timeout)
-		timeout = setTimeout(() => query("#Tetris HEADER").classList.toggle("focused", event.type === "mouseenter"), event.type === "mouseenter" ? 125 : 500)
+		timeout = setTimeout(() => query("#Tetris HEADER").classList.toggle("focused", event.type === "mouseenter"), event.type === "mouseenter" ? 0 : 1000)
 	})
 
 listen(query("#Tetris HEADER A"), "click", (event) => {
@@ -195,11 +202,6 @@ if ($debug.style.opacity) {
 			})
 			printLine(`Keyboard: ${event && keys.length ? keys.join('') : 'No keys pressed'}`)
 		} else printLine(`Keyboard: ?`)
-		//printLine(JSON.stringify(Keyboard))
-
-
-		//if (Mouse) $debug.innerText += `Mouse Normal X/Y: ${Mouse.x}, ${Mouse.y}\n`
-		//if (Mouse) $debug.innerText += `Mouse Normal X/Y: ${Mouse.x}, ${Mouse.y}\n`
 	}
 	debug()
 }
