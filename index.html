@@ -73,6 +73,8 @@ transform: translateY(-5vh) }
 transition: transform 0.25s ease-in-out;
 transform: translateY(-5vh) scale(1.1) }
 
+#Tetris H3 { text-align: center; margin: 5em 0 2.5em; text-transform: uppercase }
+
 /* CARDS */
 #Tetris .card { --flipped: 0; --direction: 1; --maxX: 1; --maxY: 1;
                 --offsetX: calc(var(--x) * 2 - 1); --offsetY: calc(var(--y) * 2 - 1);
@@ -114,7 +116,7 @@ background: url("Artwork/Logo Fill.png") center no-repeat; background-size: 100%
 
 /* DEBUG */
 #debug { position: fixed; z-index: 1; top: 0; left: 0; width: 100vw; height: 100vh; padding: 1em; background: transparent; color: var(--color, black); border: none; pointer-events: none;
-font-family: "IBM Plex Mono", monospace; font-weight: 100; font-size: 8pt }
+font-family: "IBM Plex Mono", monospace; font-weight: 100; font-size: 8pt; background: radial-gradient(circle at 2% 10%, black, transparent 20%) }
 </STYLE>
 <ARTICLE ID="Tetris">
 <HEADER>
@@ -145,7 +147,7 @@ for (let card of query("#Tetris .card"))
 listen(query("#Tetris HEADER A"), "click", (event) => {
 	let normalize = (value, range) => (value * 2 - range) / range
 	let normalizedLayerX = normalize(event.layerX, event.target.offsetWidth)
-	if (Math.abs(normalizedLayerX) < 0.67) return
+	if (Math.abs(normalizedLayerX) < 0.5) return
 
 	event.preventDefault()
 	for (let card of query("#Tetris .card")) {
@@ -156,10 +158,28 @@ listen(query("#Tetris HEADER A"), "click", (event) => {
 })
 </SCRIPT>
 
-<P>Ahhh&hellip; Tetris. <Q>The relentless building block video puzzle</Q> game that launched with Nintendo&rsquo;s Game&nbsp;Boy in 1989.</P>
-<P>While the Tetris video game in general has an interesting and complicated history dating back as early as 1984, it was the Nintendo Game&nbsp;Boy version that I have the fondest memories of. Whether it was taking turns to get the high score with my mom, dad and brother or playing under the passing streetlights in the back of our van as we drove home from a family gathering, Tetris will always be one of remembered as one of my favorite video games of all time.</P>
+<iframe style="float: right; margin-top: 0.5em; margin-left: 1em; border-radius: 4pt; width: 16em; height: 12em" width="256" height="192" src="https://www.youtube.com/embed/E-ej_8XBwmI?modestbranding=1&showinfo=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<P>Ahhh&hellip; <CITE>Tetris</CITE>. <Q CITE="https://www.mobygames.com/game/gameboy/tetris_gb/cover-art/gameCoverId,39235/">The relentless building block video puzzle</Q> game that launched with Nintendo&rsquo;s Game&nbsp;Boy in 1989.</P>
+<P>The title comes from <EM>tetromino</EM> &mdash; a shape that is comprised of four blocks, kind of like how a <EM>domino</EM> is a shape made up of two blocks &mdash; combined with &ldquo;tennis&rdquo;, a favorite activity of the game&rsquo;s original creator, Alexey Pajitnov.</P>
+<P>While the Tetris game in general has an interesting and complicated history dating back as early as 1984, it was the <EM>Nintendo Game&nbsp;Boy</EM> version that I have the fondest memories of. Whether it was taking turns to get the high score with my mom, dad and brother or playing under the passing streetlights in the back of our van as we drove home from a family gathering, Tetris will always be one of remembered as one of my favorite video games of all time.</P>
 
-<P>The game&rsquo;s title, &ldquo;Tetris,&rdquo; is a portmanteau of <EM>tetromino</EM> (a shape that is comprised of four blocks, kind of like how a <EM>domino</EM> is a shape made up of two blocks) combined with “tennis”, Pajitnov’s favorite sport.</P>
+
+
+<STYLE>
+#Tetris #Resources UL { list-style: none; padding-left: 0 }
+#Tetris #Resources LI { padding-bottom: 1em }
+
+#Tetris #Resources A::before, #Tetris #Resources A::after { content: ""; display: inline-block; text-decoration: none }
+#Tetris #Resources A::before { content: "\201C"; }
+#Tetris #Resources A::after { content: "\201D"; } 
+</STYLE>
+<SECTION id="Resources">
+<H3>Additional Resources</H3>
+<UL>
+<LI><A HREF="https://tetris.com">The Addictive Puzzle Game that Started It All!,</A> Alexey Pajitnov and Henk Rogers, <EM>Tetris.com,</EM> <TIME DATETIME="2020-01-01">2020</TIME>.</LI>
+<LI><A HREF="https://www.mobygames.com/game/gameboy/tetris_gb">Tetris for Game Boy (1989),</A> 雷堂嬢太朗 (Jotaro Raido), <CITE>Moby Games,</CITE> <TIME DATETIME="2009-12-19">2009</TIME>.</LI>
+</UL>
+</SECTION>
 </ARTICLE>
 
 <!-- DEBUGGER -->
