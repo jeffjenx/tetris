@@ -93,7 +93,7 @@ border-radius: 4pt; overflow: hidden; display: inline-flex;
 box-shadow: calc(var(--offsetX) * var(--maxX) * -1vmin + 0.5vmin)
             calc(var(--offsetY) * var(--maxY) * -1vmin + 0.5vmin)
             2vmin rgba(0,0,0,0.25);
-transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+transition: all 1s cubic-bezier(0.23, 1, 0.32, 1), outline 0s;
 transform: perspective(100vmin)
            rotateX(calc(var(--offsetY) * var(--maxY) * -3deg))
            rotateY(calc(var(--offsetX) * var(--maxX) * 3deg + var(--direction) * var(--flipped) * 180deg)) }
@@ -113,7 +113,7 @@ transform: perspective(100vmin)
 #Tetris .card.front::after { --stack: 0; content: ""; display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
 will-change: filter, transform;
 filter: drop-shadow(calc(var(--offsetX) * -3px) calc(var(--offsetY) * -3px) 1px rgba(0,0,0,0.2));
-transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+transition: all 1s cubic-bezier(0.23, 1, 0.32, 1), outline 0s;
 transform: perspective(100vmin)
            translateX(calc(var(--stack) * var(--offsetX) * var(--maxX) * 0.1vmin))
            translateY(calc(var(--stack) * var(--offsetY) * var(--maxY) * 0.1vmin)) }
@@ -162,11 +162,26 @@ listen(query("#Tetris HEADER A"), "click", (event) => {
 })
 </SCRIPT>
 
-<!-- <iframe style="float: right; margin-top: 0.5em; margin-left: 1em; border-radius: 4pt; width: 16em; height: 12em" width="256" height="192" src="https://www.youtube.com/embed/E-ej_8XBwmI?modestbranding=1&showinfo=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
-<P>Ahhh&hellip; <CITE>Tetris</CITE>. <Q CITE="https://www.mobygames.com/game/gameboy/tetris_gb/cover-art/gameCoverId,39235/">The relentless building block video puzzle</Q> game that launched with Nintendo&rsquo;s Game&nbsp;Boy in 1989.</P>
+<STYLE>
+BLOCKQUOTE { font-size: smaller; margin-top: 5em }
+
+.commercial { border-radius: 4pt; overflow: hidden; display: inline-flex; float: right; margin: 1em; position: relative }
+.commercial::after { content: ""; position: absolute; top: 35%; left: 35%; width: 30%; height: 30%; 
+will-change: opacity; transition: opacity 0.2s ease-in-out;
+background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.23;
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/e/e1/YouTube_play_buttom_icon_%282013-2017%29.svg) }
+.commercial:hover::after { opacity: 0.5 }
+</STYLE>
+<A CLASS="commercial" HREF="https://youtube.com/watch?v=E-ej_8XBwmI"><IMG ALT="Nintendo Game Boy Commercial (1989)" SRC="https://img.youtube.com/vi/E-ej_8XBwmI/0.jpg" ALIGN="RIGHT" WIDTH="512"/></A>
+<P>Ahhh&hellip; <CITE>Tetris</CITE>. <Q CITE="https://mobygames.com/game/gameboy/tetris_gb/cover-art/gameCoverId,39235">The relentless building block video puzzle</Q> game that launched with Nintendo&rsquo;s Game&nbsp;Boy in 1989.</P>
 <P>The title comes from <EM>tetromino</EM> &mdash; a shape that is comprised of four blocks, kind of like how a <EM>domino</EM> is a shape made up of two blocks &mdash; combined with &ldquo;tennis&rdquo;, a favorite activity of the game&rsquo;s original creator, Alexey Pajitnov.</P>
 <P>While the Tetris game in general has an interesting and complicated history dating back as early as 1984, it was the <EM>Nintendo Game&nbsp;Boy</EM> version that I have the fondest memories of. Whether it was taking turns to get the high score with my mom, dad and brother or playing under the passing streetlights in the back of our van as we drove home from a family gathering, Tetris will always be one of remembered as one of my favorite video games of all time.</P>
-
+<BLOCKQUOTE CITE="https://mobygames.com/game/gameboy/tetris_gb/cover-art/gameCoverId,39236">
+<P><STRONG>The Soviet Game Sensation!</STRONG></P>
+<P>Beams, boxes, zig-zags and L-shaped blocks drop down a narrow passage.</P>
+<P>Feel your pulse quick as you spin, shift and align the shapes for a perfect fit. It's challenge and demands split second decision!</P>
+<P>Start at new heights for a tougher contest. Pick the music and set your pace from 20 progressive skill levels!</P>
+</BLOCKQUOTE>
 
 
 <STYLE>
