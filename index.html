@@ -42,8 +42,8 @@ listen(document, "keydown", (event) => {
 	let animationFrameTimer
 	let update = (event) => {
 		if (event) {
-			if (event.type === "keydown") Keyboard[event.key] = true
-			else delete Keyboard[event.key]
+			if (event.type === "keydown") Keyboard[event.code] = true
+			else delete Keyboard[event.code]
 		}
 
 		if (Object.keys(Keyboard).length === 0)
@@ -52,6 +52,8 @@ listen(document, "keydown", (event) => {
 	}
 	update(event)
 	listen(document, "keydown keyup", update)
+	//listen(window, "blur", () => { console.log("blur"); if (animationFrameTimer) cancelAnimationFrame(animationFrameTimer) })
+	//listen(window, "focus", () => { Keyboard = {} })
 }, { once: true })
 </SCRIPT>
 
@@ -188,11 +190,14 @@ listen(query("#Tetris HEADER A"), "click", (event) => {
 <STYLE>
 /* DEBUG */
 #debug { position: fixed; z-index: 1; top: 0; left: 0; width: 100vw; height: 100vh; padding: 1em; background: transparent; color: var(--color, black); border: none; pointer-events: none;
-font-family: "IBM Plex Mono", monospace; font-weight: 100; font-size: 8pt; background: radial-gradient(circle at 2% 10%, white, transparent 20%) }
+font-family: "IBM Plex Mono", monospace; font-weight: 100; font-size: 8pt; background: radial-gradient(circle at 2% 10%, black, transparent 20%) }
+@media (prefers-color-scheme: light) {
+#debug { background: radial-gradient(circle at 2% 10%, white, transparent 30%) }
+}
 </STYLE>
 <DIV ID="debug" STYLE="opacity: 1">&nbsp;</DIV>
 <SCRIPT>
-let platformIcon = 'platform' in navigator ? '\uF8FF' : ''
+let platformIcon = 'platform' in navigator ? '' : ''
 let $debug = document.querySelector("#debug");
 if ($debug.style.opacity) {
 	listen(window, "resize", debug)
@@ -225,18 +230,20 @@ if ($debug.style.opacity) {
 		let keys = ``
 		if (Keyboard) {
 			const larger = (text) => `<span style="line-height:0.67em; font-size:1.5em">${text}</span>`
-			keys = Object.keys(Keyboard)
+			let displayMap = `⌘MetaLeft ⌘MetaRight ⌃ControlLeft ⌃ControlRight ⌥AltLeft ⌥AltRight [BracketLeft ]BracketRight \`Backquote \\Backslash /Slash .Period
+         -Minus =Equal ,Comma ;Semicolon 'Quote ⎵Space ↵Enter ⌫Backspace ⌦Delete ⎋Escape →ArrowRight ←ArrowLeft ↑ArrowUp ↓ArrowDown ⇞PageUp ⇟PageDown ↖Home ↘End
+			⇪CapsLock ⇧ShiftLeft ⇧ShiftRight ⇥Tab ⓪Numpad0 ①Numpad1 ②Numpad2 ③Numpad3 ④Numpad4 ⑤Numpad5 ⑥Numpad6 ⑦Numpad7 ⑧Numpad8 ⑨Numpad9 ⊜NumpadEqual 
+         ⨸NumpadDivide ⊗NumpadMultiply ⊝NumpadSubtract ⊕NumpadAdd ⏎NumpadEnter`
 			keys = Object.keys(Keyboard).map(key => {
-				switch (key) {
-				case "CapsLock": return larger('\u21EA')
-				case "Shift": return larger('\u21E7')
-				case "Control": return '\u2303'
-				case "Alt": return '\u2325'
-				case "Meta": return '\u2318'
-				default: return key }
+				let display = key.replace(/Digit|Key/g, '')
+				if (displayMap.indexOf(key) > -1) display = displayMap[displayMap.indexOf(key) - 1]
+				return display
+				//switch (key) {
+				//case "Tab": return larger(Keyboard.ShiftLeft || Keyboard.ShiftRight ? '\u21E4' : '\u21E5')
+				//default: return key.replace(/Digit|Key/g,'') }
 			})
-			printLine(`Keyboard: ${keys.length ? keys.join('') : 'No keys pressed'}`)
-		} else printLine(`Keyboard: ?`)
+			printLine(`Keyboard: ${keys.length ? keys.join('') : ''}`)
+		} else printLine(`Keyboard: `)
 	}
 	debug()
 }
