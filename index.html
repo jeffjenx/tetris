@@ -24,7 +24,7 @@ function listen(elements, types, listener, options) {
 <SCRIPT>
 let Mouse = undefined
 listen(document, "mousemove", (event) => {
-	Mouse = {}
+	if (!Mouse) Mouse = {}
 	let update = (event) => {
 		Mouse.x = Math.round(event.clientX / window.innerWidth * 100) / 100,
 		Mouse.y = Math.round(event.clientY / window.innerHeight * 100) / 100
@@ -38,10 +38,17 @@ listen(document, "mousemove", (event) => {
 <SCRIPT>
 let Keyboard = undefined
 listen(document, "keydown", (event) => {
-	Keyboard = {}
+	if (!Keyboard) Keyboard = {}
+	let animationFrameTimer
 	let update = (event) => {
-		if (event.type === "keydown") Keyboard[event.key] = true
-		else delete Keyboard[event.key]
+		if (event) {
+			if (event.type === "keydown") Keyboard[event.key] = true
+			else delete Keyboard[event.key]
+		}
+
+		if (Object.keys(Keyboard).length === 0)
+			return cancelAnimationFrame(animationFrameTimer)
+		animationFrameTimer = requestAnimationFrame(() => update())
 	}
 	update(event)
 	listen(document, "keydown keyup", update)
@@ -112,11 +119,6 @@ transform: perspective(100vmin)
 background: url("Artwork/Logo Shadow.png") center no-repeat; background-size: 100% 100% }
 #Tetris .card.front::after { --stack: 2;
 background: url("Artwork/Logo Fill.png") center no-repeat; background-size: 100% 100% }
-
-
-/* DEBUG */
-#debug { position: fixed; z-index: 1; top: 0; left: 0; width: 100vw; height: 100vh; padding: 1em; background: transparent; color: var(--color, black); border: none; pointer-events: none;
-font-family: "IBM Plex Mono", monospace; font-weight: 100; font-size: 8pt; background: radial-gradient(circle at 2% 10%, black, transparent 20%) }
 </STYLE>
 <ARTICLE ID="Tetris">
 <HEADER>
@@ -158,7 +160,7 @@ listen(query("#Tetris HEADER A"), "click", (event) => {
 })
 </SCRIPT>
 
-<iframe style="float: right; margin-top: 0.5em; margin-left: 1em; border-radius: 4pt; width: 16em; height: 12em" width="256" height="192" src="https://www.youtube.com/embed/E-ej_8XBwmI?modestbranding=1&showinfo=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<!-- <iframe style="float: right; margin-top: 0.5em; margin-left: 1em; border-radius: 4pt; width: 16em; height: 12em" width="256" height="192" src="https://www.youtube.com/embed/E-ej_8XBwmI?modestbranding=1&showinfo=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
 <P>Ahhh&hellip; <CITE>Tetris</CITE>. <Q CITE="https://www.mobygames.com/game/gameboy/tetris_gb/cover-art/gameCoverId,39235/">The relentless building block video puzzle</Q> game that launched with Nintendo&rsquo;s Game&nbsp;Boy in 1989.</P>
 <P>The title comes from <EM>tetromino</EM> &mdash; a shape that is comprised of four blocks, kind of like how a <EM>domino</EM> is a shape made up of two blocks &mdash; combined with &ldquo;tennis&rdquo;, a favorite activity of the game&rsquo;s original creator, Alexey Pajitnov.</P>
 <P>While the Tetris game in general has an interesting and complicated history dating back as early as 1984, it was the <EM>Nintendo Game&nbsp;Boy</EM> version that I have the fondest memories of. Whether it was taking turns to get the high score with my mom, dad and brother or playing under the passing streetlights in the back of our van as we drove home from a family gathering, Tetris will always be one of remembered as one of my favorite video games of all time.</P>
@@ -183,16 +185,27 @@ listen(query("#Tetris HEADER A"), "click", (event) => {
 </ARTICLE>
 
 <!-- DEBUGGER -->
+<STYLE>
+/* DEBUG */
+#debug { position: fixed; z-index: 1; top: 0; left: 0; width: 100vw; height: 100vh; padding: 1em; background: transparent; color: var(--color, black); border: none; pointer-events: none;
+font-family: "IBM Plex Mono", monospace; font-weight: 100; font-size: 8pt; background: radial-gradient(circle at 2% 10%, white, transparent 20%) }
+</STYLE>
 <DIV ID="debug" STYLE="opacity: 1">&nbsp;</DIV>
 <SCRIPT>
 let platformIcon = 'platform' in navigator ? '\uF8FF' : ''
 let $debug = document.querySelector("#debug");
 if ($debug.style.opacity) {
 	listen(window, "resize", debug)
-	listen(document, "click mousemove keydown keyup scroll", debug);
-	function debug(event) { 
-		$debug.innerText = ""
-		let printLine = (line) => $debug.innerText += `${line}\n`
+	listen(document, "click mousemove keydown keyup scroll", debug)
+
+	Keyboard = new Proxy({}, {
+		set: (obj, prop, value) => { obj[prop] = value; debug(); return true },
+		deleteProperty(obj, prop) { if (prop in obj) { delete obj[prop]; debug() } }
+	})
+
+	function debug(event) {
+		$debug.innerHTML = ``
+		let printLine = (line) => $debug.innerHTML += `${line}<BR/>`
 		printLine(`Platform: ${platformIcon ? platformIcon + ' ' : ''}${'platform' in navigator ? navigator.platform : '?'}`)
 		printLine(``)
 		printLine(`Screen Size: ${'screen' in window ? window.screen.width : '?'}, ${'screen' in window ? window.screen.height : '?'}`)
@@ -211,16 +224,18 @@ if ($debug.style.opacity) {
 		printLine(`Keyboard: ${Keyboard ? 'Active' : 'Inactive'}`)
 		let keys = ``
 		if (Keyboard) {
+			const larger = (text) => `<span style="line-height:0.67em; font-size:1.5em">${text}</span>`
 			keys = Object.keys(Keyboard)
 			keys = Object.keys(Keyboard).map(key => {
 				switch (key) {
-				case "Shift": return '\u21E7'
+				case "CapsLock": return larger('\u21EA')
+				case "Shift": return larger('\u21E7')
 				case "Control": return '\u2303'
 				case "Alt": return '\u2325'
 				case "Meta": return '\u2318'
 				default: return key }
 			})
-			printLine(`Keyboard: ${event && keys.length ? keys.join('') : 'No keys pressed'}`)
+			printLine(`Keyboard: ${keys.length ? keys.join('') : 'No keys pressed'}`)
 		} else printLine(`Keyboard: ?`)
 	}
 	debug()
