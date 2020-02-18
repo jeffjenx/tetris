@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <TITLE>Tetris</TITLE>
 <LINK REL="stylesheet" HREF="https://webdevkit.net/styles.css">
+<LINK REL="icon" SIZES="32x32" HREF="Icon/32x32.png">
 
 <!-- GLOBALS -->
 <SCRIPT>
@@ -38,7 +39,10 @@ listen(document, "mousemove", (event) => {
 <SCRIPT>
 let Keyboard = undefined
 listen(document, "keydown", (event) => {
-	if (!Keyboard) Keyboard = {}
+	if (!Keyboard) Keyboard = new Proxy({}, {
+		set: (obj, prop, value) => { obj[prop] = value; debug(); return true },
+		deleteProperty(obj, prop) { if (prop in obj) { delete obj[prop]; debug() } }
+	})
 	let animationFrameTimer
 	let update = (event) => {
 		if (event) {
@@ -52,8 +56,7 @@ listen(document, "keydown", (event) => {
 	}
 	update(event)
 	listen(document, "keydown keyup", update)
-	//listen(window, "blur", () => { console.log("blur"); if (animationFrameTimer) cancelAnimationFrame(animationFrameTimer) })
-	//listen(window, "focus", () => { Keyboard = {} })
+	listen(window, "blur", () => { for (let key of Object.keys(Keyboard)) delete Keyboard[key] })
 }, { once: true })
 </SCRIPT>
 
@@ -89,7 +92,7 @@ transform: translateY(-5vh) scale(1.1) }
                 --offsetX: calc(var(--x) * 2 - 1); --offsetY: calc(var(--y) * 2 - 1);
 will-change: box-shadow, transform;
 backface-visibility: hidden;
-border-radius: 4pt; overflow: hidden; display: inline-flex;
+border-radius: 3pt; overflow: hidden; display: inline-flex;
 box-shadow: calc(var(--offsetX) * var(--maxX) * -1vmin + 0.5vmin)
             calc(var(--offsetY) * var(--maxY) * -1vmin + 0.5vmin)
             2vmin rgba(0,0,0,0.25);
@@ -166,25 +169,177 @@ listen(query("#Tetris MAIN HEADER A"), "click", (event) => {
 #Tetris BLOCKQUOTE { font-size: smaller; margin: 3em auto; max-width: 30em }
 #Tetris BLOCKQUOTE HEADER, #Tetris BLOCKQUOTE FOOTER { margin: 2em 0 }
 
-#Tetris .commercial { border-radius: 4pt; overflow: hidden; display: inline-flex; float: right; margin: 1em; position: relative }
-#Tetris .commercial::after { content: ""; position: absolute; top: 35%; left: 35%; width: 30%; height: 30%; 
-will-change: opacity; transition: opacity 0.2s ease-in-out;
-background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.23;
+#Tetris #commercial { display: inline-flex; float: right; margin: 1em; position: relative }
+#Tetris #commercial::before { content: ""; position: absolute; z-index: 1; top: 0; left: 0; width: 100%; height: 100%;
+background-size: contain; background-repeat: no-repeat; background-position: center;
+background-image: url("Commercial/Overlay.png") }
+#Tetris #commercial::after { content: ""; position: absolute; top: 141px; left: 191px; width: 43px; height: 43px; filter: grayscale(1);
+will-change: opacity; transition: opacity 0.5s ease-in-out;
+background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.5;
 background-image: url(https://upload.wikimedia.org/wikipedia/commons/e/e1/YouTube_play_buttom_icon_%282013-2017%29.svg) }
-#Tetris .commercial:hover::after { opacity: 0.5 }
+#Tetris #commercial:hover::after { opacity: 0.75; transition-duration: 0.125s; filter: grayscale(0); }
+#Tetris #commercial img, #Tetris #commercial iframe, #Tetris #commercial .ytp-spinner { transform: scale(0.63) translate(-13.5%, -12%) }
+/* #Tetris #commercial::before, #Tetris #commercial::after { pointer-events: none } */
+
+
+#Tetris #commercial:not(.playing) iframe { display: none }
+#Tetris #commercial.playing::after,
+#Tetris #commercial.playing img { display: none }
+
+#Tetris #commercial.buffering::after { background: none }
+#Tetris #commercial.buffering::after { border-radius: 50% }
+
+#Tetris #commercial:not(.buffering) .ytp-spinner { display: none }
+#Tetris #commercial.buffering .ytp-spinner { display: block; opacity: 0.5; left: 43%; top: 42%; }
+.ytp-spinner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 64px;
+    margin-left: -32px;
+    z-index: 18;
+    pointer-events: none;
+}
+.ytp-spinner-container {
+    pointer-events: none;
+    position: absolute;
+    width: 100%;
+    padding-bottom: 100%;
+    top: 50%;
+    left: 50%;
+    margin-top: -50%;
+    margin-left: -50%;
+    animation: ytp-spinner-linspin 1568.23529647ms linear infinite;
+    -webkit-animation: ytp-spinner-linspin 1568.23529647ms linear infinite;
+}
+.ytp-spinner-rotator {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-animation: ytp-spinner-easespin 5332ms cubic-bezier(0.4,0.0,0.2,1) infinite both;
+    animation: ytp-spinner-easespin 5332ms cubic-bezier(0.4,0.0,0.2,1) infinite both;
+}
+.ytp-spinner-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+.ytp-spinner-left {
+    right: 49%;
+}
+.ytp-spinner-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+.ytp-spinner-right {
+    left: 49%;
+}
+.ytp-spinner-circle {
+    box-sizing: border-box;
+    position: absolute;
+    width: 200%;
+    height: 100%;
+    border-style: solid;
+    border-color: #ddd #ddd transparent;
+    border-radius: 50%;
+    border-width: 6px;
+}
+.ytp-spinner-left .ytp-spinner-circle {
+    left: 0;
+    right: -100%;
+    border-right-color: transparent;
+    -webkit-animation: ytp-spinner-left-spin 1333ms cubic-bezier(0.4,0.0,0.2,1) infinite both;
+    animation: ytp-spinner-left-spin 1333ms cubic-bezier(0.4,0.0,0.2,1) infinite both;
+}
+.ytp-spinner-right .ytp-spinner-circle {
+    left: -100%;
+    right: 0;
+    border-left-color: transparent;
+    -webkit-animation: ytp-right-spin 1333ms cubic-bezier(0.4,0.0,0.2,1) infinite both;
+    animation: ytp-right-spin 1333ms cubic-bezier(0.4,0.0,0.2,1) infinite both;
+}
+@keyframes ytp-spinner-linspin {
+to { transform:rotate(360deg) } }
+@keyframes ytp-spinner-easespin {
+12.5% { transform:rotate(135deg) }
+25% { transform:rotate(270deg) }
+37.5% { transform:rotate(405deg) }
+50% { transform:rotate(540deg) }
+62.5% { transform:rotate(675deg) }
+75% { transform:rotate(810deg) }
+87.5% { transform:rotate(945deg) }
+to { transform:rotate(1080deg) } }
+@keyframes ytp-spinner-left-spin {
+0% { transform:rotate(130deg) }
+50% { transform:rotate(-5deg) }
+to { transform:rotate(130deg) } }
+@keyframes ytp-right-spin {
+0% { transform:rotate(-130deg) }
+50% { transform:rotate(5deg) }
+to { transform:rotate(-130deg) } }
+
 </STYLE>
-<A CLASS="commercial" HREF="https://youtube.com/watch?v=E-ej_8XBwmI"><IMG ALT="Nintendo Game Boy Commercial (1989)" SRC="https://img.youtube.com/vi/E-ej_8XBwmI/0.jpg" ALIGN="RIGHT" WIDTH="512"/></A>
+
+
+<A ID="commercial" HREF="javascript:;">
+<IMG ALT="Nintendo Game Boy Commercial (1989)" SRC="Commercial/Keyframe.jpg" ALIGN="RIGHT" WIDTH="512"/>
+<div class="ytp-spinner"><div class="ytp-spinner-container"><div class="ytp-spinner-rotator"><div class="ytp-spinner-left"><div class="ytp-spinner-circle"></div></div><div class="ytp-spinner-right"><div class="ytp-spinner-circle"></div></div></div></div></div>
+<SCRIPT>
+let television = document.querySelector("#commercial")
+let player = document.createElement("div")
+player.id = `player`
+television.appendChild(player)
+
+let commercial
+function onYouTubeIframeAPIReady() {
+	television.classList.remove("loading")
+	commercial = new YT.Player('player', {
+		height: '384',
+		width: '512',
+		videoId: 'E-ej_8XBwmI',
+		playerVars: { 'controls': 0, 'modestbranding': 1 },
+		events: {
+			'onReady': event => event.target.playVideo(),
+			'onStateChange': event => {
+				television.className = Object.keys(YT.PlayerState).find(state => YT.PlayerState[state] === event.data).toLowerCase()
+			}
+		}
+	})
+}
+
+listen(television, "click", () => {
+	television.classList.add("loading")
+	var tag = document.createElement('script');
+	tag.src = "https://youtube.com/iframe_api";
+	var firstScriptTag = document.getElementsByTagName('script')[0];
+	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+}, { once: true })
+
+listen(television, "click", () => {
+	if (!commercial) return
+	if (television.classList.contains("paused") || television.classList.contains("ended"))
+		commercial.playVideo()
+	else
+		commercial.pauseVideo()
+})
+</SCRIPT>
+</A>
 <P>Ahhh&hellip; <CITE>Tetris</CITE>. <Q CITE="https://mobygames.com/game/gameboy/tetris_gb/cover-art/gameCoverId,39235">The relentless building block video puzzle</Q> game that launched with Nintendo&rsquo;s Game&nbsp;Boy in 1989.</P>
-<P>The title comes from <EM>tetromino</EM> &mdash; a shape that is comprised of four blocks, kind of like how a <EM>domino</EM> is a shape made up of two blocks &mdash; combined with &ldquo;tennis&rdquo;, a favorite activity of the game&rsquo;s original creator, Alexey Pajitnov.</P>
+<P>The title comes from <EM>tetromino</EM> &mdash; a shape that is comprised of four blocks, kind of like how a <EM>domino</EM> is a shape made up of two blocks &mdash; combined with &ldquo;tennis,&rdquo; a favorite activity of the game&rsquo;s original creator Alexey Pajitnov.</P>
 <P>While the Tetris franchise has an interesting and complicated history dating back as early as 1984, it was the <EM>Nintendo Game&nbsp;Boy</EM> version that I have the fondest memories of. Whether it was taking turns to get the high score with my mom, dad and brother or playing under the passing streetlights in the back of our van as we drove home from a family gathering, Tetris will always be one of remembered as one of my favorite video games of all time.</P>
 <BLOCKQUOTE CITE="https://mobygames.com/game/gameboy/tetris_gb/cover-art/gameCoverId,39236">
 <HEADER><P><STRONG>The Soviet Game Sensation!</STRONG></P></HEADER>
 <P>Beams, boxes, zig-zags and L-shaped blocks drop down a narrow passage.</P>
 <P>Feel your pulse quick as you spin, shift and align the shapes for a perfect fit. It's challenge and demands split second decision!</P>
 <P>Start at new heights for a tougher contest. Pick the music and set your pace from 20 progressive skill levels!</P>
-<FOOTER><P>&mdash;<CITE>Tetris Display Packaging</CITE>, 1989</P></FOOTER>
+<FOOTER><P>&mdash; &ldquo;Tetris&rdquo; Retail Product Packaging, <CITE>Nintendo,</CITE> 1989.</P></FOOTER>
 </BLOCKQUOTE>
-
+<P></P>
 
 <STYLE>
 #Tetris #Resources UL { list-style: none; padding-left: 0 }
@@ -205,30 +360,24 @@ background-image: url(https://upload.wikimedia.org/wikipedia/commons/e/e1/YouTub
 
 <!-- DEBUGGER -->
 <STYLE>
-/* DEBUG */
 #debug { position: fixed; z-index: 1; top: 0; left: 0; width: 100vw; height: 100vh; padding: 1em; background: transparent; color: var(--color, black); border: none; pointer-events: none;
-font-family: "IBM Plex Mono", monospace; font-weight: 100; font-size: 8pt; background: radial-gradient(circle at 2% 10%, black, transparent 20%) }
-@media (prefers-color-scheme: light) {
-#debug { background: radial-gradient(circle at 2% 10%, white, transparent 30%) }
-}
+font-family: "IBM Plex Mono", monospace; font-weight: 100; font-size: 8pt; background: radial-gradient(circle at 2% 10%, var(--background, white), transparent 15%) }
 </STYLE>
 <DIV ID="debug" STYLE="opacity: 1">&nbsp;</DIV>
 <SCRIPT>
-let platformIcon = 'platform' in navigator ? '' : ''
 let $debug = document.querySelector("#debug");
 if ($debug.style.opacity) {
 	listen(window, "resize", debug)
 	listen(document, "click mousemove keydown keyup scroll", debug)
 
-	Keyboard = new Proxy({}, {
-		set: (obj, prop, value) => { obj[prop] = value; debug(); return true },
-		deleteProperty(obj, prop) { if (prop in obj) { delete obj[prop]; debug() } }
-	})
-
 	function debug(event) {
-		$debug.innerHTML = ``
 		let printLine = (line) => $debug.innerHTML += `${line}<BR/>`
-		printLine(`Platform: ${platformIcon ? platformIcon + ' ' : ''}${'platform' in navigator ? navigator.platform : '?'}`)
+		$debug.innerHTML = ``
+
+		let userAgentTokens = navigator.userAgent.match(/[^\/ ]*\/[^\/ ]*( \([^\)]*\))?/g)
+		let platform = 'platform' in navigator ? navigator.platform : ''
+		platform = userAgentTokens[0].match(/Mac OS X 10_1[2345](_\d*)?/)[0].replace(/_/g, '.').replace('Mac OS X', ' macOS')
+		printLine(`Platform: ${platform}`)
 		printLine(``)
 		printLine(`Screen Size: ${'screen' in window ? window.screen.width : '?'}, ${'screen' in window ? window.screen.height : '?'}`)
 		printLine(`Screen Color Depth: ${'screen' in window ? window.screen.colorDepth + '-bit' : '?'}`)
@@ -237,13 +386,16 @@ if ($debug.style.opacity) {
 		printLine(`Window Size: ${'innerWidth' in window ? window.innerWidth : '?'}, ${'innerHeight' in window ? window.innerHeight : '?'}`)
 		printLine(`Window Scroll: ${'scrollX' in window ? window.scrollX : '?'}, ${'scrollY' in window ? window.scrollY : '?'}`)
 		printLine(``)
-		printLine(`Mouse: ${Mouse ? 'Active' : 'Inactive'}`)
-		printLine(`Mouse Client: ${event && 'clientX' in event ? event.clientX : '?'}, ${event && 'clientY' in event ? event.clientY : '?'}`)
-		printLine(`Mouse Layer: ${event && 'layerX' in event ? event.layerX : '?'}, ${event && 'layerY' in event ? event.layerY : '?'}`)
-		printLine(`Mouse Page: ${event && 'pageX' in event ? event.pageX : '?'}, ${event && 'pageY' in event ? event.pageY : '?'}`)
-		printLine(`Mouse Screen: ${event && 'screenX' in event ? event.screenX : '?'}, ${event && 'screenY' in event ? event.screenY : '?'}`)
-		printLine(``)
-		printLine(`Keyboard: ${Keyboard ? 'Active' : 'Inactive'}`)
+		if (Mouse) {
+			let buttonMap = `┑Main ┰Auxiliary ┍Secondary`.split(" ")
+			printLine(`Mouse Client: ${event && 'clientX' in event ? event.clientX + ', ' + event.clientY : ''}`)
+			printLine(`Mouse Layer: ${event && 'layerX' in event ? event.layerX + ', ' + event.layerY : ''}`)
+			printLine(`Mouse Page: ${event && 'pageX' in event ? event.pageX + ', ' + event.pageY : ''}`)
+			printLine(`Mouse Screen: ${event && 'screenX' in event ? event.screenX + ', ' + event.screenY : ''}`)
+			printLine(`Mouse Buttons: ${event ? buttonMap.filter((button, index) => (((event.type === "click" ? 1 : 0) << event.button) | event.buttons) & (1 << index)).map(button => button[0]) : ''}`)
+			printLine(``)
+		}
+
 		let keys = ``
 		if (Keyboard) {
 			const larger = (text) => `<span style="line-height:0.67em; font-size:1.5em">${text}</span>`
@@ -255,12 +407,9 @@ if ($debug.style.opacity) {
 				let display = key.replace(/Digit|Key/g, '')
 				if (displayMap.indexOf(key) > -1) display = displayMap[displayMap.indexOf(key) - 1]
 				return display
-				//switch (key) {
-				//case "Tab": return larger(Keyboard.ShiftLeft || Keyboard.ShiftRight ? '\u21E4' : '\u21E5')
-				//default: return key.replace(/Digit|Key/g,'') }
 			})
 			printLine(`Keyboard: ${keys.length ? keys.join('') : ''}`)
-		} else printLine(`Keyboard: `)
+		}
 	}
 	debug()
 }
