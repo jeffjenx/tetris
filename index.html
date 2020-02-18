@@ -186,10 +186,14 @@ background-image: url(https://upload.wikimedia.org/wikipedia/commons/e/e1/YouTub
 #Tetris #commercial.playing::after,
 #Tetris #commercial.playing img { display: none }
 
-#Tetris #commercial.buffering::after { background: none }
-#Tetris #commercial.buffering::after { border-radius: 50% }
-
 #Tetris #commercial:not(.buffering) .ytp-spinner { display: none }
+
+#Tetris #commercial.start::after,
+#Tetris #commercial.waiting ::after,
+#Tetris #commercial.buffering::after { background: none }
+
+#Tetris #commercial.start .ytp-spinner,
+#Tetris #commercial.waiting .ytp-spinner,
 #Tetris #commercial.buffering .ytp-spinner { display: block; opacity: 0.5; left: 43%; top: 42%; }
 .ytp-spinner {
     position: absolute;
@@ -289,6 +293,8 @@ to { transform:rotate(-130deg) } }
 <A ID="commercial" HREF="javascript:;">
 <IMG ALT="Nintendo Game Boy Commercial (1989)" SRC="Commercial/Keyframe.jpg" ALIGN="RIGHT" WIDTH="512"/>
 <div class="ytp-spinner"><div class="ytp-spinner-container"><div class="ytp-spinner-rotator"><div class="ytp-spinner-left"><div class="ytp-spinner-circle"></div></div><div class="ytp-spinner-right"><div class="ytp-spinner-circle"></div></div></div></div></div>
+<script src="https://youtube.com/iframe_api"></script>
+<script src="https://api.dmcdn.net/all.js"></script>
 <SCRIPT>
 let television = document.querySelector("#commercial")
 let player = document.createElement("div")
@@ -296,36 +302,47 @@ player.id = `player`
 television.appendChild(player)
 
 let commercial
-function onYouTubeIframeAPIReady() {
-	television.classList.remove("loading")
-	commercial = new YT.Player('player', {
-		height: '384',
-		width: '512',
-		videoId: 'E-ej_8XBwmI',
-		playerVars: { 'controls': 0, 'modestbranding': 1 },
-		events: {
-			'onReady': event => event.target.playVideo(),
-			'onStateChange': event => {
-				television.className = Object.keys(YT.PlayerState).find(state => YT.PlayerState[state] === event.data).toLowerCase()
-			}
+
+listen(television, "click", event => {
+	if (!commercial && event.layerX > 400) {
+		commercial = {
+			play() { this.player.play() },
+			pause() { this.player.pause() },
+			player: DM.player(document.getElementById("player"), {
+				video: "x1tn4lk",
+				width: "512",
+				height: "384",
+				params: { autoplay: true, mute: true, 'queue-enable': false }
+			})
 		}
-	})
-}
+		listen(commercial.player, "start", () => commercial.player.setMuted(0))
+		listen(commercial.player, "playing pause end start video_start video_end waiting", event => {
+			television.className = event.type
+		})
+		return
+	} else if (!commercial) {
+		commercial = {
+			play() { this.player.playVideo() },
+			pause() { this.player.pauseVideo() },
+			player: new YT.Player('player', {
+				height: '384',
+				width: '512',
+				videoId: 'E-ej_8XBwmI',
+				playerVars: { 'controls': 0, 'modestbranding': 1, 'autoplay': 1 },
+				events: {
+					'onStateChange': event => {
+						television.className = Object.keys(YT.PlayerState).find(state => YT.PlayerState[state] === event.data).toLowerCase()
+					}
+				}
+			})
+		}
+		return
+	}
 
-listen(television, "click", () => {
-	television.classList.add("loading")
-	var tag = document.createElement('script');
-	tag.src = "https://youtube.com/iframe_api";
-	var firstScriptTag = document.getElementsByTagName('script')[0];
-	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-}, { once: true })
-
-listen(television, "click", () => {
-	if (!commercial) return
-	if (television.classList.contains("paused") || television.classList.contains("ended"))
-		commercial.playVideo()
+	if (television.classList.contains("playing"))
+		commercial.pause()
 	else
-		commercial.pauseVideo()
+		commercial.play()
 })
 </SCRIPT>
 </A>
