@@ -1463,17 +1463,37 @@ function updateScoringTable(highSpeedScoring) {
 				$cell.appendChild($output)
 			}
 
-			$output.value = [1,40,100,300,1200][lineIndex] * (level + (lineIndex ? 1 : 0))
+			let value = [1,40,100,300,1200][lineIndex] * (level + (lineIndex ? 1 : 0))
+			if (lineIndex === 0) {
+				$output.value = value
+				if (highSpeedScoring) $output.innerHTML += "<small>♥︎</small>"
+				continue
+			}
 
 			if (highSpeedScoring)
-				if (lineIndex === 0)
-					$output.innerHTML += "<small>♥︎</small>"
-				else
-					$output.value = [1,40,100,300,1200][lineIndex] * (level + 10 + (lineIndex ? 1 : 0))
+				value = [1,40,100,300,1200][lineIndex] * (level + 10 + (lineIndex ? 1 : 0))
+			animateValue($output, $output.value, value, 500)
 		}
 	}
 }
 updateScoringTable()
+
+function animateValue(element, start, end, duration) {
+	let range = end - start
+	let endTime = Date.now() + duration
+	let updateTimer = requestAnimationFrame(updateValue)
+	function updateValue() {
+		let now = Date.now()
+		let remaining = Math.max((endTime - now) / duration, 0)
+		let value = Math.round(end - (remaining * range))
+		element.innerHTML = value
+		if (value == end)
+			cancelAnimationFrame(updateTimer)
+		updateTimer = requestAnimationFrame(updateValue)
+	}
+}
+
+animateValue("value", 100, 25, 5000);
 
 let $toggle = $(".tetris__toggle.scoring input")
 on($toggle, "change", event => {
