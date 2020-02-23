@@ -1,0 +1,17 @@
+#debug {
+	z-index: 1;
+	display: none;
+	position: fixed;
+	left: 0; top: 0;
+	width: 100vw; height: 100vh;
+	background: transparent;
+	padding: 1em;
+	color: var(--foregroundColor, black);
+	border: none;
+	pointer-events: none;
+	font-family: "IBM Plex Mono", monospace;
+	font-weight: 100;
+	font-size: 8pt;
+	background: radial-gradient(circle at 2% 10%, var(--backgroundColor, white), transparent 15%) }
+
+#debug.enabled { display: block }
