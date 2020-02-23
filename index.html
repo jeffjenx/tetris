@@ -258,8 +258,8 @@
 					<time class="tetris__citeDate" datetime="1989-07-31">1989.</time>
 					<label class="tetris__toggle scoring">
 						<input class="tetris__toggleInput" type="checkbox"/>
-						<span class="tetris__toggleIcon">♡</span>
-						<span class="tetris__toggleText">View High Speed Scoring</span>
+						<span class="tetris__toggleIcon" title="Toggle High Speed Scores">♡</span>
+						<span class="tetris__toggleText">Toggle High Speed Scores</span>
 					</label>
 				</figcaption>
 			</figure>
@@ -313,7 +313,7 @@
 				I don’t think he knew at the time that each Level serves a multiplier for bonus points awarded to line clears.
 			</p>
 			<figure class="tetris__figure gameboy">
-				<a class="tetris__gameboy"
+				<a class="tetris__imageLink gameboy"
 				   href="Game Boy.png">
 					<img class="tetris__image gameboy"
 					     src="Game Boy.png"
@@ -877,10 +877,10 @@ abbr { text-decoration: none }
 	max-width: 30em }
 
 .tetris__blockquote.instructions { float: right; width: 40%; margin: 1.5em 4em }
-.tetris__blockquote.miyamoto { max-width: none; margin: 4em calc(256px + 6em + 3em) 3em 3em }
+.tetris__blockquote.miyamoto { max-width: none; margin: 5em calc(256px + 6em + 3em) 5em 3em }
 .tetris__blockquote.objective { margin-left: calc(256px + 6em + 5em) }
 .tetris__blockquote.pajitnov { margin: 3.5em 23em 3.5em 5em; max-width: 40em }
-.tetris__blockquote.wozniak { float: right; margin: 3em 5em; max-width: 40% }
+.tetris__blockquote.wozniak { float: right; margin: 0 5em 3em; max-width: 40% }
 
 .tetris__blockquoteHeader { margin-bottom: 1.5em }
 
@@ -893,8 +893,8 @@ abbr { text-decoration: none }
 	margin-top: 1em }
 
 .tetris__caption.commercial { clear: both }
-.tetris__caption.evaluation { position: relative; top: -2.5em; width: 40em; margin: 0 auto }
-.tetris__caption.gameboy { width: 56%; margin: 1em auto }
+.tetris__caption.evaluation { position: relative; width: 40em; margin-left: auto; margin-right: auto }
+.tetris__caption.gameboy { transform: scale(1) } /* for filter: drop-shadow stacking */
 .tetris__caption.magazine { width: 60%; margin: 0 auto }
 .tetris__caption.miyamoto { margin-top: 1em; text-align: center }
 .tetris__caption.scoring { width: 63em; margin-left: auto; margin-right: auto }
@@ -907,7 +907,7 @@ abbr { text-decoration: none }
 
 .tetris__citePublication { font-style: italic }
 
-.tetris__figure.gameboy { float: left;	display: block; width: 75%; margin: 2em calc(-10% + 2em) 0 -10% }
+.tetris__figure.gameboy { float: left; width: 40%; margin: 1.5em 3.5em 1em 1em }
 .tetris__figure.magazine { margin: 2em auto }
 .tetris__figure.miyamoto { float: right; width: 256px; margin: 0em 5em 0em 2em }
 .tetris__figure.nester { float: right; width: 25%;  margin: -1.5em 3em 1em 1em }
@@ -916,13 +916,14 @@ abbr { text-decoration: none }
 .tetris__figure.strategy { float: left; width: 33%; margin: 1em 2em }
 .tetris__figure.versus { float: left; width: 256px; margin: 1em 3em }
 
-.tetris__image.gameboy { filter: drop-shadow(10px 5px 10px var(--black)) }
+.tetris__image.gameboy { filter: drop-shadow(10px 5px 10px var(--black)); transform: scale(2) translateX(-0.6%) }
 .tetris__image.magazine { margin: -4em auto -6em }
 .tetris__image.miyamoto { position: relative; left: -40%; top: 0% }
 .tetris__image.versus { image-rendering: pixelated }
 
 .tetris__imageLink { display: inline-flex }
 
+.tetris__imageLink.gameboy { display: inline-flex; padding-top: 33%; padding-bottom: 31% }
 .tetris__imageLink.magazine { display: inline-block; overflow: hidden }
 .tetris__imageLink.miyamoto {
 	display: block;
@@ -930,7 +931,9 @@ abbr { text-decoration: none }
 	overflow: hidden;
 	border: solid 4px var(--backgroundColor);
 	border-radius: 50%;
-	box-shadow: 0 0 0 2px var(--foregroundColor) }
+	box-shadow: 0 0 0 2px var(--foregroundColor);
+	transform: scale(0.75);
+	margin-bottom: -12.25% }
 
 .tetris__quote::before { content: "\201C" }
 .tetris__quote::after { content: "\201D" }
@@ -1101,7 +1104,8 @@ abbr { text-decoration: none }
 	font-size: 1.5em;
 	box-shadow: 2px 2px var(--foregroundColor);
 	background: var(--backgroundColor);
-	margin-top: 0 }
+	margin-top: 0;
+	padding: 0.125em 0.75em }
 
 .evaluation .tetris__dataList {
 	display: grid;
@@ -1209,15 +1213,13 @@ abbr { text-decoration: none }
 
 .scoring .tetris__toggleIcon::before {
 	will-change: opacity;
-	transition: opacity 0.125s ease-in-out;
+	transition: opacity 0.25s ease-in-out;
 
 	content: "♥︎"; opacity: 0;
 	position: absolute;
 	left: 0; top: 0;
 	width: 100% }
-.scoring .tetris__toggleIcon:hover::before { opacity: 0.25 }
-.scoring .tetris__toggleInput.active + .tetris__toggleIcon::before {	opacity: 0.75 }
-.scoring .tetris__toggleInput.active + .tetris__toggleIcon:hover::before {	opacity: 1 }
+.scoring .tetris__toggleInput.active + .tetris__toggleIcon::before {	opacity: 1 }
 
 .scoring .tetris__toggleInput,
 .scoring .tetris__toggleText { display: none }
@@ -1283,7 +1285,6 @@ abbr { text-decoration: none }
 	display: grid;
 	grid-template-columns: min-content auto;
 	grid-template-rows: 27% 27% 46%;
-	max-width: 22em;
 	font-family: 'IBM Plex Sans';
 	font-size: 12pt }
 
@@ -1299,6 +1300,9 @@ abbr { text-decoration: none }
 .strategy .tetris__region.danger { background:var(--red50); color:var(--coolGray10); font-weight: 700 }
 .strategy .tetris__region.warning { background: var(--green30); color: var(--coolGray100) }
 .strategy .tetris__region.safe { background: var(--blue50); color: var(--coolGray100) }
+
+.strategy .tetris__container,
+.strategy .tetris__caption { max-width: 22em }
 </style>
 
 <script>
