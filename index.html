@@ -1,45 +1,187 @@
 <!doctype html>
 <title>Tetris</title>
+<link rel="icon" sizes="32x32" href="Icon/32x32.png">
 
-<LINK REL="icon" SIZES="32x32" HREF="Icon/32x32.png">
-<!-- <LINK REL="stylesheet" HREF="https://webdevkit.net/styles.css"> -->
+<article class="tetris">
+	<header class="tetris__header">
+		<h1 class="tetris__headerTitle">
+			<a class="tetris__boxArt front"
+			   href="Artwork.jpg">
+				<img class="tetris__boxArtImage front"
+				     src="Artwork.jpg"
+				     alt="Tetris"
+				     width="512" height="512" />
+			</a>
+		</h1>
+		<h2 class="tetris__headerSubtitle">
+			<a class="tetris__boxArt back"
+			   href="Description.jpg">
+				<img class="tetris__boxArtImage back"
+				     src="Description.jpg"
+				     alt="From Russia with Fun!"
+				     width="512" height="512" />
+			</a>
+		</h2>
+	</header>
+</article>
+
+<style>
+/* Variables */
+:root {
+	--coolGray10: #f2f4f8; --coolGray100: #121619;
+	--green50: #24a148;
+	--red60: #da1e28;
+	--orange40: #ff832b;
+	--yellow20: #f1c21b;
+
+	--errorColor: var(--red60);
+	--successColor: var(--green50);
+	--dangerColor: var(--orange40);
+	--warningColor: var(--yellow20);
+
+	--backgroundColor: var(--coolGray10);
+	--foregroundColor: var(--coolGray100) }
+
+@media (prefers-color-scheme: dark) {
+:root {
+	--backgroundColor: var(--coolGray100);
+	--foregroundColor: var(--coolGray10) } }
+
+body {
+	background: var(--backgroundColor);
+	color: var(--foregroundColor);
+	margin: 0 }
+
+.tetris {
+	--x: 0.5;
+	--y: 0.5;
+	
+	transition: opacity 1s;
+
+	font-family: "IBM Plex Serif", sans-serif;
+	font-size: 2.4vh;
+	line-height: 1.4;
+	max-width: 80ch;
+	margin: 0 auto;
+	padding: 0 2em 25vh }
+
+.tetris:not(.loaded) { opacity: 0 }
+.tetris.loaded { opacity: 1 }
+.tetris.visited { opacity: 1 !important }
+
+/* 3-D Layered Box Art */
+.tetris__boxArt {
+	--flipped: 0;
+	--direction: 1;
+	--maxX: 1; --maxY: 1;
+   --offsetX: calc(var(--x) * 2 - 1);
+	--offsetY: calc(var(--y) * 2 - 1);
+
+	will-change: box-shadow, transform;
+
+	backface-visibility: hidden;
+	border-radius: 3pt; overflow: hidden; display: inline-flex;
+	box-shadow: calc(var(--offsetX) * var(--maxX) * -1vmin + 0.5vmin)
+					calc(var(--offsetY) * var(--maxY) * -1vmin + 0.5vmin)
+					2vmin rgba(0,0,0,0.25);
+	transition: all 1s cubic-bezier(0.23, 1, 0.32, 1), outline 0s;
+	transform: perspective(100vmin)
+				rotateX(calc(var(--offsetY) * var(--maxY) * -3deg))
+				rotateY(calc(var(--offsetX) * var(--maxX) * 3deg + var(--direction) * var(--flipped) * 180deg)) }
+
+.tetris__boxArt:hover { --maxX: 5; --maxY: 1.5 }
+.tetris__boxArt.flipped { --flipped: 1 }
+
+.tetris__boxArt.back { --flipped: -1 }
+.tetris__boxArt.back.flipped { --flipped: 0 }
+
+.tetris__boxArtImage.front { opacity: 0 }
+.tetris__boxArt.front { background: url("Artwork/Background.jpg"); background-size: contain; z-index: 1 }
+
+.tetris__boxArt.front::before,
+.tetris__boxArt.front::after {
+	--stack: 0;
+
+	will-change: filter, transform;
+	transition: all 1s cubic-bezier(0.23, 1, 0.32, 1), outline 0s;
+
+	content: ""; display: block; position: absolute;
+	left: 0; top: 0;
+	width: 100%; height: 100%;
+	filter: drop-shadow(calc(var(--offsetX) * -3px) calc(var(--offsetY) * -3px) 1px rgba(0,0,0,0.2));
+	transform: perspective(100vmin)
+	           translateX(calc(var(--stack) * var(--offsetX) * var(--maxX) * 0.1vmin))
+	           translateY(calc(var(--stack) * var(--offsetY) * var(--maxY) * 0.1vmin)) }
+
+.tetris__boxArt.front::before {
+	--stack: 1;
+	background: url("Artwork/Logo Shadow.png") center no-repeat;
+	background-size: 100% 100% }
+
+.tetris__boxArt.front::after {
+	--stack: 2;
+	background: url("Artwork/Logo Fill.png") center no-repeat;
+	background-size: 100% 100% }
+
+/* Full-Screen Header */
+.tetris__header {
+	transition: transform 1s ease-in-out;
+
+	min-height: 100vh;
+	display: grid;
+	grid-template-columns: min-content;
+	grid-template-rows: min-content; 
+	justify-content: center;
+	align-content: center;
+	transform: translateY(-5vh) }
+
+.tetris__header.focused { 
+	transition: transform 0.25s ease-in-out;
+	transform: translateY(-5vh) scale(1.1) }
+
+.tetris__headerTitle,
+.tetris__headerSubtitle { margin: 0; display: inline-flex }
+
+.tetris__headerSubtitle { margin-top: -100% }
+
+/* Quotes */
+.tetris__quote::before { content: "\201C" }
+.tetris__quote::after { content: "\201D" }
+</style>
 
 <script>
-function listen(elements, types, listener, options) {
-	if (types.indexOf(" ") > -1) types = types.split(" ")
-	else types = [types]
-
-	if (elements instanceof NodeList === false)
-		elements = [elements]
-	for (let type of types) 
-		for (let element of elements)
-			element.addEventListener(type, listener, options)
-}
-
+// jQuery style QuerySelector
 function $(selector, base = document) {
 	let elements = base.querySelectorAll(selector)
 	return elements.length === 1 ? elements[0] : elements
 }
-</script>
 
-<!-- MOUSE -->
-<SCRIPT>
+// Multi-element, multi-event attachment
+function on(elements = document, events, listener, options) {
+	events = events.split(" ")
+	if (elements instanceof NodeList === false)
+		elements = [elements]
+
+	for (let event of events) 
+		for (let element of elements)
+			element.addEventListener(event, listener, options)
+}
+
+// Mouse
 let Mouse = undefined
-listen(document, "mousemove", (event) => {
+on(document, "mousemove", (event) => {
 	if (!Mouse) Mouse = {}
 	let update = (event) => {
 		Mouse.x = Math.round(event.clientX / window.innerWidth * 100) / 100,
 		Mouse.y = Math.round(event.clientY / window.innerHeight * 100) / 100
 	}
 	update(event)
-	listen(document, "click mousemove", update)
+	on(document, "click mousemove", update)
 },	{ once: true })
-</SCRIPT>
 
-<!-- KEYBOARD -->
-<SCRIPT>
+// Keyboard
 let Keyboard = undefined
-listen(document, "keydown", (event) => {
+on(document, "keydown", (event) => {
 	if (!Keyboard) Keyboard = new Proxy({}, {
 		set: (obj, prop, value) => { obj[prop] = value; debug(); return true },
 		deleteProperty(obj, prop) { if (prop in obj) { delete obj[prop]; debug() } }
@@ -56,90 +198,17 @@ listen(document, "keydown", (event) => {
 		animationFrameTimer = requestAnimationFrame(() => update())
 	}
 	update(event)
-	listen(document, "keydown keyup", update)
-	listen(window, "blur", () => { for (let key of Object.keys(Keyboard)) delete Keyboard[key] })
+	on(document, "keydown keyup", update)
+	on(window, "blur", () => { for (let key of Object.keys(Keyboard)) delete Keyboard[key] })
 }, { once: true })
-</SCRIPT>
 
-<STYLE>
-Q::before { content: "\201C" }
-Q::after { content: "\201D" }
+const $tetris = $(".tetris")
+const $header = $(".tetris__header")
+const $boxArts = $(".tetris__boxArt")
 
-BODY { margin: 0 }
-
-#Tetris { --x: 0.5; --y: 0.5;
-font-family: "IBM Plex Serif", sans-serif; font-size: 2.4vh; line-height: 1.4;
-max-width: 80ch; margin: 0 auto; padding: 0 2em 25vh; transition: opacity 1s }
-
-#Tetris:not(.loaded) { opacity: 0 }
-#Tetris.loaded { opacity: 1 }
-#Tetris.visited { opacity: 1 !important }
-
-#Tetris MAIN HEADER {
-min-height: 100vh; transition: transform 1s ease-in-out;
-display: grid; grid-template-columns: min-content; grid-template-rows: min-content; 
-justify-content: center; align-content: center;
-transform: translateY(-5vh) }
-#Tetris MAIN HEADER H1, #Tetris MAIN HEADER H2 { margin: 0; display: inline-flex }
-#Tetris MAIN HEADER H2 { margin-top: -100% }
-#Tetris MAIN HEADER.focused { 
-transition: transform 0.25s ease-in-out;
-transform: translateY(-5vh) scale(1.1) }
-
-#Tetris H3 { text-align: center; margin: 5em 0 2.5em; text-transform: uppercase }
-
-/* CARDS */
-#Tetris .card { --flipped: 0; --direction: 1; --maxX: 1; --maxY: 1;
-                --offsetX: calc(var(--x) * 2 - 1); --offsetY: calc(var(--y) * 2 - 1);
-will-change: box-shadow, transform;
-backface-visibility: hidden;
-border-radius: 3pt; overflow: hidden; display: inline-flex;
-box-shadow: calc(var(--offsetX) * var(--maxX) * -1vmin + 0.5vmin)
-            calc(var(--offsetY) * var(--maxY) * -1vmin + 0.5vmin)
-            2vmin rgba(0,0,0,0.25);
-transition: all 1s cubic-bezier(0.23, 1, 0.32, 1), outline 0s;
-transform: perspective(100vmin)
-           rotateX(calc(var(--offsetY) * var(--maxY) * -3deg))
-           rotateY(calc(var(--offsetX) * var(--maxX) * 3deg + var(--direction) * var(--flipped) * 180deg)) }
-
-#Tetris .card:hover { --maxX: 5; --maxY: 1.5 }
-#Tetris .card.flipped { --flipped: 1 }
-
-#Tetris .card.front IMG { opacity: 0 }
-#Tetris .card.front { background: url("Artwork/Background.jpg"); background-size: contain; z-index: 1 }
-
-#Tetris .card.back { --flipped: -1 }
-#Tetris .card.back.flipped { --flipped: 0 }
-
-
-/* LAYERS */
-#Tetris .card.front::before,
-#Tetris .card.front::after { --stack: 0; content: ""; display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-will-change: filter, transform;
-filter: drop-shadow(calc(var(--offsetX) * -3px) calc(var(--offsetY) * -3px) 1px rgba(0,0,0,0.2));
-transition: all 1s cubic-bezier(0.23, 1, 0.32, 1), outline 0s;
-transform: perspective(100vmin)
-           translateX(calc(var(--stack) * var(--offsetX) * var(--maxX) * 0.1vmin))
-           translateY(calc(var(--stack) * var(--offsetY) * var(--maxY) * 0.1vmin)) }
-#Tetris .card.front::before { --stack: 1;
-background: url("Artwork/Logo Shadow.png") center no-repeat; background-size: 100% 100% }
-#Tetris .card.front::after { --stack: 2;
-background: url("Artwork/Logo Fill.png") center no-repeat; background-size: 100% 100% }
-
-/* Citations */
-#Tetris .cite-title::before, #Tetris .cite-title::after { content: ""; display: inline-block; text-decoration: none }
-#Tetris .cite-title::before { content: "\201C"; }
-#Tetris .cite-title::after { content: "\201D"; } 
-</STYLE>
-<ARTICLE ID="Tetris">
-<MAIN><HEADER>
-<H1><A CLASS="card front" HREF="Artwork.jpg"><IMG ALT="Tetris" SRC="Artwork.jpg" WIDTH="512" HEIGHT="512"/></A></H1>
-<H2><A CLASS="card back" HREF="Description.jpg"><IMG ALT="From Russia with Fun!" SRC="Description.jpg" WIDTH="512" HEIGHT="512"/></A></H1>
-</HEADER></MAIN>
-<SCRIPT>
-let $tetris = $("#Tetris")
-listen(window, "load", () => { setTimeout(() => $("#Tetris").classList.add("loaded"), 500) }) // simulate loading
-listen(document, "mousemove", () => {
+// 3-D Layered Box Art
+on(window, "load", () => { setTimeout(() => $tetris.classList.add("loaded"), 500) }) // simulate loading
+on($header, "mousemove", () => {
 	if (!Mouse) return
 	$tetris.style.setProperty("--x", Mouse.x)
 	$tetris.style.setProperty("--y", Mouse.y)
@@ -148,29 +217,33 @@ listen(document, "mousemove", () => {
 setTimeout(() => { localStorage.setItem("tetris", true) }, 4500)
 if (localStorage.getItem("tetris")) $tetris.classList.add("visited")
 
-
-// CARDS
-let timeout
-for (let card of $("#Tetris .card"))
-	listen(card, "mouseenter mouseleave", (event) => {
-		if (timeout) clearTimeout(timeout)
-		timeout = setTimeout(() => $("#Tetris MAIN HEADER").classList.toggle("focused", event.type === "mouseenter"), event.type === "mouseenter" ? 0 : 1000)
+// Delay the mouse events for box art
+let headerMouseTimeout
+for (const $boxArt of $boxArts)
+	on($boxArt, "mouseenter mouseleave", event => {
+		if (headerMouseTimeout) clearTimeout(headerMouseTimeout)
+		headerMouseTimeout = setTimeout(
+			() => $header.classList.toggle("focused", event.type === "mouseenter"),
+			event.type === "mouseenter" ? 0 : 1000)
 	})
 
-listen($("#Tetris MAIN HEADER A"), "click", (event) => {
+
+on($boxArts, "click", (event) => {
 	let normalize = (value, range) => (value * 2 - range) / range
 	let normalizedLayerX = normalize(event.layerX, event.target.offsetWidth)
 	if (Math.abs(normalizedLayerX) < 0.5) return
 
 	event.preventDefault()
-	for (let card of $("#Tetris .card")) {
-		card.classList.toggle("flipped")	
+	for (let $boxArt of $boxArts) {
+		$boxArt.classList.toggle("flipped")	
 		// card.classList.toggle("forwards", normalizedLayerX > 0.5)
 		// card.classList.toggle("reversed", normalizedLayerX < 0.5)
 	}
 })
-</SCRIPT>
+</script>
 
+
+<ARTICLE ID="Tetris">
 <STYLE>
 #Tetris BLOCKQUOTE { font-size: smaller; margin: 3em auto; max-width: 30em }
 #Tetris BLOCKQUOTE HEADER, #Tetris BLOCKQUOTE FOOTER { margin: 2em 0 }
@@ -306,7 +379,7 @@ to { transform:rotate(-130deg) } }
 
 
 
-<P>Ahhh&hellip; <CITE>Tetris</CITE>. <Q CITE="https://mobygames.com/game/gameboy/tetris_gb/cover-art/gameCoverId,39235">The relentless building block video puzzle</Q> game that launched with Nintendo&rsquo;s Game&nbsp;Boy in 1989.</P>
+<P>Ahhh&hellip; <CITE>Tetris</CITE>. <Q class="tetris__quote" CITE="https://mobygames.com/game/gameboy/tetris_gb/cover-art/gameCoverId,39235">The relentless building block video puzzle</Q> game that launched with Nintendo&rsquo;s Game&nbsp;Boy in 1989.</P>
 
 <P>The title &ldquo;originally comes from the word <EM>tetra</EM>&rdquo; or <EM>tetromino</EM> &mdash; a shape that is comprised of four blocks, kind of like how a domino is a shape made up of two blocks &mdash; combined with <EM>tennis,</EM> a favorite activity of the game&rsquo;s original creator Alexey Pajitnov.</P>
 
@@ -345,7 +418,7 @@ television.appendChild(player)
 
 let commercial
 
-listen(television, "click", event => {
+on(television, "click", event => {
 	if (!commercial && event.layerX > 400) {
 		television.className = "waiting"
 		commercial = {
@@ -358,8 +431,8 @@ listen(television, "click", event => {
 				params: { autoplay: true, mute: false, controls: false, 'queue-enable': false }
 			})
 		}
-		listen(commercial.player, "start", () => commercial.player.setMuted(0))
-		listen(commercial.player, "playing pause end start video_start video_end waiting", event => {
+		on(commercial.player, "start", () => commercial.player.setMuted(0))
+		on(commercial.player, "playing pause end start video_start video_end waiting", event => {
 			television.className = event.type
 		})
 		return
@@ -397,7 +470,7 @@ listen(television, "click", event => {
 </FIGURE>
 
 <P>For me and many other kids growing up in the 1980s, our primary source of video game related news came from <CITE>Nintendo Power</CITE>, an official magazine dedicated to all things Nintendo with contests, strategies, and previews of the newest games &amp; accessories. It was in these early issues from the fall of &lsquo;89 that I got my first look at true <EM>portable</EM> gaming.</P>
-<P>The anticipation would build up each month, first with a Pak Watch preview to drum up the excitement, <Q>when Power Players flock to store shelves in search of Game Boy this fall, they're in for a surprise... a Game Pak as part of the introductory package. Which game? Better hold on to something! It&rsquo;s Tetris!!</Q> While checking it out in a magazine was pretty cool, seeing in action brings it to a whole 'nother level. It is still easy to get pumped up for Game Boy and Tetris when you watch the original television advertisement.</P>
+<P>The anticipation would build up each month, first with a Pak Watch preview to drum up the excitement, <Q class="tetris__quote">when Power Players flock to store shelves in search of Game Boy this fall, they're in for a surprise... a Game Pak as part of the introductory package. Which game? Better hold on to something! It&rsquo;s Tetris!!</Q> While checking it out in a magazine was pretty cool, seeing in action brings it to a whole 'nother level. It is still easy to get pumped up for Game Boy and Tetris when you watch the original television advertisement.</P>
 <P>Then, just before the game hits the store shelves, you would get blown away by a multiple page feature in the release month&rsquo;s issue of <CITE>Nintendo Power</CITE>. For Tetris, we got to read about &ldquo;A Link with the Soviet Union&rdquo; and how Nintendo of America's president at the time, Howard Lincoln, would travel and share the Game Boy experience with the world and even beyond! You can always count on Nintendo Power to dress up the content with fun phrases and cool comics.</P>
 
 <FIGURE style="margin: 2em auto">
@@ -413,7 +486,7 @@ listen(television, "click", event => {
 <A HREF=""><IMG ALT="" SRC="Tetrads.png" Width="100%"/></A>
 <FIGCAPTION><SPAN CLASS="cite-title">Tetrads</SPAN> Illustrations, <CITE>Nintendo Power,</CITE> 1989.</FIGCAPTION>
 </FIGURE>
-<P>In Tetris, the individual block patterns are called <Q>Tetrads</Q> and there are seven ways to organize the four individual blocks that comprise them. The pieces are often referred to by the letter that the shape resembles: I, J, L, O, S, T, and Z. Only one of them can be used to score the maximum four-line clear.</P>
+<P>In Tetris, the individual block patterns are called <Q class="tetris__quote">Tetrads</Q> and there are seven ways to organize the four individual blocks that comprise them. The pieces are often referred to by the letter that the shape resembles: I, J, L, O, S, T, and Z. Only one of them can be used to score the maximum four-line clear.</P>
 
 <P>I like how Nintendo provides an &ldquo;Official Seal of Quality&rdquo; signified by a gold sunburst seal and a statement about their standards for excellence. While the Nintendo Seal has evolved over the years and certainly helped mitigate the dubious shovelware that brought about the video games industry recession of 1983, it was an important factor in Nintendo's control over the release of titles for their hardware.</P>
 
@@ -694,9 +767,9 @@ font-family: "IBM Plex Mono", monospace; font-weight: 100; font-size: 8pt; backg
 <SCRIPT>
 let $debug = $("#debug");
 if ($debug.style.opacity) {
-	listen(window, "resize", debug)
-	listen(document, "click mousemove keydown keyup scroll", debug)
-	listen(document, "keyup", event => { if (event.ctrlKey && event.code === "KeyD") $debug.classList.toggle("enabled") })
+	on(window, "resize", debug)
+	on(document, "click mousemove keydown keyup scroll", debug)
+	on(document, "keyup", event => { if (event.ctrlKey && event.code === "KeyD") $debug.classList.toggle("enabled") })
 
 	function debug(event) {
 		let printLine = (line) => $debug.innerHTML += `${line}<BR/>`
@@ -746,3 +819,75 @@ if ($debug.style.opacity) {
 
 <!-- TODO: Clean Up Code (ABEM style, etc) -->
 <!-- TODO: Analytics -->
+
+
+
+
+
+
+
+<STYLE>
+/* #Tetris { --x: 0.5; --y: 0.5;
+font-family: "IBM Plex Serif", sans-serif; font-size: 2.4vh; line-height: 1.4;
+max-width: 80ch; margin: 0 auto; padding: 0 2em 25vh; transition: opacity 1s }
+
+#Tetris:not(.loaded) { opacity: 0 }
+#Tetris.loaded { opacity: 1 }
+#Tetris.visited { opacity: 1 !important } */
+
+/* #Tetris MAIN HEADER {
+min-height: 100vh; transition: transform 1s ease-in-out;
+display: grid; grid-template-columns: min-content; grid-template-rows: min-content; 
+justify-content: center; align-content: center;
+transform: translateY(-5vh) }
+#Tetris MAIN HEADER H1, #Tetris MAIN HEADER H2 { margin: 0; display: inline-flex }
+#Tetris MAIN HEADER H2 { margin-top: -100% }
+#Tetris MAIN HEADER.focused { 
+transition: transform 0.25s ease-in-out;
+transform: translateY(-5vh) scale(1.1) } */
+
+#Tetris H3 { text-align: center; margin: 5em 0 2.5em; text-transform: uppercase }
+
+/* CARDS */
+/* #Tetris .card { --flipped: 0; --direction: 1; --maxX: 1; --maxY: 1;
+                --offsetX: calc(var(--x) * 2 - 1); --offsetY: calc(var(--y) * 2 - 1);
+will-change: box-shadow, transform;
+backface-visibility: hidden;
+border-radius: 3pt; overflow: hidden; display: inline-flex;
+box-shadow: calc(var(--offsetX) * var(--maxX) * -1vmin + 0.5vmin)
+            calc(var(--offsetY) * var(--maxY) * -1vmin + 0.5vmin)
+            2vmin rgba(0,0,0,0.25);
+transition: all 1s cubic-bezier(0.23, 1, 0.32, 1), outline 0s;
+transform: perspective(100vmin)
+           rotateX(calc(var(--offsetY) * var(--maxY) * -3deg))
+           rotateY(calc(var(--offsetX) * var(--maxX) * 3deg + var(--direction) * var(--flipped) * 180deg)) }
+
+#Tetris .card:hover { --maxX: 5; --maxY: 1.5 }
+#Tetris .card.flipped { --flipped: 1 }
+
+#Tetris .card.front IMG { opacity: 0 }
+#Tetris .card.front { background: url("Artwork/Background.jpg"); background-size: contain; z-index: 1 }
+
+#Tetris .card.back { --flipped: -1 }
+#Tetris .card.back.flipped { --flipped: 0 } */
+
+
+/* LAYERS */
+/* #Tetris .card.front::before,
+#Tetris .card.front::after { --stack: 0; content: ""; display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+will-change: filter, transform;
+filter: drop-shadow(calc(var(--offsetX) * -3px) calc(var(--offsetY) * -3px) 1px rgba(0,0,0,0.2));
+transition: all 1s cubic-bezier(0.23, 1, 0.32, 1), outline 0s;
+transform: perspective(100vmin)
+           translateX(calc(var(--stack) * var(--offsetX) * var(--maxX) * 0.1vmin))
+           translateY(calc(var(--stack) * var(--offsetY) * var(--maxY) * 0.1vmin)) }
+#Tetris .card.front::before { --stack: 1;
+background: url("Artwork/Logo Shadow.png") center no-repeat; background-size: 100% 100% }
+#Tetris .card.front::after { --stack: 2;
+background: url("Artwork/Logo Fill.png") center no-repeat; background-size: 100% 100% } */
+
+/* Citations */
+#Tetris .cite-title::before, #Tetris .cite-title::after { content: ""; display: inline-block; text-decoration: none }
+#Tetris .cite-title::before { content: "\201C"; }
+#Tetris .cite-title::after { content: "\201D"; } 
+</STYLE>
