@@ -1,14 +1,10 @@
-<!DOCTYPE HTML>
-<TITLE>Tetris</TITLE>
-<LINK REL="stylesheet" HREF="https://webdevkit.net/styles.css">
-<LINK REL="icon" SIZES="32x32" HREF="Icon/32x32.png">
+<!doctype html>
+<title>Tetris</title>
 
-<!-- GLOBALS -->
-<SCRIPT>
-function query(selector) {
-	let elements = document.querySelectorAll(selector)
-	return elements.length > 1 ? elements : elements[0]
-}
+<LINK REL="icon" SIZES="32x32" HREF="Icon/32x32.png">
+<!-- <LINK REL="stylesheet" HREF="https://webdevkit.net/styles.css"> -->
+
+<script>
 function listen(elements, types, listener, options) {
 	if (types.indexOf(" ") > -1) types = types.split(" ")
 	else types = [types]
@@ -19,7 +15,12 @@ function listen(elements, types, listener, options) {
 		for (let element of elements)
 			element.addEventListener(type, listener, options)
 }
-</SCRIPT>
+
+function $(selector, base = document) {
+	let elements = base.querySelectorAll(selector)
+	return elements.length === 1 ? elements[0] : elements
+}
+</script>
 
 <!-- MOUSE -->
 <SCRIPT>
@@ -136,8 +137,8 @@ background: url("Artwork/Logo Fill.png") center no-repeat; background-size: 100%
 <H2><A CLASS="card back" HREF="Description.jpg"><IMG ALT="From Russia with Fun!" SRC="Description.jpg" WIDTH="512" HEIGHT="512"/></A></H1>
 </HEADER></MAIN>
 <SCRIPT>
-let $tetris = query("#Tetris")
-listen(window, "load", () => { setTimeout(() => query("#Tetris").classList.add("loaded"), 500) }) // simulate loading
+let $tetris = $("#Tetris")
+listen(window, "load", () => { setTimeout(() => $("#Tetris").classList.add("loaded"), 500) }) // simulate loading
 listen(document, "mousemove", () => {
 	if (!Mouse) return
 	$tetris.style.setProperty("--x", Mouse.x)
@@ -150,19 +151,19 @@ if (localStorage.getItem("tetris")) $tetris.classList.add("visited")
 
 // CARDS
 let timeout
-for (let card of query("#Tetris .card"))
+for (let card of $("#Tetris .card"))
 	listen(card, "mouseenter mouseleave", (event) => {
 		if (timeout) clearTimeout(timeout)
-		timeout = setTimeout(() => query("#Tetris MAIN HEADER").classList.toggle("focused", event.type === "mouseenter"), event.type === "mouseenter" ? 0 : 1000)
+		timeout = setTimeout(() => $("#Tetris MAIN HEADER").classList.toggle("focused", event.type === "mouseenter"), event.type === "mouseenter" ? 0 : 1000)
 	})
 
-listen(query("#Tetris MAIN HEADER A"), "click", (event) => {
+listen($("#Tetris MAIN HEADER A"), "click", (event) => {
 	let normalize = (value, range) => (value * 2 - range) / range
 	let normalizedLayerX = normalize(event.layerX, event.target.offsetWidth)
 	if (Math.abs(normalizedLayerX) < 0.5) return
 
 	event.preventDefault()
-	for (let card of query("#Tetris .card")) {
+	for (let card of $("#Tetris .card")) {
 		card.classList.toggle("flipped")	
 		// card.classList.toggle("forwards", normalizedLayerX > 0.5)
 		// card.classList.toggle("reversed", normalizedLayerX < 0.5)
@@ -337,7 +338,7 @@ I still admire traditional, original Game Boy version. I like it. It's very clos
 <script src="https://youtube.com/iframe_api"></script>
 <script src="https://api.dmcdn.net/all.js"></script>
 <SCRIPT>
-let television = document.querySelector("#commercial")
+let television = $("#commercial")
 let player = document.createElement("div")
 player.id = `player`
 television.appendChild(player)
@@ -691,7 +692,7 @@ font-family: "IBM Plex Mono", monospace; font-weight: 100; font-size: 8pt; backg
 </STYLE>
 <DIV ID="debug" STYLE="opacity: 0">&nbsp;</DIV>
 <SCRIPT>
-let $debug = document.querySelector("#debug");
+let $debug = $("#debug");
 if ($debug.style.opacity) {
 	listen(window, "resize", debug)
 	listen(document, "click mousemove keydown keyup scroll", debug)
