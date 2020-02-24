@@ -1,6 +1,7 @@
 <!doctype html>
+<html class="light">
 <title>Tetris</title>
-<link rel="icon" sizes="32x32" href="Icon/32x32.png">
+<link rel="icon" sizes="32x32" href="icons/32x32.png">
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
 <link rel="dns-prefetch" href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400|IBM+Plex+Sans:300,400,400i,600,700|IBM+Plex+Sans+Condensed:600|IBM+Plex+Serif:400,400i,600,700" rel="stylesheet">
 <script src="https://youtube.com/iframe_api"></script>
@@ -8,25 +9,23 @@
 
 <!-- TODO -->
 <!-- add Analytics -->
-<!-- figure out j.d. font -->
-<!-- review tv commercial functionality -->
 
 <article class="tetris__article">
 	<header class="tetris__articleHeader">
 		<h1 class="tetris__articleTitle">
 			<a class="tetris__imageLink boxArt front"
-			   href="Artwork.jpg">
+			   href="images/Artwork.jpg">
 				<img class="tetris__image boxArt front"
-				     src="Artwork.jpg"
+				     src="images/Artwork.jpg"
 				     alt="Tetris"
 				     width="512" height="512" />
 			</a>
 		</h1>
 		<h2 class="tetris__articleSubtitle">
 			<a class="tetris__imageLink boxArt back"
-			   href="Description.jpg">
+			   href="images/Description.jpg">
 				<img class="tetris__image boxArt back"
-				     src="Description.jpg"
+				     src="images/Description.jpg"
 				     alt="From Russia with Fun!"
 				     width="512" height="512" />
 			</a>
@@ -43,9 +42,9 @@
 			<p>The title “originally comes from the word <em>tetra</em>” or <em>tetromino</em> — a shape made of four blocks, kind of like how a domino is a shape made of two blocks — combined with <em>tennis,</em> a favorite activity of the game’s original creator Alexey Pajitnov.</p>
 			<figure class="tetris__figure nester">
 				<a class="tetris__imageLink nester"
-				   href="Nester.png">
+				   href="images/Nester.png">
 					<img class="tetris__image nester"
-					     src="Nester.png"
+					     src="images/Nester.png"
 					     alt="Nester smiles with his Game Boy"
 					     width="256"/>
 				</a>
@@ -88,7 +87,7 @@
 				   id="television"
 				   href="javascript:;">
 					<img class="tetris__image commercial"
-					     src="Commercial/Keyframe.jpg"
+					     src="images/Commercial/Keyframe.jpg"
 					     alt="Nintendo Game Boy Commercial (1989)"
 					     width="512"/>
 					<div class="tetris__spinner commercial">
@@ -128,9 +127,9 @@
 			</p>
 			<figure class="tetris__figure magazine">
 				<a class="tetris__imageLink magazine"
-				   href="Magazine/Page Spread.jpg">
+				   href="images/Magazine/Page Spread.jpg">
 					<img class="tetris__image magazine"
-					     src="Magazine.png"
+					     src="images/Magazine.png"
 					     alt="Nester ignores everyone to play Tetris on his Game Boy until his mom discovers how fun it is!"
 					     width="100%">
 				</a>
@@ -150,9 +149,9 @@
 			<h3 class="tetris__sectionTitle">A Brief Review</h3>
 			<figure class="tetris__figure tetrads">
 				<a class="tetris__tetrads"
-				   href="Tetrads.jpg">
+				   href="images/Tetrads.jpg">
 					<img class="tetris__image tetrads"
-					     src="Tetrads.png"
+					     src="images/Tetrads.png"
 					     alt="Seve Tetris pieces, known as Tetrads, resemble alphabet letters."
 					     width="100%"/>
 				</a>
@@ -173,9 +172,9 @@
 			</p>
 			<figure class="tetris__figure versus">
 				<a class="tetris__versus"
-				   href="Mario vs Luigi.png">
+				   href="images/Mario vs Luigi.png">
 					<img class="tetris__image versus"
-					     src="Mario vs Luigi.png"
+					     src="images/Mario vs Luigi.png"
 					     alt="Screenshots showing the two-player game mode graphics featuring Mario and Luigi."
 					     width="100%"/>
 				</a>
@@ -284,7 +283,7 @@
 				<a class="tetris__imageLink miyamoto"
 				   href="https://www.youtube.com/watch?v=7TJ7IUNWGl4">
 					<img class="tetris__image miyamoto"
-					     src="Miyamoto/Dark.jpg"
+					     src="images/Miyamoto/Dark.jpg"
 					     alt="Nintendo’s Shigeru Miyamoto makes a thumbs up gesture."
 					     height="100%">
 				</a>
@@ -317,9 +316,9 @@
 			</p>
 			<figure class="tetris__figure gameboy">
 				<a class="tetris__imageLink gameboy"
-				   href="Game Boy.png">
+				   href="images/Game Boy.png">
 					<img class="tetris__image gameboy"
-					     src="Game Boy.png"
+					     src="images/Game Boy.png"
 					     alt="An original Nintendo Game Boy showing the Tetris title screen."
 					     width="100%"/>
 				</a>
@@ -383,7 +382,7 @@
 			<figure class="tetris__figure strategy">
 				<div class="tetris__container">
 					<img class="tetris__image"
-						src="Strategy.jpg"
+						src="images/Strategy.jpg"
 						alt="A screenshot shows when it is time to change strategies."
 						height="256"/>
 					<div class="tetris__region danger">Red Alert!</DIV>
@@ -558,7 +557,7 @@
 			</p>
 			<figure class="tetris__figure jeff">
 				<img class="tetris__image jeff"
-				     src="Jeff.jpg"
+				     src="images/Jeff.jpg"
 				     alt="A profile caricature of Jeff Jenkins" />
 			</figure>
 			<p>
@@ -839,6 +838,16 @@
 	--tempGray90: var(--warmGray90);
 	--tempGray100: var(--warmGray100) }
 
+:root.dark {
+	--backgroundColor: var(--tempGray100);
+	--foregroundColor: var(--tempGray10) }
+
+:root.light {
+	--backgroundColor: var(--tempGray10);
+	--foregroundColor: var(--tempGray100) }
+
+@font-face { font-family: "Handwriting"; src: url("fonts/Handwriting.woff2") }
+
 @keyframes tetris__spinLinear {
 	to { transform:rotate(360deg) } }
 
@@ -963,11 +972,16 @@ abbr { text-decoration: none }
 .tetris__figure.strategy { float: left; width: 33%; margin: 1.5em 2em }
 .tetris__figure.versus { float: left; width: 256px; margin: 1em 3em }
 
-.tetris__image.gameboy { filter: drop-shadow(10px 5px 10px var(--black)); transform: scale(2) translateX(-0.6%) }
+.tetris__image.gameboy { filter: drop-shadow(10px 5px 10px rgba(0,0,0,0.25)); transform: scale(2) translateX(-0.6%) }
 .tetris__image.jeff { height: 3em; border: solid 2px var(--backgroundColor); border-radius: 50% }
 .tetris__image.magazine { margin: -4em auto -6em }
 .tetris__image.miyamoto { position: relative; left: -40%; top: 0% }
 .tetris__image.versus { image-rendering: pixelated }
+
+@media (prefers-color-dark: dark) {
+.tetris__image.gameboy { filter: drop-shadow(10px 5px 10px var(--black)) } }
+:root.light .tetris__image.gameboy { filter: drop-shadow(10px 5px 10px rgba(0,0,0,0.25)) }
+:root.dark .tetris__image.gameboy { filter: drop-shadow(10px 5px 10px var(--black)) }
 
 .tetris__imageLink { display: inline-flex }
 
@@ -1031,7 +1045,7 @@ abbr { text-decoration: none }
 .boxArt.tetris__imageLink.back { --flipped: -1 }
 .boxArt.tetris__imageLink.back.flipped { --flipped: 0 }
 
-.boxArt.tetris__imageLink.front { background: url("Artwork/Background.jpg"); background-size: contain; z-index: 1 }
+.boxArt.tetris__imageLink.front { background: url("images/Artwork/Background.jpg"); background-size: contain; z-index: 1 }
 
 .boxArt.tetris__imageLink.front::before,
 .boxArt.tetris__imageLink.front::after {
@@ -1050,12 +1064,12 @@ abbr { text-decoration: none }
 
 .boxArt.tetris__imageLink.front::before {
 	--stack: 1;
-	background: url("Artwork/Logo Shadow.png") center no-repeat;
+	background: url("images/Artwork/Logo Shadow.png") center no-repeat;
 	background-size: 100% 100% }
 
 .boxArt.tetris__imageLink.front::after {
 	--stack: 2;
-	background: url("Artwork/Logo Fill.png") center no-repeat;
+	background: url("images/Artwork/Logo Fill.png") center no-repeat;
 	background-size: 100% 100% }
 
 
@@ -1074,7 +1088,7 @@ abbr { text-decoration: none }
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;
-	background-image: url("Commercial/Overlay.png");
+	background-image: url("images/Commercial/Overlay.png");
 	transform-origin: bottom;
 	transform: scale(1.1) translateY(1%) }
 
@@ -1119,7 +1133,7 @@ abbr { text-decoration: none }
 .commercial.tetris__spinner.waiting,
 .commercial.tetris__spinner.buffering {
 	display: block;
-	left: 43%; top: 42%;
+	left: 37%; top: 32%;
 	opacity: 0.5; }
 
 .commercial.tetris__video {
@@ -1147,11 +1161,41 @@ abbr { text-decoration: none }
 	--backgroundColor: var(--tempGray90);
 	background-color: var(--backgroundColor) } }
 
+:root.dark .evaluation .tetris__form {
+	--backgroundColor: var(--tempGray90);
+	background-color: var(--backgroundColor) }
+
+:root.light .evaluation .tetris__form {
+	--backgroundColor: var(--tempGray30);
+	background-color: var(--backgroundColor) }
+
+.evaluation .tetris__formTitle,
+.evaluation .tetris__dataList,
+.evaluation .tetris__image,
+.evaluation .tetris__table {
+	--backgroundColor: var(--tempGray30);
+	background-color: var(--backgroundColor) }
+
+@media (prefers-color-scheme: dark) {
 .evaluation .tetris__formTitle,
 .evaluation .tetris__dataList,
 .evaluation .tetris__image,
 .evaluation .tetris__table {
 	--backgroundColor: var(--tempGray80);
+	background-color: var(--backgroundColor) } }
+
+:root.dark .evaluation .tetris__formTitle,
+:root.dark .evaluation .tetris__dataList,
+:root.dark .evaluation .tetris__image,
+:root.dark .evaluation .tetris__table {
+	--backgroundColor: var(--tempGray80);
+	background-color: var(--backgroundColor) }
+
+:root.light .evaluation .tetris__formTitle,
+:root.light .evaluation .tetris__dataList,
+:root.light .evaluation .tetris__image,
+:root.light .evaluation .tetris__table {
+	--backgroundColor: var(--tempGray10);
 	background-color: var(--backgroundColor) }
 
 .evaluation .tetris__formTitle {
@@ -1185,10 +1229,15 @@ abbr { text-decoration: none }
 	text-transform: uppercase }
 
 .evaluation .tetris__formInput {
-	font-family: "j.d.";
+	font-family: "Handwriting";
 	font-size: 1.25em;
-	line-height: 2.1rem;	color: var(--cyan50);
+	line-height: 2.1rem;
+	color: var(--cyan50);
 	margin: 0 }
+
+@media (prefers-color-scheme: dark) { .evaluation .tetris__formInput { color: var(--cyan50) } }
+:root.dark .evaluation .tetris__formInput { color: var(--cyan50) }
+:root.light .evaluation .tetris__formInput { color: var(--cyan60) }
 
 .evaluation .tetris__formField:last-child
 	.tetris__formLabel { margin-bottom: -1em }
@@ -1217,6 +1266,10 @@ abbr { text-decoration: none }
 .evaluation .tetris__image [fill="black"] { fill: var(--foregroundColor) }
 .evaluation .tetris__image [stroke="blue"] { stroke: var(--cyan50) }
 
+@media (prefers-color-scheme: dark) { .evaluation .tetris__image [stroke="blue"]  { color: var(--cyan50) } }
+:root.dark .evaluation .tetris__image [stroke="blue"]  { color: var(--cyan50) }
+:root.light .evaluation .tetris__image [stroke="blue"]  { color: var(--cyan60) }
+
 .evaluation .tetris__table {
 	font-size: 14pt;
 	border: solid 2px var(--foregroundColor);
@@ -1230,6 +1283,10 @@ abbr { text-decoration: none }
 	padding: 0.5em }
 .evaluation .tetris__table th { font-family: "IBM Plex Sans Condensed"; }
 .evaluation .tetris__table td { font-family: "j.d."; font-size: 1.25em; color: var(--cyan50); text-align: center }
+
+@media (prefers-color-scheme: dark) { .evaluation .tetris__table td { color: var(--cyan50) } }
+:root.dark .evaluation .tetris__table td  { color: var(--cyan50) }
+:root.light .evaluation .tetris__table td  { color: var(--cyan60) }
 
 .evaluation .tetris__table tr:first-child th { text-transform: uppercase; font-size: 0.75em; line-height: 1 }
 .evaluation .tetris__table tr:first-child th:last-child { text-transform: none; text-align: left; border-bottom: 0 }
@@ -1275,6 +1332,12 @@ abbr { text-decoration: none }
 .scoring .tetris__table thead tr { background-color: var(--tempGray90) }
 .scoring .tetris__table tbody tr > :first-child { background-color: var(--magenta90) } }
 
+:root.light .scoring .tetris__table thead tr { background-color: var(--tempGray30) }
+:root.light .scoring .tetris__table tbody tr > :first-child { background-color: var(--magenta30) }
+
+:root.dark .scoring .tetris__table thead tr { background-color: var(--tempGray90) }
+:root.dark .tetris__table tbody tr > :first-child { background-color: var(--magenta90) }
+
 .scoring .tetris__toggle {
 	float: right;
 	position: relative;
@@ -1291,6 +1354,7 @@ abbr { text-decoration: none }
 	transition: opacity 0.25s ease-in-out;
 
 	content: "♥︎"; opacity: 0;
+	color: var(--foregroundColor);
 	position: absolute;
 	left: 0; top: 0;
 	width: 100% }
@@ -1362,8 +1426,17 @@ abbr { text-decoration: none }
 	grid-template-rows: 27% 27% 46%;
 	font-family: 'IBM Plex Sans';
 	font-size: 12pt;
-	border: solid 4px var(--black);
-	box-shadow: 0 0 0 2px var(--foregroundColor) }
+	box-shadow: 0 0 0 3px var(--foregroundColor) }
+
+@media (prefers-color-scheme: dark) {
+.strategy .tetris__container {
+	box-shadow: 0 0 0 3px var(--backgroundColor), 0 0 0 5px var(--foregroundColor) } }
+
+:root.dark .strategy .tetris__container {
+	box-shadow: 0 0 0 3px var(--backgroundColor), 0 0 0 5px var(--foregroundColor) }
+
+:root.light .strategy .tetris__container {
+	box-shadow: 0 0 0 3px var(--foregroundColor) }
 
 .strategy .tetris__image { grid-row: 1 / 4 }
 
@@ -1416,8 +1489,8 @@ on(document, "mousemove", (event) => {
 let Keyboard = undefined
 on(document, "keydown", (event) => {
 	if (!Keyboard) Keyboard = new Proxy({}, {
-		set: (obj, prop, value) => { obj[prop] = value; debug(); return true },
-		deleteProperty(obj, prop) { if (prop in obj) { delete obj[prop]; debug() } }
+		set: (obj, prop, value) => { obj[prop] = value; return true },
+		deleteProperty(obj, prop) { if (prop in obj) { delete obj[prop] } }
 	})
 	let animationFrameTimer
 	let update = (event) => {
@@ -1438,6 +1511,7 @@ on(document, "keydown", (event) => {
 const $tetris = $(".tetris__article")
 const $header = $(".tetris__articleHeader")
 const $boxArts = $(".tetris__image.boxArt")
+const $boxArtLinks = $(".tetris__imageLink.boxArt")
 
 // 3-D Layered Box Art
 on(window, "load", () => { setTimeout(() => $tetris.classList.add("loaded"), 500) }) // simulate loading
@@ -1461,18 +1535,19 @@ for (const $boxArt of $boxArts)
 	})
 
 
-on($boxArts, "click", (event) => {
+on($boxArtLinks, "click", (event) => {
 	let normalize = (value, range) => (value * 2 - range) / range
 	let normalizedLayerX = normalize(event.layerX, event.target.offsetWidth)
 	if (Math.abs(normalizedLayerX) < 0.5) return
 
 	event.preventDefault()
-	for (let $boxArt of $boxArts)
+	for (let $boxArt of $boxArtLinks)
 		$boxArt.classList.toggle("flipped")
 })
 
 // Television Commercial
 let program
+let channel = 0
 let $television = $("#television")
 let $commercials = $(".commercial")
 on($television, "click", event => {
@@ -1485,37 +1560,49 @@ on($television, "click", event => {
 		}
 	}
 
-	if (!program && event.layerX > 400) {
+	if (!program || event.layerX > 400) {
+		if (event.layerX > 400)
+			channel = 1 - channel
+
 		updateTV("waiting")
-		program = {
-			play() { this.player.play() },
-			pause() { this.player.pause() },
-			player: DM.player($("#player"), {
-				video: "x1tn4lk",
-				width: "512",
-				height: "384",
-				params: { autoplay: true, mute: false, controls: false, "queue-enable": false }
-			})
-		}
-		on(program.player, "start", () => program.player.setMuted(0))
-		on(program.player, "playing pause end start video_start video_end waiting", event => updateTV(event.type))
-		return
-	} else if (!program) {
-		updateTV("waiting")
-		program = {
-			play() { this.player.playVideo() },
-			pause() { this.player.pauseVideo() },
-			player: new YT.Player("player", {
-				height: "384",
-				width: "512",
-				videoId: "E-ej_8XBwmI",
-				playerVars: { "controls": 0, "modestbranding": 1,"autoplay": 1 },
-				events: {
-					"onStateChange": event => {
-						updateTV(Object.keys(YT.PlayerState).find(state => YT.PlayerState[state] === event.data).toLowerCase())
+		program = Object.assign({
+			play() {
+				return this.player[`play${guide[channel].player.toLowerCase() === 'youtube' ? 'Video' : ''}`]()
+			},
+			pause() {
+				return this.player[`pause${guide[channel].player.toLowerCase() === 'youtube' ? 'Video' : ''}`]()
+			}
+		}, guide[channel])
+
+		let $player = document.createElement("div")
+		$player.className = "tetris__video commercial"
+		$player.id = "player"
+		$("#player").replaceWith($player)
+
+		switch (program.player.toLowerCase()) {
+			case "youtube":
+				program.player = new YT.Player("player", {
+					height: "384",
+					width: "512",
+					videoId: program.id,
+					playerVars: { "controls": 0, "modestbranding": 1,"autoplay": 1 },
+					events: {
+						"onStateChange": event => {
+							updateTV(Object.keys(YT.PlayerState).find(state => YT.PlayerState[state] === event.data).toLowerCase())
+						}
 					}
-				}
-			})
+				})
+				break
+			case "dailymail":
+				program.player = DM.player($player, {
+					video: program.id,
+					width: "512",
+					height: "384",
+					params: { autoplay: true, mute: false, controls: false, "queue-enable": false }
+				})
+				on(program.player, "start", () => program.player.setMuted(0))
+				on(program.player, "playing pause end start video_start video_end waiting", event => updateTV(event.type))
+				break
 		}
 		return
 	}
@@ -1525,6 +1612,10 @@ on($television, "click", event => {
 	else
 		program.play()
 })
+let guide = [
+	{ id: "E-ej_8XBwmI", player: "YouTube", title: "Game Boy: <em>Portable</em> Power", type: "Television Advertisement", publisher: "Nintendo", year: "1989" },
+	{ id: "x1tn4lk", player: "DailyMail", title: "Teenage Mutant Ninja Turtles", type: "Animated Series", publisher: "Mirage Studios", year: "1987" }
+]
 
 // Scoring Table Toggle
 function updateScoringTable(highSpeedScoring) {
@@ -1584,5 +1675,5 @@ on($toggle, "change", event => {
 </script>
 
 <link rel="stylesheet" href="debug.css"/>
-<script src="debug.js"></script>
+<!-- <script src="debug.js"></script> -->
 <script src="tetris.js"></script>
