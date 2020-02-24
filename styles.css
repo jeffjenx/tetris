@@ -1,0 +1,713 @@
+/* Variables */
+:root {
+	--white: #fff; --black: #000;
+	--gray10: #f4f4f4; --gray30: #c6c6c6; --gray80: #393939; --gray90: #262626; --gray100: #161616;
+	--coolGray10: #f2f4f8; --coolGray30: #c1c7cd; --coolGray80: #343a3f; --coolGray90: #21272a; --coolGray100: #121619;
+	--warmGray10: #f7f3f2; --warmGray30: #cac5c4; --warmGray80: #3c3838; --warmGray90: #272525; --warmGray100: #171414;
+	--cyan50: #1192e8; --cyan60: #0072c3;
+	--blue50: #4589ff; --blue60: #0f62fe; --blue70: #0043ce;
+	--green30: #6fdc8c; --green50: #24a148;
+	--magenta30: #ffafd2; --magenta90: #510224;
+	--orange40: #ff832b;
+	--purple60: #8a3ffc; --purple70: #6929c4;
+	--red50: #fa4d56; --red60: #da1e28;
+	--yellow20: #f1c21b;
+
+	--tempGray10: var(--gray10);
+	--tempGray30: var(--gray30);
+	--tempGray80: var(--gray80);
+	--tempGray90: var(--gray90);
+	--tempGray100: var(--gray100);
+
+	--errorColor: var(--red60);
+	--successColor: var(--green50);
+	--dangerColor: var(--orange40);
+	--warningColor: var(--yellow20);
+
+	--backgroundColor: var(--tempGray10);
+	--foregroundColor: var(--tempGray100) }
+
+@media (prefers-color-scheme: dark) {
+:root {
+	--backgroundColor: var(--tempGray100);
+	--foregroundColor: var(--tempGray10) } }
+
+:root.cool {
+	--tempGray10: var(--coolGray10);
+	--tempGray30: var(--coolGray30);
+	--tempGray80: var(--coolGray80);
+	--tempGray90: var(--coolGray90);
+	--tempGray100: var(--coolGray100) }
+
+:root.neutral {
+	--tempGray10: var(--gray10);
+	--tempGray30: var(--gray30);
+	--tempGray80: var(--gray80);
+	--tempGray90: var(--gray90);
+	--tempGray100: var(--gray100) }
+
+:root.warm {
+	--tempGray10: var(--warmGray10);
+	--tempGray30: var(--warmGray30);
+	--tempGray80: var(--warmGray80);
+	--tempGray90: var(--warmGray90);
+	--tempGray100: var(--warmGray100) }
+
+:root.dark {
+	--backgroundColor: var(--tempGray100);
+	--foregroundColor: var(--tempGray10) }
+
+:root.light {
+	--backgroundColor: var(--tempGray10);
+	--foregroundColor: var(--tempGray100) }
+
+@font-face { font-family: "Handwriting"; src: url("fonts/Handwriting.woff2") }
+
+@keyframes tetris__spinLinear {
+	to { transform:rotate(360deg) } }
+
+@keyframes tetris__spinEase {
+	12.5% { transform:rotate(135deg) }
+	25% { transform:rotate(270deg) }
+	37.5% { transform:rotate(405deg) }
+	50% { transform:rotate(540deg) }
+	62.5% { transform:rotate(675deg) }
+	75% { transform:rotate(810deg) }
+	87.5% { transform:rotate(945deg) }
+	to { transform:rotate(1080deg) } }
+
+@keyframes tetris__spinLeft {
+	0% { transform:rotate(130deg) }
+	50% { transform:rotate(-5deg) }
+	to { transform:rotate(130deg) } }
+
+@keyframes tetris__spinRight {
+	0% { transform:rotate(-130deg) }
+	50% { transform:rotate(5deg) }
+	to { transform:rotate(-130deg) } }
+
+body {
+	will-change: background-color, color;
+	transition: background-color 0.25s, color 0.25s;
+
+	background-color: var(--backgroundColor);
+	color: var(--foregroundColor);
+	margin: 0 }
+
+a:link { color: var(--blue60) }
+a:active { color: var(--blue70) }
+a:visited { color: var(--purple60) }
+a:visited:active { color: var(--purple70) }
+abbr { text-decoration: none }
+
+.tetris__article {
+	--x: 0.5;
+	--y: 0.5;
+	
+	transition: opacity 1s;
+
+	font-family: "IBM Plex Serif", sans-serif;
+	font-size: 2.4vh;
+	line-height: 1.4;
+	max-width: 80ch;
+	margin: 0 auto;
+	padding: 0 2em 100vh }
+
+.tetris__article:not(.loaded) { opacity: 0 }
+.tetris__article.loaded { opacity: 1 }
+.tetris__article.visited { opacity: 1 !important }
+
+.tetris__articleHeader {
+	transition: transform 1s ease-in-out;
+
+	min-height: 100vh;
+	display: grid;
+	grid-template-columns: min-content;
+	grid-template-rows: min-content; 
+	justify-content: center;
+	align-content: center;
+	transform: translateY(-5vh) }
+
+.tetris__articleHeader.focused { 
+	transition: transform 0.25s ease-in-out;
+	transform: translateY(-5vh) scale(1.1) }
+
+.tetris__articleTitle,
+.tetris__articleSubtitle { margin: 0; display: inline-flex }
+
+.tetris__articleSubtitle { margin-top: -100% }
+
+.tetris__blockquote {
+	font-size: smaller;
+	margin: 3em auto;
+	max-width: 30em }
+
+.tetris__blockquote.instructions { float: right; width: 40%; margin: 1.5em 4em }
+.tetris__blockquote.miyamoto { max-width: none; margin: 5em calc(256px + 6em + 3em) 5em 3em }
+.tetris__blockquote.objective { margin-left: calc(256px + 6em + 5em) }
+.tetris__blockquote.pajitnov { margin: 3.5em 23em 3.5em 5em; max-width: 40em }
+.tetris__blockquote.wozniak { float: right; margin: 0 5em 3em; max-width: 40% }
+
+.tetris__blockquoteHeader { margin-bottom: 1.5em }
+
+.tetris__blockquoteSpeaker { max-width: 20em; text-indent: -1em; padding-left: 1em }
+
+.tetris__caption {
+	font-family: "IBM Plex Sans", sans-serif;
+	font-size: 10pt;
+	font-weight: 300;
+	margin-top: 1em }
+
+.tetris__caption.commercial { clear: both }
+.tetris__caption.evaluation { position: relative; width: 40em; margin-left: auto; margin-right: auto }
+.tetris__caption.gameboy { transform: scale(1) } /* for filter: drop-shadow stacking */
+.tetris__caption.magazine { width: 60%; margin: 0 auto }
+.tetris__caption.miyamoto { margin-top: 1em; text-align: center }
+.tetris__caption.scoring { width: 63em; margin-left: auto; margin-right: auto }
+
+.tetris__citeTitle::before,
+.tetris__citeTitle::after { display: inline-block; text-decoration: none }
+
+.tetris__citeTitle::before { content: "\201C" }
+.tetris__citeTitle::after { content: "\201D" }
+
+.tetris__citePublication { font-style: italic }
+
+.tetris__figure.evaluation { margin-top: 3em; margin-bottom: 0em }
+.tetris__figure.gameboy { float: left; width: 40%; margin: 1.5em 3.5em 1em 1em }
+.tetris__figure.jeff {
+	float: left;
+	display: inline-flex;
+	overflow: hidden;
+	margin: 0; margin-right: 1em; margin-top: -4pt;
+	border-radius: 50%;
+	border: solid 2px var(--foregroundColor); }
+.tetris__figure.magazine { margin: 2em auto }
+.tetris__figure.miyamoto { float: right; width: 256px; margin: 0em 5em 0em 2em }
+.tetris__figure.nester { float: right; width: 25%;  margin: -1.5em 3em 1em 1em }
+.tetris__figure.tetrads { float: right; width: 40% }
+.tetris__figure.scoring { margin:3em auto }
+.tetris__figure.strategy { float: left; width: 33%; margin: 1.5em 2em }
+.tetris__figure.versus { float: left; width: 256px; margin: 1em 3em }
+
+.tetris__image.gameboy { width: 100%; filter: drop-shadow(10px 5px 10px rgba(0,0,0,0.25)); transform: scale(2) translateX(-0.6%) }
+.tetris__image.jeff { height: 3em; border: solid 2px var(--backgroundColor); border-radius: 50% }
+.tetris__image.magazine { margin: -4em auto -6em; width: 100% }
+.tetris__image.miyamoto { position: relative; left: -40%; top: 0%; height: 100% }
+.tetris__image.tetrads { width: 100% }
+.tetris__image.versus { image-rendering: pixelated; width: 100% }
+
+@media (prefers-color-scheme: dark) {
+.tetris__image.gameboy { filter: drop-shadow(10px 5px 10px var(--black)) } }
+:root.light .tetris__image.gameboy { filter: drop-shadow(10px 5px 10px rgba(0,0,0,0.25)) }
+:root.dark .tetris__image.gameboy { filter: drop-shadow(10px 5px 10px var(--black)) }
+
+.tetris__imageLink { display: inline-flex }
+
+.tetris__imageLink.gameboy { display: inline-flex; padding-top: 33%; padding-bottom: 31% }
+.tetris__imageLink.magazine { display: inline-block; overflow: hidden }
+.tetris__imageLink.miyamoto {
+	display: block;
+	width: 256px; height: 256px;
+	overflow: hidden;
+	border: solid 4px var(--backgroundColor);
+	border-radius: 50%;
+	box-shadow: 0 0 0 2px var(--foregroundColor);
+	transform: scale(0.75);
+	margin-bottom: -12.25% }
+
+.tetris__quote::before { content: "\201C" }
+.tetris__quote::after { content: "\201D" }
+
+.tetris__section { margin: 5em 0 }
+.tetris__sectionTitle { text-align: center; margin: 2.5em 0; text-transform: uppercase }
+.tetris__section.intro .tetris__sectionTitle,
+.tetris__section.callToAction .tetris__sectionTitle { display: none }
+.tetris__section.callToAction > p { margin-bottom: 3em }
+
+.tetris__table {
+	text-align: center;
+	font-size: 12pt;
+	font-family: "IBM Plex Sans";
+	border: solid 4px var(--foregroundColor);
+	border-collapse: collapse }
+
+.tetris__table thead tr { background-color: var(--tempGray30) }
+
+.tetris__table th,
+.tetris__table td { padding: 0.75em 1em; border: solid 2px var(--foregroundColor) }
+
+
+/* 3-D Box Art */
+.boxArt.tetris__image.front { opacity: 0 }
+
+.boxArt.tetris__imageLink {
+	--flipped: 0;
+	--direction: 1;
+	--maxX: 1; --maxY: 1;
+   --offsetX: calc(var(--x) * 2 - 1);
+	--offsetY: calc(var(--y) * 2 - 1);
+
+	will-change: box-shadow, transform;
+
+	backface-visibility: hidden;
+	border-radius: 3pt; overflow: hidden; display: inline-flex;
+	box-shadow: calc(var(--offsetX) * var(--maxX) * -1vmin + 0.5vmin)
+					calc(var(--offsetY) * var(--maxY) * -1vmin + 0.5vmin)
+					2vmin rgba(0,0,0,0.25);
+	transition: all 1s cubic-bezier(0.23, 1, 0.32, 1), outline 0s;
+	transform: perspective(100vmin)
+				rotateX(calc(var(--offsetY) * var(--maxY) * -3deg))
+				rotateY(calc(var(--offsetX) * var(--maxX) * 3deg + var(--direction) * var(--flipped) * 180deg)) }
+
+.boxArt.tetris__imageLink:hover { --maxX: 5; --maxY: 1.5 }
+.boxArt.tetris__imageLink.flipped { --flipped: 1 }
+
+.boxArt.tetris__imageLink.back { --flipped: -1 }
+.boxArt.tetris__imageLink.back.flipped { --flipped: 0 }
+
+.boxArt.tetris__imageLink.front { background: url("images/Artwork/Background.jpg"); background-size: contain; z-index: 1 }
+
+.boxArt.tetris__imageLink.front::before,
+.boxArt.tetris__imageLink.front::after {
+	--stack: 0;
+
+	will-change: filter, transform;
+	transition: all 1s cubic-bezier(0.23, 1, 0.32, 1), outline 0s;
+
+	content: ""; display: block; position: absolute;
+	left: 0; top: 0;
+	width: 100%; height: 100%;
+	filter: drop-shadow(calc(var(--offsetX) * -3px) calc(var(--offsetY) * -3px) 1px rgba(0,0,0,0.2));
+	transform: perspective(100vmin)
+	           translateX(calc(var(--stack) * var(--offsetX) * var(--maxX) * 0.1vmin))
+	           translateY(calc(var(--stack) * var(--offsetY) * var(--maxY) * 0.1vmin)) }
+
+.boxArt.tetris__imageLink.front::before {
+	--stack: 1;
+	background: url("images/Artwork/Logo Shadow.png") center no-repeat;
+	background-size: 100% 100% }
+
+.boxArt.tetris__imageLink.front::after {
+	--stack: 2;
+	background: url("images/Artwork/Logo Fill.png") center no-repeat;
+	background-size: 100% 100% }
+
+
+/* Video Player */
+.commercial.tetris__figure {
+	float: left;
+	position: relative;
+	margin: 2em 3em 1em 1em }
+
+.commercial.tetris__imageLink::after {
+	z-index: 4;
+	content: "";
+	position: absolute;
+	left: 0; top: 0;
+	width: 100%; height: 100%;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-image: url("images/Commercial/Overlay.png");
+	transform-origin: bottom;
+	transform: scale(1.1) translateY(1%) }
+
+.commercial.tetris__imageLink::before {
+	will-change: filter, opacity, transition-duration;
+	transition: filter 0.5s ease-in-out, opacity 0.5s ease-in-out;
+
+	z-index: 3;
+	content: "";
+	position: absolute;
+	left: 191px; top: 141px;
+	width: 43px; height: 43px;
+	background-image: url(https://upload.wikimedia.org/wikipedia/commons/e/e1/YouTube_play_buttom_icon_%282013-2017%29.svg);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	opacity: 0.5;
+	filter: grayscale(1) }
+
+.commercial.tetris__imageLink:hover::before {
+	transition-duration: 0.25s;
+	opacity: 0.75;
+	filter: grayscale(0) }
+
+.commercial.tetris__image,
+.commercial.tetris__video,
+.commercial.tetris__spinner {	transform: scale(0.69) translate(-13.25%, -10.5%) }
+
+.commercial.tetris__image { z-index: 2; border-radius: 4pt; transition: filter 0.25s, opacity 0.25s }
+
+.commercial.tetris__imageLink.start::before,
+.commercial.tetris__imageLink.waiting::before,
+.commercial.tetris__imageLink.buffering::before { background: none }
+
+.commercial.tetris__imageLink.playing::before,
+.commercial.tetris__image.playing { opacity: 0 }
+.commercial.tetris__image.playing { filter: brightness(0) contrast(0) }
+
+.commercial.tetris__spinner:not(.buffering) { display: none }
+
+.commercial.tetris__spinner.start,
+.commercial.tetris__spinner.waiting,
+.commercial.tetris__spinner.buffering {
+	display: block;
+	left: 37%; top: 32%;
+	opacity: 0.5; }
+
+.commercial.tetris__video {
+	z-index: 1;
+	position: absolute;
+	left: 0; top: 0 }
+
+
+/* Evaluation Form */
+.evaluation .tetris__form {
+	--backgroundColor: var(--tempGray30);
+	display: grid;
+	max-width: 35em;
+	background-color: var(--backgroundColor);
+	border: solid 2px var(--foregroundColor);
+   padding: 2rem;
+	margin: 0 auto calc(-40% - 2.45em);
+	transform: scale(0.6);
+	transform-origin: top center;
+	box-shadow: 0 14px 28px rgba(0,0,0,0.25),
+	            0 10px 10px rgba(0,0,0,0.22) }
+
+@media (prefers-color-scheme: dark) {
+.evaluation .tetris__form {
+	--backgroundColor: var(--tempGray90);
+	background-color: var(--backgroundColor) } }
+
+:root.dark .evaluation .tetris__form {
+	--backgroundColor: var(--tempGray90);
+	background-color: var(--backgroundColor) }
+
+:root.light .evaluation .tetris__form {
+	--backgroundColor: var(--tempGray30);
+	background-color: var(--backgroundColor) }
+
+.evaluation .tetris__formTitle,
+.evaluation .tetris__dataList,
+.evaluation .tetris__image,
+.evaluation .tetris__table {
+	--backgroundColor: var(--tempGray30);
+	background-color: var(--backgroundColor) }
+
+@media (prefers-color-scheme: dark) {
+.evaluation .tetris__formTitle,
+.evaluation .tetris__dataList,
+.evaluation .tetris__image,
+.evaluation .tetris__table {
+	--backgroundColor: var(--tempGray80);
+	background-color: var(--backgroundColor) } }
+
+:root.dark .evaluation .tetris__formTitle,
+:root.dark .evaluation .tetris__dataList,
+:root.dark .evaluation .tetris__image,
+:root.dark .evaluation .tetris__table {
+	--backgroundColor: var(--tempGray80);
+	background-color: var(--backgroundColor) }
+
+:root.light .evaluation .tetris__formTitle,
+:root.light .evaluation .tetris__dataList,
+:root.light .evaluation .tetris__image,
+:root.light .evaluation .tetris__table {
+	--backgroundColor: var(--tempGray10);
+	background-color: var(--backgroundColor) }
+
+.evaluation .tetris__formTitle {
+	font-family: "IBM Plex Sans";
+	font-style: italic;
+	font-variant: small-caps;
+	font-size: 1.5em;
+	text-align: center;
+   box-shadow: 1px 1px var(--foregroundColor),
+	            2px 2px var(--foregroundColor),
+	            3px 3px var(--foregroundColor),
+	            4px 4px var(--foregroundColor);
+	margin: 0 0 0 -4px;
+	padding: 0.125em 0.75em }
+
+.evaluation .tetris__dataList {
+	display: grid;
+	grid-template-columns: 50%;
+	border: solid 1px;
+	margin-bottom: 0;
+	margin-top: 2rem }
+
+.evaluation .tetris__formField {
+	border: solid 1px var(--foregroundColor);
+	padding: 0.5em }
+
+.evaluation .tetris__formLabel {
+	font-family: "IBM Plex Sans Condensed";
+	font-size: 0.6em;
+	font-weight: 600;
+	text-transform: uppercase }
+
+.evaluation .tetris__formInput {
+	font-family: "Handwriting";
+	font-size: 1.25em;
+	line-height: 2.1rem;
+	color: var(--cyan50);
+	margin: 0 }
+
+@media (prefers-color-scheme: dark) { .evaluation .tetris__formInput { color: var(--cyan50) } }
+:root.dark .evaluation .tetris__formInput { color: var(--cyan50) }
+:root.light .evaluation .tetris__formInput { color: var(--cyan60) }
+
+.evaluation .tetris__formField:last-child
+	.tetris__formLabel { margin-bottom: -1em }
+
+.evaluation .tetris__formField:nth-child(1) .tetris__formInput { padding-left: 1.75em }
+.evaluation .tetris__formField:nth-child(2) .tetris__formInput { padding-left: 2em }
+.evaluation .tetris__formField:nth-child(3) .tetris__formInput { padding-left: 3em }
+.evaluation .tetris__formField:nth-child(4) .tetris__formInput { padding-left: 1.75em }
+.evaluation .tetris__formField:nth-child(5) .tetris__formInput { padding-left: 3.5em }
+.evaluation .tetris__formField:nth-child(6) .tetris__formInput { padding-left: 2.25em }
+.evaluation .tetris__formField:nth-child(7) .tetris__formInput { padding-left: 5em }
+
+.evaluation .tetris__form :first-of-type { grid-column: 1 / 3 }
+
+.evaluation .tetris__image {
+	--backgroundColor: var(--tempGray80);
+
+	justify-self: center;
+	border: solid 2px var(--foregroundColor);
+	margin-top: 2rem }
+.evaluation .tetris__image text { font-weight: 600 }
+.evaluation .tetris__image text.quadrantIdentifier { font-weight: 700 }
+.evaluation .tetris__image [stroke="white"] { stroke: var(--backgroundColor) }
+.evaluation .tetris__image [stroke="black"] { stroke: var(--foregroundColor) }
+.evaluation .tetris__image [fill="white"] { fill: var(--backgroundColor) }
+.evaluation .tetris__image [fill="black"] { fill: var(--foregroundColor) }
+.evaluation .tetris__image [stroke="blue"] { stroke: var(--cyan50) }
+
+@media (prefers-color-scheme: dark) { .evaluation .tetris__image [stroke="blue"]  { color: var(--cyan50) } }
+:root.dark .evaluation .tetris__image [stroke="blue"]  { color: var(--cyan50) }
+:root.light .evaluation .tetris__image [stroke="blue"]  { color: var(--cyan60) }
+
+.evaluation .tetris__table {
+	font-size: 14pt;
+	border: solid 2px var(--foregroundColor);
+	border-collapse: collapse;
+	margin-top: 2rem;
+	width: 100% }
+
+.evaluation .tetris__table th,
+.evaluation .tetris__table td {
+	border: solid 2px var(--foregroundColor);
+	padding: 0.5em }
+.evaluation .tetris__table th { font-family: "IBM Plex Sans Condensed"; }
+.evaluation .tetris__table td { font-family: "j.d."; font-size: 1.25em; color: var(--cyan50); text-align: center }
+
+@media (prefers-color-scheme: dark) { .evaluation .tetris__table td { color: var(--cyan50) } }
+:root.dark .evaluation .tetris__table td  { color: var(--cyan50) }
+:root.light .evaluation .tetris__table td  { color: var(--cyan60) }
+
+.evaluation .tetris__table tr:first-child th { text-transform: uppercase; font-size: 0.75em; line-height: 1 }
+.evaluation .tetris__table tr:first-child th:last-child { text-transform: none; text-align: left; border-bottom: 0 }
+.evaluation .tetris__table tr:not(:first-child) th { text-align: left; font-size: 0.75em }
+
+.evaluation .tetris__table abbr { font-size: 2em; float: left; margin-right: 0.25em }
+.evaluation .tetris__table abbr::after { content: "=" }
+
+.evaluation .tetris__table tr > :nth-child(1) { width: 25% }
+.evaluation .tetris__table tr > :nth-child(2),
+.evaluation .tetris__table tr > :nth-child(3) { width: 17.5% }
+.evaluation .tetris__table tr > :nth-child(4) { width: 40% }
+.evaluation .tetris__table tr span { line-height: 2.75 }
+.evaluation .tetris__table tr:first-child th:last-child { vertical-align: top }
+.evaluation .tetris__table .comments {
+	border-top: 0;
+	font-size: 1.1em;
+	vertical-align: top;
+	text-align: left;
+	line-height: 1.75em;
+	background-image: linear-gradient(to right, var(--backgroundColor) 3px, transparent 2px),
+	                  linear-gradient(var(--foregroundColor) 2px, transparent 2px);
+	background-size: 5px 1.71em;
+	box-shadow: inset 0 -5px 0 5px var(--backgroundColor);
+	padding: 0.33em 1em 0 }
+
+
+/* References & Citations */
+.tetris__resources { list-style: none; padding-left: 0 }
+.tetris__resource { padding-bottom: 1em }
+.tetris__resource > * { display: inline-block }
+
+
+/* Scoring Table */
+.scoring .tetris__caption { width: 69em; margin-left: auto; margin-right: auto }
+
+.scoring .tetris__table { margin: 0 auto }
+.scoring .tetris__table tr > :not(:first-child) { min-width: 3em }
+
+.scoring .tetris__table tr :first-child { text-align: left }
+.scoring .tetris__table tbody tr > :first-child { background-color: var(--magenta30) }
+
+@media (prefers-color-scheme: dark) {
+.scoring .tetris__table thead tr { background-color: var(--tempGray90) }
+.scoring .tetris__table tbody tr > :first-child { background-color: var(--magenta90) } }
+
+:root.light .scoring .tetris__table thead tr { background-color: var(--tempGray30) }
+:root.light .scoring .tetris__table tbody tr > :first-child { background-color: var(--magenta30) }
+
+:root.dark .scoring .tetris__table thead tr { background-color: var(--tempGray90) }
+:root.dark .tetris__table tbody tr > :first-child { background-color: var(--magenta90) }
+
+.scoring .tetris__toggle {
+	float: right;
+	position: relative;
+	cursor: pointer;
+	background: none; border: none;
+	color: var(--foregroundColor);
+	font-size: 14pt; text-align: center;
+	width: 1.5em;
+	margin: -0.25em 1.5em 0;
+	padding: 0 }
+
+.scoring .tetris__toggleIcon::before {
+	will-change: opacity;
+	transition: opacity 0.25s ease-in-out;
+
+	content: "♥︎"; opacity: 0;
+	color: var(--foregroundColor);
+	position: absolute;
+	left: 0; top: 0;
+	width: 100% }
+.scoring .tetris__toggleInput.active + .tetris__toggleIcon::before {	opacity: 1 }
+
+.scoring .tetris__toggleInput,
+.scoring .tetris__toggleText { display: none }
+
+
+/* Color Scheme Toggle */
+.colorScheme.tetris__toggle {
+	will-change: opacity;
+	transition: opacity 0.25s ease-in-out;
+
+	position: absolute;
+	right: 0; top: 0;
+	cursor: pointer;
+	display: grid;
+	align-content: center; justify-content: center;
+	background: none; border: none;
+	border-radius: 50%;
+	color: var(--foregroundColor);
+	font-size: 1em; text-align: center;
+	width: 0.8em; height: 0.8em;
+	margin: 0.5em;
+	opacity: 0.125;
+	padding: 0;
+	transform: rotate(0deg) }
+
+.colorScheme.tetris__toggle:hover { opacity: 0.5 }
+
+@media (prefers-color-scheme: light) {
+.colorScheme.tetris__toggle:hover { opacity: 0.75 } }
+:root.light .colorScheme.tetris__toggle:hover { opacity: 0.75 }
+
+.colorScheme .tetris__toggleIcon {
+	will-change: transform;
+	transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	display: inline-block }
+.colorScheme .tetris__toggleInput.active + .tetris__toggleIcon { transform: rotate(180deg) }
+
+.colorScheme .tetris__toggleInput,
+.colorScheme .tetris__toggleText { display: none }
+
+
+/* Waiting Spinner */
+.tetris__spinner {
+	display: none;
+	z-index: 18;
+	position: absolute;
+	left: 50%; top: 50%;
+	width: 64px; height: 64px;
+	pointer-events: none }
+
+.tetris__spinnerContainer {
+	animation: tetris__spinLinear 1568.23529647ms linear infinite;
+
+	position: absolute;
+	left: 50%; top: 50%;
+	width: 100%;
+	margin-left: -50%; margin-top: -50%;
+	padding-bottom: 100%;
+	pointer-events: none }
+
+.tetris__spinnerRotator {
+	animation: tetris__spinEase 5332ms cubic-bezier(0.4,0.0,0.2,1) infinite both;
+
+	position: absolute;
+	width: 100%; height: 100% }
+
+.tetris__spinnerLeft {
+	position: absolute;
+	left: 0; top: 0; bottom: 0; right: 49%;
+	overflow: hidden }
+
+.tetris__spinnerRight {
+	position: absolute;
+	left: 49%; top: 0; bottom: 0; right: 0;
+	overflow: hidden }
+
+.tetris__spinnerCircle {
+	position: absolute;
+	width: 200%; height: 100%;
+	box-sizing: border-box;
+	border-style: solid;
+	border-color: #ddd #ddd transparent;
+	border-radius: 50%;
+	border-width: 6px }
+
+.tetris__spinnerCircle.left {
+	animation: tetris__spinLeft 1333ms cubic-bezier(0.4,0.0,0.2,1) infinite both;
+	left: 0; right: -100%;
+	border-right-color: transparent }
+
+.tetris__spinnerCircle.right {
+	animation: tetris__spinRight 1333ms cubic-bezier(0.4,0.0,0.2,1) infinite both;
+	left: -100%; right: 0;
+	border-left-color: transparent }
+
+
+/* Strategy Chart */
+.strategy .tetris__container {
+	display: grid;
+	grid-template-columns: min-content auto;
+	grid-template-rows: 27% 27% 46%;
+	font-family: 'IBM Plex Sans';
+	font-size: 12pt;
+	box-shadow: 0 0 0 3px var(--foregroundColor) }
+
+@media (prefers-color-scheme: dark) {
+.strategy .tetris__container {
+	box-shadow: 0 0 0 3px var(--backgroundColor), 0 0 0 5px var(--foregroundColor) } }
+
+:root.dark .strategy .tetris__container {
+	box-shadow: 0 0 0 3px var(--backgroundColor), 0 0 0 5px var(--foregroundColor) }
+
+:root.light .strategy .tetris__container {
+	box-shadow: 0 0 0 3px var(--foregroundColor) }
+
+.strategy .tetris__image { grid-row: 1 / 4 }
+
+.strategy .tetris__region {
+	display: grid;
+	box-sizing: border-box;
+	align-content: center;
+	padding: 0 3em 0 1.5em }
+
+.strategy .tetris__region + .tetris__region { border-top: solid 2px var(--black) }
+.strategy .tetris__region.danger { background:var(--red50); color:var(--tempGray10); font-weight: 700 }
+.strategy .tetris__region.warning { background: var(--green30); color: var(--tempGray100) }
+.strategy .tetris__region.safe { background: var(--blue50); color: var(--tempGray100) }
+
+.strategy .tetris__container,
+.strategy .tetris__caption { max-width: 22em }
