@@ -8,11 +8,8 @@
 
 <!-- TODO -->
 <!-- add Analytics -->
-<!-- add property cite to blockquote -->
-<!-- switch strategyFigure to figure.strategy -->
 <!-- figure out j.d. font -->
-<!-- add np # to figure captions -->
-<!-- invert evaluation form on dark -->
+<!-- review tv commercial functionality -->
 
 <article class="tetris__article">
 	<header class="tetris__articleHeader">
@@ -55,6 +52,7 @@
 				<figcaption class="tetris__caption">
 					<span class="tetris__citeTitle">Nester &amp; Game Boy</span> Illustration,
 					<cite class="tetris__citePublication">Nintendo Power,</cite>
+					<abbr class="tetris__citeExtra" title="Issue #7">#7,</abbr>
 					<time class="tetris__citeDate" datetime="1989-07/08">1989.</time>
 				</figcaption>
 			</figure>
@@ -139,6 +137,7 @@
 				<figcaption class="tetris__caption magazine">
 					<span class="tetris__citeTitle">Howard &amp; Nester &amp; Nester’s Mom Discover Game Boy</span> Comic Strip,
 					<cite class="tetris__citePublication">Nintendo Power,</cite>
+					<abbr class="tetris__citeExtra" title="Issue #8">#8,</abbr>
 					<time class="tetris__citeDate" datetime="1989-09/10">1989.</time>
 				</figcaption>
 			</figure>
@@ -160,6 +159,7 @@
 				<figcaption class="tetris__caption">
 					<span class="tetris__citeTitle">Tetrads</span> Illustrations,
 					<cite class="tetris__citePublication">Nintendo Power,</cite>
+					<abbr class="tetris__citeExtra" title="Issue #8">#8,</abbr>
 					<time class="tetris__citeDate" datetime="1989-09/10">1989.</time>
 				</figcaption>
 			</figure>
@@ -293,7 +293,8 @@
 					<span class="tetris__citeDate" datetime="2016">2016.</span>
 				</figcaption>
 			</figure>
-			<blockquote class="tetris__blockquote miyamoto">
+			<blockquote class="tetris__blockquote miyamoto"
+			            cite="https://www.youtube.com/watch?v=_fQtxKmgJC8">
 				<p>Yes! Why? Because your secretaries and accountants are playing it!</p>
 				<p class="tetris__blockquoteSpeaker">— Nintendo Designer Shigeru Miyamoto to President Hirochi Yamauchi</p>
 				<footer class="tetris__caption">
@@ -358,7 +359,7 @@
 			<blockquote class="tetris__blockquote wozniak"
 			            cite="https://www.youtube.com/watch?v=n6gzcjyNkHs">
 				<p>
-					Now I’ve met people that can play better than I do.
+					Now, I’ve met people that can play better than I do.
 					But, in my timeframe, when they kept track in Nintendo Power magazine, I always had the high score and I’m very proud of that.
 				</p>
 				<p>— Steve Wozniak</p>
@@ -436,7 +437,7 @@
 						</div>
 						<div class="tetris__formField">
 							<dt class="tetris__formLabel">Date</dt>
-							<dd class="tetris__formInput"><time datetime="2020-02-13">February 13 2020</time></dd>
+							<dd class="tetris__formInput"><time datetime="2020-02-13">Feb 13 2020</time></dd>
 						</div>
 						<div class="tetris__formField">
 							<dt class="tetris__formLabel">
@@ -540,6 +541,7 @@
 				<figcaption class="tetris__caption evaluation">
 					<span class="tetris__citeTitle">Behind the Scenes at Nintendo,</span>
 					<cite class="tetris__citePublication">Nintendo Power,</cite>
+					<abbr class="tetris__citeExtra" title="Issue #44, Super Power Club Edition">#44,</abbr>
 					<time class="tetirs__citeDate" datetime="1993-01">1993.</time>
 				</figcaption>
 			</figure>
@@ -784,8 +786,11 @@
 <style>
 /* Variables */
 :root {
-	--white: #fff; --black: #000; 
+	--white: #fff; --black: #000;
+	--gray10: #f4f4f4; --gray30: #c6c6c6; --gray80: #393939; --gray90: #262626; --gray100: #161616;
 	--coolGray10: #f2f4f8; --coolGray30: #c1c7cd; --coolGray80: #343a3f; --coolGray90: #21272a; --coolGray100: #121619;
+	--warmGray10: #f7f3f2; --warmGray30: #cac5c4; --warmGray80: #3c3838; --warmGray90: #272525; --warmGray100: #171414;
+	--cyan50: #1192e8; --cyan60: #0072c3;
 	--blue50: #4589ff; --blue60: #0f62fe; --blue70: #0043ce;
 	--green30: #6fdc8c; --green50: #24a148;
 	--magenta30: #ffafd2; --magenta90: #510224;
@@ -794,13 +799,45 @@
 	--red50: #fa4d56; --red60: #da1e28;
 	--yellow20: #f1c21b;
 
+	--tempGray10: var(--gray10);
+	--tempGray30: var(--gray30);
+	--tempGray80: var(--gray80);
+	--tempGray90: var(--gray90);
+	--tempGray100: var(--gray100);
+
 	--errorColor: var(--red60);
 	--successColor: var(--green50);
 	--dangerColor: var(--orange40);
 	--warningColor: var(--yellow20);
 
-	--backgroundColor: var(--coolGray10);
-	--foregroundColor: var(--coolGray100) }
+	--backgroundColor: var(--tempGray10);
+	--foregroundColor: var(--tempGray100) }
+
+@media (prefers-color-scheme: dark) {
+:root {
+	--backgroundColor: var(--tempGray100);
+	--foregroundColor: var(--tempGray10) } }
+
+:root.cool {
+	--tempGray10: var(--coolGray10);
+	--tempGray30: var(--coolGray30);
+	--tempGray80: var(--coolGray80);
+	--tempGray90: var(--coolGray90);
+	--tempGray100: var(--coolGray100) }
+
+:root.neutral {
+	--tempGray10: var(--gray10);
+	--tempGray30: var(--gray30);
+	--tempGray80: var(--gray80);
+	--tempGray90: var(--gray90);
+	--tempGray100: var(--gray100) }
+
+:root.warm {
+	--tempGray10: var(--warmGray10);
+	--tempGray30: var(--warmGray30);
+	--tempGray80: var(--warmGray80);
+	--tempGray90: var(--warmGray90);
+	--tempGray100: var(--warmGray100) }
 
 @keyframes tetris__spinLinear {
 	to { transform:rotate(360deg) } }
@@ -824,11 +861,6 @@
 	0% { transform:rotate(-130deg) }
 	50% { transform:rotate(5deg) }
 	to { transform:rotate(-130deg) } }
-
-@media (prefers-color-scheme: dark) {
-:root {
-	--backgroundColor: var(--coolGray100);
-	--foregroundColor: var(--coolGray10) } }
 
 body {
 	background: var(--backgroundColor);
@@ -928,7 +960,7 @@ abbr { text-decoration: none }
 .tetris__figure.nester { float: right; width: 25%;  margin: -1.5em 3em 1em 1em }
 .tetris__figure.tetrads { float: right; width: 40% }
 .tetris__figure.scoring { margin:3em auto }
-.tetris__figure.strategy { float: left; width: 33%; margin: 1em 2em }
+.tetris__figure.strategy { float: left; width: 33%; margin: 1.5em 2em }
 .tetris__figure.versus { float: left; width: 256px; margin: 1em 3em }
 
 .tetris__image.gameboy { filter: drop-shadow(10px 5px 10px var(--black)); transform: scale(2) translateX(-0.6%) }
@@ -965,7 +997,7 @@ abbr { text-decoration: none }
 	border: solid 4px var(--foregroundColor);
 	border-collapse: collapse }
 
-.tetris__table thead tr { background-color: var(--coolGray30) }
+.tetris__table thead tr { background-color: var(--tempGray30) }
 
 .tetris__table th,
 .tetris__table td { padding: 0.75em 1em; border: solid 2px var(--foregroundColor) }
@@ -1098,9 +1130,10 @@ abbr { text-decoration: none }
 
 /* Evaluation Form */
 .evaluation .tetris__form {
+	--backgroundColor: var(--tempGray30);
 	display: grid;
 	max-width: 35em;
-	background-color: var(--coolGray30);
+	background-color: var(--backgroundColor);
 	border: solid 2px var(--foregroundColor);
    padding: 2rem;
 	margin: 0 auto calc(-40% - 1.75em);
@@ -1111,7 +1144,15 @@ abbr { text-decoration: none }
 
 @media (prefers-color-scheme: dark) {
 .evaluation .tetris__form {
-	background-color: var(--coolGray80) } }
+	--backgroundColor: var(--tempGray90);
+	background-color: var(--backgroundColor) } }
+
+.evaluation .tetris__formTitle,
+.evaluation .tetris__dataList,
+.evaluation .tetris__image,
+.evaluation .tetris__table {
+	--backgroundColor: var(--tempGray80);
+	background-color: var(--backgroundColor) }
 
 .evaluation .tetris__formTitle {
 	font-family: "IBM Plex Sans";
@@ -1119,17 +1160,17 @@ abbr { text-decoration: none }
 	font-variant: small-caps;
 	font-size: 1.5em;
 	text-align: center;
-   box-shadow: 2px 2px var(--foregroundColor);
-	background: var(--backgroundColor);
-	margin-bottom: 0rem;
-	margin-top: 0;
+   box-shadow: 1px 1px var(--foregroundColor),
+	            2px 2px var(--foregroundColor),
+	            3px 3px var(--foregroundColor),
+	            4px 4px var(--foregroundColor);
+	margin: 0 0 0 -4px;
 	padding: 0.125em 0.75em }
 
 .evaluation .tetris__dataList {
 	display: grid;
 	grid-template-columns: 50%;
 	border: solid 1px;
-	background: var(--backgroundColor);
 	margin-bottom: 0;
 	margin-top: 2rem }
 
@@ -1145,33 +1186,39 @@ abbr { text-decoration: none }
 
 .evaluation .tetris__formInput {
 	font-family: "j.d.";
-	font-size: 1em;
-	color: var(--blue60);
+	font-size: 1.25em;
+	line-height: 2.1rem;	color: var(--cyan50);
 	margin: 0 }
 
 .evaluation .tetris__formField:last-child
 	.tetris__formLabel { margin-bottom: -1em }
-.evaluation .tetris__formField:last-child
-	.tetris__formInput { padding-left: 6em }
+
+.evaluation .tetris__formField:nth-child(1) .tetris__formInput { padding-left: 1.75em }
+.evaluation .tetris__formField:nth-child(2) .tetris__formInput { padding-left: 2em }
+.evaluation .tetris__formField:nth-child(3) .tetris__formInput { padding-left: 3em }
+.evaluation .tetris__formField:nth-child(4) .tetris__formInput { padding-left: 1.75em }
+.evaluation .tetris__formField:nth-child(5) .tetris__formInput { padding-left: 3.5em }
+.evaluation .tetris__formField:nth-child(6) .tetris__formInput { padding-left: 2.25em }
+.evaluation .tetris__formField:nth-child(7) .tetris__formInput { padding-left: 5em }
 
 .evaluation .tetris__form :first-of-type { grid-column: 1 / 3 }
 
 .evaluation .tetris__image {
-    justify-self: center;
-    border: solid 2px var(--foregroundColor);
-    background: var(--backgroundColor);
-    margin-top: 2rem }
+	--backgroundColor: var(--tempGray80);
+
+	justify-self: center;
+	border: solid 2px var(--foregroundColor);
+	margin-top: 2rem }
 .evaluation .tetris__image text { font-weight: 600 }
 .evaluation .tetris__image text.quadrantIdentifier { font-weight: 700 }
 .evaluation .tetris__image [stroke="white"] { stroke: var(--backgroundColor) }
 .evaluation .tetris__image [stroke="black"] { stroke: var(--foregroundColor) }
 .evaluation .tetris__image [fill="white"] { fill: var(--backgroundColor) }
 .evaluation .tetris__image [fill="black"] { fill: var(--foregroundColor) }
-.evaluation .tetris__image [stroke="blue"] { stroke: var(--blue60) }
+.evaluation .tetris__image [stroke="blue"] { stroke: var(--cyan50) }
 
 .evaluation .tetris__table {
 	font-size: 14pt;
-	background: var(--backgroundColor);
 	border: solid 2px var(--foregroundColor);
 	border-collapse: collapse;
 	margin-top: 2rem;
@@ -1182,7 +1229,7 @@ abbr { text-decoration: none }
 	border: solid 2px var(--foregroundColor);
 	padding: 0.5em }
 .evaluation .tetris__table th { font-family: "IBM Plex Sans Condensed"; }
-.evaluation .tetris__table td { font-family: "j.d."; font-size: 1.25em; color: var(--blue60); text-align: center }
+.evaluation .tetris__table td { font-family: "j.d."; font-size: 1.25em; color: var(--cyan50); text-align: center }
 
 .evaluation .tetris__table tr:first-child th { text-transform: uppercase; font-size: 0.75em; line-height: 1 }
 .evaluation .tetris__table tr:first-child th:last-child { text-transform: none; text-align: left; border-bottom: 0 }
@@ -1204,7 +1251,7 @@ abbr { text-decoration: none }
 	line-height: 2em;
 	background-image: linear-gradient(to right, var(--backgroundColor) 3px, transparent 2px),
 	                  linear-gradient(var(--foregroundColor) 2px, transparent 2px);
-	background-size: 5px 1.9em;
+	background-size: 5px 1.85em;
 	box-shadow: inset 0 -5px 0 5px var(--backgroundColor);
 	padding: 0.33em 1em 0 }
 
@@ -1225,7 +1272,7 @@ abbr { text-decoration: none }
 .scoring .tetris__table tbody tr > :first-child { background-color: var(--magenta30) }
 
 @media (prefers-color-scheme: dark) {
-.scoring .tetris__table thead tr { background-color: var(--coolGray90) }
+.scoring .tetris__table thead tr { background-color: var(--tempGray90) }
 .scoring .tetris__table tbody tr > :first-child { background-color: var(--magenta90) } }
 
 .scoring .tetris__toggle {
@@ -1314,7 +1361,9 @@ abbr { text-decoration: none }
 	grid-template-columns: min-content auto;
 	grid-template-rows: 27% 27% 46%;
 	font-family: 'IBM Plex Sans';
-	font-size: 12pt }
+	font-size: 12pt;
+	border: solid 4px var(--black);
+	box-shadow: 0 0 0 2px var(--foregroundColor) }
 
 .strategy .tetris__image { grid-row: 1 / 4 }
 
@@ -1325,9 +1374,9 @@ abbr { text-decoration: none }
 	padding: 0 3em 0 1.5em }
 
 .strategy .tetris__region + .tetris__region { border-top: solid 2px var(--black) }
-.strategy .tetris__region.danger { background:var(--red50); color:var(--coolGray10); font-weight: 700 }
-.strategy .tetris__region.warning { background: var(--green30); color: var(--coolGray100) }
-.strategy .tetris__region.safe { background: var(--blue50); color: var(--coolGray100) }
+.strategy .tetris__region.danger { background:var(--red50); color:var(--tempGray10); font-weight: 700 }
+.strategy .tetris__region.warning { background: var(--green30); color: var(--tempGray100) }
+.strategy .tetris__region.safe { background: var(--blue50); color: var(--tempGray100) }
 
 .strategy .tetris__container,
 .strategy .tetris__caption { max-width: 22em }
