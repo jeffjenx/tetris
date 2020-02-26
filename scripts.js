@@ -10,7 +10,7 @@ function on(elements = document, events, listener, options) {
 	if (elements instanceof NodeList === false)
 		elements = [elements]
 
-	for (let event of events) 
+	for (let event of events)
 		for (let element of elements)
 			element.addEventListener(event, listener, options)
 }
@@ -76,7 +76,6 @@ for (const $boxArt of $boxArts)
 			event.type === "mouseenter" ? 0 : 1000)
 	})
 
-
 on($boxArtLinks, "click", (event) => {
 	let normalize = (value, range) => (value * 2 - range) / range
 	let normalizedLayerX = normalize(event.layerX, event.target.offsetWidth)
@@ -88,76 +87,145 @@ on($boxArtLinks, "click", (event) => {
 })
 
 // Television Commercial
-let program
-let channel = 0
-let $television = $("#television")
-let $commercials = $(".commercial")
-on($television, "click", event => {
-	let states = "buffering cued end ended pause paused playing start unstarted video_start video_end waiting"
-	let updateTV = function (state) {
-		for (let $commercial of $commercials) {
-			for (let offState of states.split(" "))
-				$commercial.classList.toggle(offState, false)
-			$commercial.classList.toggle(state, true)
+let $television = $(".tetris__imageLink.commercial")
+let television = {
+	channel: 0,
+	volume: 50,
+	player: null,
+	guide: [
+		{ id: "E-ej_8XBwmI", channelID: "3", publication: "YouTube", title: "Game Boy: <em>Portable</em> Power", type: "Television Advertisement", publisher: "Nintendo", year: "1989" },
+		{ id: "x1tn4lk", channelID: "4", publication: "DailyMotion", title: "Teenage Mutant Ninja Turtles", type: "Animated Series", publisher: "Mirage Studios", year: "1987" },
+	],
+	states: "loading buffering cued end ended pause paused playing start unstarted video_start video_end waiting",
+	isOff() { return $television.classList.contains("off") },
+	isPlaying() { return $television.classList.contains("playing") },
+	isYouTube() { return this.guide[this.channel].publication.toLowerCase() === "youtube" },
+	toggle() {
+		if (this.isOff()) return
+		if (!this.player) return this.programChange()
+		if (this.isPlaying()) return this.pause()
+		else return this.play()
+	},
+	play() {
+		this.player[this.isYouTube() ? "playVideo" : "play"]()
+	},
+	pause() {
+		this.player[this.isYouTube() ? "pauseVideo" : "pause"]()
+	},
+	channelChange(direction) {
+		if (this.isOff()) return
+
+		this.channel += direction
+		if (this.channel >= this.guide.length) this.channel = 0
+		else if (this.channel < 0) this.channel = this.guide.length - 1
+
+		this.programChange()
+		$(".tetris__videoDisplay", $television).setAttribute("data-channel", this.guide[this.channel].channelID)
+		setTimeout(() => this.clearDisplay("channel"), 5000)
+		this.updateCitation()
+	},
+	channelDown() { return this.channelChange(-1) },
+	channelUp() { return this.channelChange(+1) },
+	updateCitation() {
+		$(".tetris__caption.commercial").innerHTML = `
+			<span class="tetris__citeTitle">${this.guide[this.channel].title}</span> ${this.guide[this.channel].type},
+			<cite class="tetris__citePublication">${this.guide[this.channel].publisher},</cite>
+			<time class="tetris__citeDate" datetime="${this.guide[this.channel].year}">${this.guide[this.channel].year}.</time>`
+	},
+	volumeChange(amount) {
+		if (this.isOff()) return
+
+		this.volume += (amount * 10)
+		this.volume = Math.min(this.volume, 100)
+		this.volume = Math.max(this.volume, 0)
+
+		if (this.player) this.player.setVolume(this.volume)
+		if (!amount) return
+
+		$(".tetris__videoDisplay", $television).setAttribute("data-volume", this.volume)
+		setTimeout(() => this.clearDisplay("volume"), 5000)
+	},
+	volumeDown() { return this.volumeChange(-1) },
+	volumeUp() { return this.volumeChange(+1) },
+	clearDisplay(display) {
+		$(".tetris__videoDisplay", $television).removeAttribute(`data-${display}`)
+	},
+	power() {
+		if (this.isPlaying())
+			this.pause()
+		$television.classList.toggle("off")
+	},
+	programChange() {
+		let program = this.guide[this.channel]
+		$(".tetris__video.commercial").outerHTML = "<div class='tetris__video commercial' id='player'></div>"
+
+		this.player = null
+		this.stateChange("loading")
+		if (this.isYouTube())
+			this.player = new YT.Player("player", {
+				videoId: program.id,
+				width: "512", height: "384",
+				playerVars: { "controls": 0, "modestbranding": 1,"autoplay": 1 },
+				events: {
+					onReady(event) { $television.classList.remove("loading"); television.volumeChange(0) },
+					onStateChange(event) { return television.stateChange.bind(television)(event) }
+				}
+			})
+		else {
+			this.player = DM.player("player", {
+				video: program.id,
+				width: "512", height: "384",
+				params: { autoplay: true, mute: false, controls: false, "queue-enable": false }
+			})
+			on(program.player, "playing pause end start video_start video_end waiting", event => television.stateChange.bind(television)(event))
 		}
+	},
+	stateChange(event) {
+		let state
+		for (state of this.states.split(" "))
+			$television.classList.toggle(state, false)
+		if (typeof(event) === "string")
+			state = event
+		else
+			state = this.isYouTube()
+					? Object.keys(YT.PlayerState).find(state => YT.PlayerState[state] === event.data).toLowerCase()
+					: event.type
+		$television.classList.toggle(state, true)
 	}
-
-	if (!program || event.layerX > 400) {
-		if (event.layerX > 400)
-			channel = 1 - channel
-
-		updateTV("waiting")
-		program = Object.assign({
-			play() {
-				return this.player[`play${guide[channel].player.toLowerCase() === 'youtube' ? 'Video' : ''}`]()
-			},
-			pause() {
-				return this.player[`pause${guide[channel].player.toLowerCase() === 'youtube' ? 'Video' : ''}`]()
-			}
-		}, guide[channel])
-
-		let $player = document.createElement("div")
-		$player.className = "tetris__video commercial"
-		$player.id = "player"
-		$("#player").replaceWith($player)
-
-		switch (program.player.toLowerCase()) {
-			case "youtube":
-				program.player = new YT.Player("player", {
-					height: "384",
-					width: "512",
-					videoId: program.id,
-					playerVars: { "controls": 0, "modestbranding": 1,"autoplay": 1 },
-					events: {
-						"onStateChange": event => {
-							updateTV(Object.keys(YT.PlayerState).find(state => YT.PlayerState[state] === event.data).toLowerCase())
-						}
-					}
-				})
-				break
-			case "dailymail":
-				program.player = DM.player($player, {
-					video: program.id,
-					width: "512",
-					height: "384",
-					params: { autoplay: true, mute: false, controls: false, "queue-enable": false }
-				})
-				on(program.player, "start", () => program.player.setMuted(0))
-				on(program.player, "playing pause end start video_start video_end waiting", event => updateTV(event.type))
-				break
-		}
-		return
+}
+on(window, "load resize", event => {
+	let $map = $('map[name="television"]')
+	let $static = $('[usemap="#television"]')
+	let areas = [
+		{ click: "toggle",
+		  shape: "rect", coords: "9.38%,10.29%,74.80%,76.04%" },
+		{ click: "channelDown",
+		  shape: "rect", coords: "81.64%,20.70%,87.89%,24.87%" },
+		{ click: "channelUp",
+		  shape: "rect", coords: "87.89%,20.70%,94.14%,24.87%" },
+		{ click: "volumeDown",
+		  shape: "rect", coords: "81.64%,24.87%,87.89%,29.04%" },
+		{ click: "volumeUp",
+		  shape: "rect", coords: "87.89%,24.87%,94.14%,29.04%" },
+		{ click: "power",
+		  shape: "rect", coords: "87.89%,29.04%,94.14%,35.00%" }
+	]
+	
+	$map.innerHTML = ""
+	for (area of areas) {
+		let coords = area.coords.split(",").map((coord, index) => {
+			if (coord.indexOf("%"))
+				return Math.floor($static[index % 2 ? "height" : "width"] * parseFloat(coord) / 100)
+			return coord
+		}).join(",")
+		let $area = document.createElement("area")
+		$area.setAttribute("href", "javascript:;")
+		$area.setAttribute("shape", area.shape)
+		$area.setAttribute("coords", coords)
+		$area.addEventListener("click", television[area.click].bind(television))
+		$map.appendChild($area)
 	}
-
-	if ($television.classList.contains("playing"))
-		program.pause()
-	else
-		program.play()
 })
-let guide = [
-	{ id: "E-ej_8XBwmI", player: "YouTube", title: "Game Boy: <em>Portable</em> Power", type: "Television Advertisement", publisher: "Nintendo", year: "1989" },
-	{ id: "x1tn4lk", player: "DailyMail", title: "Teenage Mutant Ninja Turtles", type: "Animated Series", publisher: "Mirage Studios", year: "1987" }
-]
 
 // Scoring Table Toggle
 function updateScoringTable(highSpeedScoring) {
@@ -179,8 +247,15 @@ function updateScoringTable(highSpeedScoring) {
 
 			let value = [1,40,100,300,1200][lineIndex] * (level + (lineIndex ? 1 : 0))
 			if (lineIndex === 0) {
+				let $heart = document.createElement("small")
+				$heart.textContent = "♥︎"
 				$output.value = value
-				if (highSpeedScoring) $output.innerHTML += "<small>♥︎</small>"
+				if (highSpeedScoring)
+					setTimeout(() => { $output.appendChild($heart) }, level * 25)
+				else {
+					$output.appendChild($heart)
+					setTimeout(() => { $heart.remove() }, (10 - level) * 25)
+				}
 				continue
 			}
 
@@ -219,8 +294,7 @@ on($toggleScoring, "change", event => {
 let $toggleColorScheme = $(".tetris__toggle.colorScheme input")
 on($toggleColorScheme, "change", event => {
 	event.target.classList.toggle("active")
-	document.documentElement.classList.toggle("light")
-})
+	$tetris.classList.toggle("color-scheme-inverted") })
 
 // Global site tag (gtag.js) - Google Analytics
 window.dataLayer = window.dataLayer || []
