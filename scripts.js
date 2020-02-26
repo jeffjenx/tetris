@@ -295,6 +295,10 @@ let $toggleColorScheme = $(".tetris__toggle.colorScheme input")
 on($toggleColorScheme, "change", event => {
 	event.target.classList.toggle("active")
 	$tetris.classList.toggle("color-scheme-inverted") })
+on(window, "load", event => {
+	if (window.matchMedia("(prefers-color-scheme: dark)"))
+		$tetris.classList.toggle("color-scheme-inverted", true)
+})
 
 // Global site tag (gtag.js) - Google Analytics
 window.dataLayer = window.dataLayer || []
