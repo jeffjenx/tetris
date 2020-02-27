@@ -144,6 +144,14 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 	max-width: 20em; padding-left: 1em;
 	text-indent: -1em; }
 
+.tetris__divider {
+	border: none; margin: 0;
+	text-align: center;
+	font-size: 8pt; letter-spacing: 9pt;
+	opacity: 0.25 }
+.tetris__divider::before {
+	content: '▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣▣' }
+
 /* General Specifics */
 .tetris__section.intro .tetris__sectionTitle,
 .tetris__section.callToAction .tetris__sectionTitle { display: none }
@@ -166,7 +174,7 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 	margin: 0; display: inline-flex }
 .tetris__articleSubtitle {
 	margin-block-start: -100% }
-.boxArt.tetris__image { width: 75vw; height: auto }
+.boxArt.tetris__image { width: 75vw; max-width: 20em; height: auto }
 .boxArt.tetris__image.front { opacity: 0 } /* hide flat image to replace with layered effect */
 .boxArt.tetris__imageLink {
 	--flipped: 0;
@@ -640,6 +648,9 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 	--purple60: #8a3ffc; --purple70: #6929c4;
 	--magenta30: #ffafd2; --magenta90: #510224;
 	--red50: #fa4d56; --red70: #a2191f }
+body {
+	background-color: var(--gray10);
+	transition: background-color 0.25s }
 .tetris__article {
 	--colorBackground: var(--gray10);
 	--colorText: var(--gray100);
@@ -654,6 +665,7 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 	--colorChannel: var(--green40) }
 
 @media (prefers-color-scheme: dark) {
+	body.color-scheme-inverted { background-color: var(--gray100) } }
 	.color-scheme-inverted .tetris__article {
 		--colorBackground: var(--gray100); --colorText: var(--gray10);
 		--colorHighlight: var(--magenta90); --colorShading: var(--gray90);
@@ -755,7 +767,10 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 
 /* Small (Tablet Portrait, Large Phone) */
 /* Small Only */
-@media screen and (min-width: 600px) and (max-width: 900px) { }
+@media screen and (min-width: 600px) and (max-width: 900px) {
+	.tetris__figure.evaluation {
+		transform: scale(0.75);
+		margin-block-start: -12.5%; margin-block-end: -12.5% } }
 @media screen and (min-width: 600px) {
 	.tetris__article {
 		font-family: "IBM Plex Serif", serif;
@@ -773,38 +788,57 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 		text-align: left }
 	.scoring .tetris__toggle {
 		margin-inline-end: 1.5em }
+	.tetris__sectionTitle,
+	.tetris__article p {
+		margin-block-start: 0 }
+	.tetris__figure,
+	.tetris__blockquote {
+		margin-block-start: 1.5em }
 	.tetris__section:not(.callToAction) {
 		display: grid;
 		grid-template-columns: repeat(12, 1fr) }
 	.tetris__section:not(.callToAction) > * {
 		grid-column: 1 / 13; order: 0 }
-	.tetris__blockquote.pajitnov { grid-area: 3 / 1 / auto / span 7 }
-	.tetris__figure.nester { grid-area: 3 / 8 / auto / span 5 }
-	.tetris__figure.commercial { grid-area: 7 / 1 / auto / span 13 }
+	.tetris__blockquote.pajitnov {
+		grid-area: 3 / 1 / auto / span 7;
+		margin-inline-start: 1.5em; margin-inline-end: 1.5em }
+	.tetris__figure.nester { grid-area: 3 / 8 / auto / span 5; margin-block-start: 0 }
+	.tetris__figure.commercial { grid-area: 7 / 1 / auto / span 13; margin-inline-end: 3em }
 	.tetris__figure.tetrads { grid-area: 2 / 8 / auto / 13; grid-template-columns: auto }
 	.tetris__figure.tetrads .tetris__image { width: 100% }
 	.tetris__section.review > h3 + p { grid-area: 2 / 1 / auto / 7 }
-	.tetris__figure.versus { grid-area: 4 / 1 / 7 / 5 }
-	.tetris__blockquote.objective { grid-area: 4 / 5 / auto / 13 }
-	.tetris__blockquote.objective + p { grid-area: 5 / 5 / auto / 13 }
-	.tetris__blockquote.objective + p + p { grid-area: 6 / 5 / auto / 13 }
+	.tetris__blockquote.objective {
+		grid-area: 4 / 6 / auto / 13;
+		max-width: 31em;
+		margin-inline-start: 3em; margin-inline-end: 3em; }
+	.tetris__blockquote.objective + p { grid-area: 5 / 6 / auto / 13 }
+	.tetris__blockquote.objective + p + p { grid-area: 6 / 6 / auto / 13 }
+	.tetris__figure.versus { grid-area: 4 / 1/ 7 / 6 }
+	.tetris__image.versus { width: 192px }
+	.tetris__figure.versus + p + p { grid-area: 8 / 1 / auto / 7 }
+	.tetris__blockquote.instructions { grid-area: 8 / 7 / 10 / 13 }
+	.tetris__blockquote.instructions + p { grid-area: 9 / 1 / auto / 7 }
 	.tetris__table.scoring { font-size: 0.75em }
 	.tetris__blockquote.miyamoto { grid-area: 16 / 1 / auto / 9 }
-	.tetris__figure.miyamoto { grid-area: 16 / 9 / auto / 13 }
+	.tetris__figure.miyamoto {
+		grid-area: 16 / 9 / auto / 13;
+		justify-content: start }
 	.tetris__imageLink.miyamoto { width: 9em; height: 9em }
 	.tetris__figure.gameboy { grid-area: 4 / 1 / 6 / 7 }
 	.tetris__figure.gameboy + p + p { grid-area: 4 / 7 / auto / 13 }
 	.tetris__figure.gameboy + p + p + p { grid-area: 5 / 7 / auto / 13 }
 	.tetris__imageLink.gameboy { width: 15em }
+	.tetris__image.nester { max-width: 11em }
 	.tetris__image.gameboy { width: 100% }
-	.tetris__blockquote.wozniak { grid-area: 8 / 6 / auto / 13 }
-	.tetris__blockquote.wozniak + p { grid-area: 8 / 1 / auto / 6 }
+	.tetris__blockquote.wozniak { grid-area: 8 / 7 / auto / 13 }
+	.tetris__blockquote.wozniak + p { grid-area: 8 / 1 / auto / 7 }
 	.tetris__figure.strategy { grid-area: 10 / 1 / auto / 7 }
 	.tetris__figure.strategy + p { grid-area: 10 / 7 / auto / 13 }
 	.tetris__figure.evaluation {
 		max-width: 35em;
 		margin-inline-start: auto; margin-inline-end: auto } }
-@media screen and (max-width: 900px) {
+
+@media screen and (max-width: 1000px) {
 	.tetris__table.scoring,
 	.tetris__table.scoring thead,
 	.tetris__table.scoring tbody,
@@ -821,17 +855,20 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 
 /* Medium (Tablet Landscape) */
 @media screen and (min-width: 900px) and (max-width: 1200px) { }
-@media screen and (min-width: 900px) { }
+@media screen and (min-width: 900px) {
+	.tetris__article {
+		max-width: 90ch }
+	.tetris__section.review .tetris__sectionTitle + p {
+		margin-inline-end: 1.5em }
+	.tetris__figure.tetrads {
+		grid-area: 2 / 7 / auto / 13;
+    	margin-block-start: 0 } }
 @media screen and (max-width: 1200px) { }
 
 /* Large (Desktop) */
 @media screen and (min-width: 1200px) and (max-width: 1800px) { }
 @media screen and (min-width: 1200px) {
-	body {
-		background-color: var(--gray10);
-		transition: background-color 0.25s }
 	.tetris__article {
-		font-family: "IBM Plex Serif", serif;
 		font-size: 16pt;
 		max-width: 80ch }
 	.tetris__blockquote.description {
@@ -843,14 +880,14 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 	.tetris__figure.versus + p + p { grid-area: 8 / 1 / auto / span 6 }
 	.tetris__blockquote.instructions { grid-area: 8 / 7 / 10 / span 13 }
 	.tetris__blockquote.instructions + p { grid-area: 9 / 1 / auto / span 6 }
-	.tetris__imageLink.gameboy { width: 23em }
-	.tetris__figure.gameboy { grid-area: 4 / 1 / 7 / 8 }
+	.tetris__imageLink.gameboy { width: 25em }
+	.tetris__figure.gameboy {
+		grid-area: 4 / 1 / 7 / 8;
+		position: relative; left: -3em }
 	.tetris__figure.gameboy + p + p { grid-area: 4 / 8 / auto / 13 }
 	.tetris__figure.gameboy + p + p + p { grid-area: 5 / 8 / auto / 13 }
 	.tetris__figure.gameboy + p + p + p + p { grid-area: 6 / 8 / auto / 13 }
 	.tetris__figure.evaluation { font-size: 12pt } }
-@media screen and (min-width: 1200px) and (prefers-color-scheme: dark) {
-	body.color-scheme-inverted { background-color: var(--gray100) } }
 @media screen and (max-width: 1800px) { }
 
 /* Extra Large (4KTV) */
