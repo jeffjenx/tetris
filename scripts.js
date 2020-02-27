@@ -277,7 +277,7 @@ function animateValue(element, start, end, duration) {
 		let value = Math.round(end - (remaining * range))
 		element.innerHTML = value
 		if (value == end)
-			cancelAnimationFrame(updateTimer)
+			return cancelAnimationFrame(updateTimer)
 		updateTimer = requestAnimationFrame(updateValue)
 	}
 }
@@ -294,11 +294,10 @@ on($toggleScoring, "change", event => {
 let $toggleColorScheme = $(".tetris__toggle.colorScheme input")
 on($toggleColorScheme, "change", event => {
 	event.target.classList.toggle("active")
-	$tetris.classList.toggle("color-scheme-inverted") })
-on(window, "load", event => {
+	document.body.classList.toggle("color-scheme-inverted") })
+on(document, "DOMContentLoaded", event => {
 	if (window.matchMedia("(prefers-color-scheme: dark)"))
-		$tetris.classList.toggle("color-scheme-inverted", true)
-})
+		document.body.classList.toggle("color-scheme-inverted", true) })
 
 // Global site tag (gtag.js) - Google Analytics
 window.dataLayer = window.dataLayer || []
