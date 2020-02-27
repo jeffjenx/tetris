@@ -824,7 +824,9 @@ body {
 		grid-area: 16 / 9 / auto / 13;
 		justify-content: start }
 	.tetris__imageLink.miyamoto { width: 9em; height: 9em }
-	.tetris__figure.gameboy { grid-area: 4 / 1 / 6 / 7 }
+	.tetris__figure.gameboy {
+		grid-area: 4 / 1 / 6 / 7;
+		margin-inline-end: 3em }
 	.tetris__figure.gameboy + p + p { grid-area: 4 / 7 / auto / 13 }
 	.tetris__figure.gameboy + p + p + p { grid-area: 5 / 7 / auto / 13 }
 	.tetris__imageLink.gameboy { width: 15em }
@@ -858,6 +860,9 @@ body {
 @media screen and (min-width: 900px) {
 	.tetris__article {
 		max-width: 90ch }
+	.tetris__figure.gameboy { grid-area: 4 / 1 / 7 / 7 }
+	.tetris__figure.gameboy + p + p + p + p { grid-area: 6 / 7 / auto / 13 }
+	.tetris__imageLink.gameboy { width: 20em }
 	.tetris__section.review .tetris__sectionTitle + p {
 		margin-inline-end: 1.5em }
 	.tetris__figure.tetrads {
