@@ -87,7 +87,8 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 .tetris__blockquote {
 	margin-inline-start: 3em; margin-inline-end: 3em }
 .tetris__image {
-	margin-inline-start: auto; margin-inline-end: auto; max-width: 90vmin }
+	margin-inline-start: auto; margin-inline-end: auto;
+	height: auto; max-width: 90vmin }
 
 /* Typography */
 .tetris__article {
@@ -156,6 +157,8 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 .tetris__section.intro .tetris__sectionTitle,
 .tetris__section.callToAction .tetris__sectionTitle { display: none }
 .tetris__section.callToAction > p { margin-block-end: 3em }
+.tetris__image.nester { height: 100% }
+.strategy .tetris__image { height: 256px }
 
 /* 3-D Box Art */
 .tetris__article {
@@ -174,7 +177,9 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 	margin: 0; display: inline-flex }
 .tetris__articleSubtitle {
 	margin-block-start: -100% }
-.boxArt.tetris__image { width: 75vw; max-width: 20em; height: auto }
+.boxArt.tetris__image {
+	width: 75vw; height: 75vw;
+	max-width: 20em; max-height: 20em }
 .boxArt.tetris__image.front { opacity: 0 } /* hide flat image to replace with layered effect */
 .boxArt.tetris__imageLink {
 	--flipped: 0;
@@ -185,6 +190,7 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 	will-change: box-shadow, transform;
 	transition: all 1s cubic-bezier(0.23, 1, 0.32, 1), outline 0s;
 	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden; /* for Safari */
 	max-width: 90vw;
 	margin: 0 auto;
 	border-radius: 3pt; overflow: hidden; display: inline-flex;
@@ -355,7 +361,7 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 	overflow: hidden }
 .magazine .tetris__image {
 	padding-block-start: 1em; padding-block-end: 0.5em;
-	transform: scale(1.6) }
+	transform: scale(1.6); max-height: 65vmin }
 
 /* Versus */
 .tetris__image.versus {
@@ -741,7 +747,7 @@ body {
 	.tetris__image.nester {
 		max-width: 15em }
 	.tetris__image.gameboy {
-		max-width: 25em }
+		max-width: 25em; max-height: 25em }
 	.tetris__figure.evaluation {
 		max-width: 33em;
 		margin-inline-start: auto; margin-inline-end: auto }
@@ -829,7 +835,7 @@ body {
 	.tetris__figure.gameboy + p + p + p { grid-area: 5 / 7 / auto / 13 }
 	.tetris__imageLink.gameboy { width: 15em }
 	.tetris__image.nester { max-width: 11em }
-	.tetris__image.gameboy { width: 100% }
+	.tetris__image.gameboy { width: 100%; height: 100% }
 	.tetris__blockquote.wozniak { grid-area: 8 / 7 / auto / 13 }
 	.tetris__blockquote.wozniak + p { grid-area: 8 / 1 / auto / 7 }
 	.tetris__figure.strategy { grid-area: 10 / 1 / auto / 7 }
