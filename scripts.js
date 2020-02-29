@@ -236,6 +236,8 @@ function updateScoringTable(highSpeedScoring) {
 			if ($output.length === 0) {
 				$output = document.createElement("output")
 				$output.name = name
+				$output.setAttribute("data-tetris__level", level)
+				$output.setAttribute("data-tetris__heartLevel", `${level}♥`)
 
 				$cell = document.createElement(lineIndex === 0 ? "th" : "td")
 				if (lineIndex === 0)
@@ -259,11 +261,15 @@ function updateScoringTable(highSpeedScoring) {
 				continue
 			}
 
+			let heartScore = [1,40,100,300,1200][lineIndex] * (level + 10 + (lineIndex ? 1 : 0))
+			$output.setAttribute("data-tetris__score", value)
+			$output.setAttribute("data-tetris__heartScore", heartScore)
 			if (highSpeedScoring)
-				value = [1,40,100,300,1200][lineIndex] * (level + 10 + (lineIndex ? 1 : 0))
+				value = heartScore
 			animateValue($output, $output.value, value, 500)
 		}
 	}
+	$(".tetris__table.scoring").classList.toggle("highSpeed", highSpeedScoring ? true : false)
 }
 updateScoringTable()
 
