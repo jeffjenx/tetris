@@ -1,6 +1,787 @@
-<!DOCTYPE HTML>
-<TITLE>Tetris</TITLE>
-<LINK REL="stylesheet" HREF="https://webdevkit.net/styles.css">
-<DIV>
-Hello, world!
-</DIV>
+<!doctype html>
+<html lang="en">
+<title>Tetris</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" sizes="32x32" href="icons/32x32.png">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+<link rel="dns-prefetch" href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400%7CIBM+Plex+Sans:300,400,400i,600,700%7CIBM+Plex+Sans+Condensed:600%7CIBM+Plex+Serif:400,400i,600,700">
+<link rel="stylesheet" href="styles.css">
+<script async src="https://youtube.com/iframe_api"></script>
+<script async src="https://api.dmcdn.net/all.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-155363758-1"></script>
+<script defer src="scripts.js"></script>
+<script defer src="tetris.js"></script>
+
+
+<article class="tetris__article">
+	<header class="tetris__articleHeader">
+		<h1 class="tetris__articleTitle">
+			<a class="tetris__imageLink boxArt front"
+			   href="images/Artwork.jpg">
+				<img class="tetris__image boxArt front"
+				     src="images/Artwork.jpg"
+				     alt="Tetris"
+				     width="512" height="512" />
+			</a>
+		</h1>
+		<h2 class="tetris__articleSubtitle">
+			<a class="tetris__imageLink boxArt back"
+			   href="images/Description.jpg">
+				<img class="tetris__image boxArt back"
+				     src="images/Description.jpg"
+				     alt="From Russia with Fun!"
+				     width="512" height="512" />
+			</a>
+		</h2>
+	</header>
+	<section class="tetris__section intro">
+		<h3 class="tetris__sectionTitle">Introduction</h3>
+		<p>
+			Ahhh… <cite>Tetris.</cite>
+			<q class="tetris__quote"
+				cite="https://mobygames.com/game/gameboy/tetris_gb/cover-art/gameCoverId,39235">The relentless building block video puzzle</q>
+			game that launched with Nintendo’s Game Boy in 1989.
+		</p>
+		<figure class="tetris__figure nester">
+			<a class="tetris__imageLink nester"
+				href="images/Nester.png">
+				<img class="tetris__image nester"
+						src="images/Nester.png"
+						alt="Nester smiles with his Game Boy"
+						width="256"/>
+			</a>
+			<figcaption class="tetris__caption">
+				<span class="tetris__citeTitle">Nester &amp; Game Boy</span> Illustration,
+				<cite class="tetris__citePublication">Nintendo Power,</cite>
+				<abbr class="tetris__citeExtra" title="Issue #7">#7,</abbr>
+				<time class="tetris__citeDate" datetime="1989-07">1989.</time>
+			</figcaption>
+		</figure>
+		<p>The title “originally comes from the word <em>tetra</em>” or <em>tetromino</em> — a shape made of four blocks, kind of like how a domino is a shape made of two blocks — combined with <em>tennis,</em> a favorite activity of the game’s original creator Alexey Pajitnov.</p>
+		<blockquote class="tetris__blockquote pajitnov"
+						cite="https://www.ign.com/videos/2009/06/12/alexey-pajitnov-stars-video-interview-alexey-pajitnov-pt-1?objectid=919431">
+			<p>I still admire traditional, original Game Boy version. I like it. It’s very close to my own.</p>
+			<p>— Tetris Creator Alexey Pajitnov
+			<footer class="tetris__caption">
+				<span class="tetris__citeTitle">Video Feature with The Tetris Company,</span>
+				<cite class="tetris__citePublication">IGN,</cite>
+				<time class="tetris__citeDate" datetime="2009-06-12">2009.</time>
+			</footer>
+		</blockquote>
+		<p>
+			While the Tetris franchise has an interesting and complicated history dating back as early as 1985, it was the <em>Nintendo Game Boy</em> version that I have the fondest memories of.
+			Whether it was taking turns to get the high score with my mom, dad and brother or playing under the passing streetlights in the back of our van as we drove home from a family gathering, Tetris will always be one of remembered as one of my favorite video games of all time.
+		</p>
+		<blockquote class="tetris__blockquote description"
+						cite="https://mobygames.com/game/gameboy/tetris_gb/cover-art/gameCoverId,39236">
+			<header class="tetris__blockquoteHeader">
+				<p><strong>The Soviet Game Sensation!</strong></p>
+			</header>
+			<p>Beams, boxes, zig-zags and L-shaped blocks drop down a narrow passage.</p>
+			<p>Feel your pulse quick as you spin, shift and align the shapes for a perfect fit. It’s challenge and demands split second decision!</p>
+			<p>Start at new heights for a tougher contest. Pick the music and set your pace from 20 progressive skill levels!</p>
+			<footer class="tetris__caption">
+				<span class="tetris__citeTitle">Tetris</span> Retail Product Packaging,
+				<cite class="tetris__citePublication">Nintendo,</cite>
+				<time class="tetris__citeDate" datetime="1989-07-31">1989.</time>
+			</footer>
+		</blockquote>
+		<p>
+			For me and many other kids growing up in the 1980s, our primary source of video game related news came from <cite class="tetris__citePublication">Nintendo Power,</cite> an official magazine dedicated to all things Nintendo with contests, strategies, and previews of the newest games &amp; accessories.
+			It was in these early issues from the fall of ‘89 that I got my first look at true <em>portable</em> gaming.
+		</p>
+		<figure class="tetris__figure commercial">
+			<div class="tetris__imageLink commercial paused">
+				<map class="tetris__imageMap"
+				     name="television"></map>
+				<img class="tetris__image commercial"
+				     src="images/Commercial/Keyframe.jpg"
+				     alt="Nintendo Game Boy Commercial (1989)"
+				     width="512"
+				     usemap="#television"/>
+				<div class="tetris__spinner commercial">
+					<div class="tetris__spinnerContainer">
+						<div class="tetris__spinnerRotator">
+							<div class="tetris__spinnerLeft">
+								<div class="tetris__spinnerCircle left"></div>
+							</div>
+							<div class="tetris__spinnerRight">
+								<div class="tetris__spinnerCircle right"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="tetris__video commercial"></div>
+				<div class="tetris__videoDisplay"></div>
+			</div>
+			<figcaption class="tetris__caption commercial">
+				<span class="tetris__citeTitle">Game Boy: <em>Portable</em> Power</span> Television Advertisement,
+				<cite class="tetris__citePublication">Nintendo,</cite>
+				<time class="tetris__citeDate" datetime="1989">1989.</time>
+			</figcaption>
+		</figure>
+		<p>
+			The anticipation would build up each month, first with a Pak Watch preview to drum up the excitement,
+			<q class="tetris__quote">when Power Players flock to store shelves in search of Game Boy this fall, they’re in for a surprise… a Game Pak as part of the introductory package. Which game? Better hold on to something! It’s Tetris!!</q>
+			While checking it out in a magazine was pretty cool, seeing in action brings it to a whole ‘nother level.
+			It is still easy to get pumped up for Game Boy and Tetris when you watch the original television advertisement.
+		</p>
+		<p>
+			Then, just before the game hits the store shelves, you would get blown away by a multiple page feature in the release month’s issue of <cite class="tetris__citePublication">Nintendo Power.</cite>
+			For Tetris, we got to read about <span class="tetris__citeTitle">A Link with the Soviet Union</span> and how Nintendo of America’s president at the time, Howard Lincoln, would travel and share the Game Boy experience with the world and even beyond! You can always count on Nintendo Power to dress up the content with fun phrases and cool comics.
+		</p>
+		<figure class="tetris__figure magazine">
+			<a class="tetris__imageLink magazine"
+				href="images/Magazine/Page%20Spread.jpg">
+				<img class="tetris__image magazine"
+						src="images/Magazine.png"
+						alt="Nester ignores everyone to play Tetris on his Game Boy until his mom discovers how fun it is!">
+			</a>
+			<figcaption class="tetris__caption magazine">
+				<span class="tetris__citeTitle">Howard &amp; Nester &amp; Nester’s Mom Discover Game Boy</span> Comic Strip,
+				<cite class="tetris__citePublication">Nintendo Power,</cite>
+				<abbr class="tetris__citeExtra" title="Issue #8">#8,</abbr>
+				<time class="tetris__citeDate" datetime="1989-09">1989.</time>
+			</figcaption>
+		</figure>
+		<p>
+			It was all a way to build up the hype before the days of online influencers, social media and forums.
+			For me, all I could do is wait until Santa made his rounds, hoping that he’d come through with a portable power pack of my own (and he did).
+		</p>
+	</section>
+	<section class="tetris__section review">
+		<h3 class="tetris__sectionTitle">A Brief Review</h3>
+		<p>
+			Tetris is a puzzle game where you guide the way various block patterns fall into a pile at the bottom of the playing field.
+			If you can manage to completely fill a row of blocks without any gaps, then it gets cleared out of the way and all the blocks above it drop down.
+		</p>
+		<figure class="tetris__figure tetrads">
+			<a class="tetris__tetrads"
+				href="images/Tetrads.jpg">
+				<img class="tetris__image tetrads"
+						src="images/Tetrads.png"
+						alt="Seve Tetris pieces, known as Tetrads, resemble alphabet letters."/>
+			</a>
+			<figcaption class="tetris__caption">
+				<span class="tetris__citeTitle">Tetrads</span> Illustrations,
+				<cite class="tetris__citePublication">Nintendo Power,</cite>
+				<abbr class="tetris__citeExtra" title="Issue #8">#8,</abbr>
+				<time class="tetris__citeDate" datetime="1989-09">1989.</time>
+			</figcaption>
+		</figure>
+		<p>
+			The individual block patterns in Tetris are called <q class="tetris__quote">Tetrads</q> and there are seven ways to organize the four individual blocks that comprise them.
+			The pieces are often referred to by the letter that the shape resembles: I, J, L, O, S, T, and Z.
+			Only one of them can be used to score the maximum four-line clear.
+		</p>
+		<blockquote class="tetris__blockquote objective"
+						cite="https://www.youtube.com/watch?v=2xS5nhogZVA">
+			The object of the game is to keep the blocks from piling up to the top of the game field.
+			To do this, you can move the blocks to the left and right, and rotate them as they fall.
+			If you can completely fill in one horizontal line, that line disappears and you get points.
+			<footer class="tetris__caption">
+				<span class="tetris__citeTitle">What Is Tetris?,</span>
+				<cite class="tetris__citePublication">Tetris Instruction Booklet</cite>,
+				<time class="tetris__citeDate" datetime="1989-07-31">1989.</time>
+			</footer>
+		</blockquote>
+		<p>
+			For the Game Boy version, there are three different types of game modes to play.
+			The A-Type game is the classic endurance mode, where you try to get the highest score by completing lines.
+			As your Score rises, so does the Level, increasing the speed that the Tetrads fall.
+		</p>
+		<p>
+			The B-Type game is one that I rarely played when I was a kid.
+			In this game mode, you only have 25 lines to score as many points as possible.
+			As an added challenge, you can pick how High of a pile of blocks you begin with.
+		</p>
+		<figure class="tetris__figure versus">
+			<a class="tetris__versus"
+				href="images/Mario%20vs%20Luigi.png">
+				<img class="tetris__image versus"
+						src="images/Mario%20vs%20Luigi.png"
+						alt="Screenshots showing the two-player game mode graphics featuring Mario and Luigi."/>
+			</a>
+			<figcaption class="tetris__caption">
+				<span class="tetris__citeTitle">Mario vs. Luigi</span> Screenshots,
+				<cite class="tetris__citePublication">Tetris Instruction Booklet,</cite>
+				<time class="tetris__citeDate" datetime="1989-07-31">1989.</time>
+			</figcaption>
+		</figure>
+		<p>
+			The third game mode is an exclusive two-player mode that showed off the capabilities of the Game Boy’s pack-in accessory, the Game Boy Video Link cable.
+			In it, you and a friend go head-to-head as Mario and Luigi!
+			As you clear multiple lines at once, you send pieces of the bonus lines to the bottom of your friend’s pile.
+			Play best of 9 games to see who wins!
+		</p>
+		<p>
+			So, how do you get the highest scores?
+			In Tetris, there are lots of way to increase your score, but knowing how to maximize the score might not be as straightforward as you’d think.
+		</p>
+		<blockquote class="tetris__blockquote instructions"
+						cite="https://www.youtube.com/watch?v=2xS5nhogZVA">
+			If a complete line with no gaps is formed, that line will disappear from the screen.
+			As you get better at the game, you can complete two lines (a double), three lines (a triple) or four lines (a “Tetris”) with the drop of one block.
+			Doubles, triples, and Tetrises will result in a higher score.
+			<footer class="tetris__caption">
+				<span class="tetris__citeTitle">Technique,</span>
+				<cite class="tetris__citePublication">Tetris Instruction Booklet,</cite>
+				<time class="tetris__citeDate" datetime="1989-07-31">1989.</time>
+			</footer>
+		</blockquote>
+		<p>
+			Each Tetrad piece that you drop will award some small points and pieces that are “dropped” from a higher the position will yield more.
+			Clearing lines by completely filling in a horizontal row with no gaps is your main goal.
+			Try completing 2, 3 or 4 lines at once.
+			The deeper the pile of lines that is completed, the more points you’ll receive.
+		</p>
+		<p>
+			Play on higher levels to earn mega-multipliers for maximum points.
+			As your score increases, you progress through the various levels signified by a satisfying audio fanfare.
+			Higher levels mean the Tetrads drop faster, so you have less time to react.
+			Starting your game on a lower level helps give you time to react so you can practice your technique on building piles suitable for scoring Tetrises.
+			Picking a higher level to start sets you up to score big, as each level will take longer to progress through giving you the best opportunity to line ‘em up.
+		</p>
+		<figure class="tetris__figure scoring">
+			<form class="tetris__form" oninput="update">
+				<table class="tetris__table scoring">
+					<thead>
+						<tr><th>Level</th></tr>
+					</thead>
+					<tbody>
+						<tr><th>Single</th></tr>
+						<tr><th>Double</th></tr>
+						<tr><th>Triple</th></tr>
+						<tr><th>Tetris</th></tr>
+					</tbody>
+				</table>
+			</form>
+			<figcaption class="tetris__caption">
+				<span class="tetris__citeTitle">About Scoring,</span>
+				<cite class="tetris__citePublication">Tetris Instruction Booklet,</cite>
+				<time class="tetris__citeDate" datetime="1989-07-31">1989.</time>
+				<label class="tetris__toggle scoring">
+					<input class="tetris__toggleInput" type="checkbox"/>
+					<span class="tetris__toggleIcon" title="Toggle High Speed Scores">♡</span>
+					<span class="tetris__toggleText">Toggle High Speed Scores</span>
+				</label>
+			</figcaption>
+		</figure>
+		<p>
+			If all of that was not enough, Nintendo managed to pack even more challenges into their take on Tetris.
+			One way to make the game harder is by disabling the Next Tetrad display indicator.
+			It is much easier to plan out your current drop position when you know what piece you are going to have to deal with next.
+			Hiding the display gives you even less time to strategize.
+		</p>
+		<p>
+			The other way to increase the difficulty is by selecting an alternate, even faster and more demanding game mode during the Level selection screen.
+			Each High Speed Level will be adorned with a ♡ both during game play and on the high score screen, differentiating itself from the Normal Speed game mode.
+		</p>
+		<p>
+			All of that crammed into one 32 <abbr title="kilobyte">KByte</abbr> ROM chip for an 8-Bit system only capable of rendering four different shades of green.
+			It’s no wonder the game managed to sell over 35 million copies and helped make Game Boy one of the most successful console launches of all time.
+			So, after all this, is Tetris any <em>good</em>?
+		</P>
+		<blockquote class="tetris__blockquote miyamoto"
+						cite="https://www.youtube.com/watch?v=_fQtxKmgJC8">
+			<p>Yes! Why? Because your secretaries and accountants are playing it!</p>
+			<p class="tetris__blockquoteSpeaker">— Nintendo Designer Shigeru Miyamoto to President Hirochi Yamauchi</p>
+			<footer class="tetris__caption">
+				<span class="tetris__citeTitle">The Story of Tetris,</span>
+				<cite class="tetris__citePublication">Gaming Historian,</cite>
+				<time class="tetris__citeDate" datetime="2018-02-02">2018.</time>
+			</footer>
+		</blockquote>
+		<figure class="tetris__figure miyamoto">
+			<a class="tetris__imageLink miyamoto"
+				href="https://www.youtube.com/watch?v=7TJ7IUNWGl4">
+				<img class="tetris__image miyamoto"
+						src="images/Miyamoto/Dark.jpg"
+						alt="Nintendo’s Shigeru Miyamoto makes a thumbs up gesture.">
+			</a>
+			<figcaption class="tetris__caption miyamoto">
+				<span class="tetris__citePerson">Shigeru Miyamoto,</span>
+				<time class="tetris__citeDate" datetime="2016">2016.</time>
+			</figcaption>
+		</figure>
+	</section>
+	<section class="tetris__section letsPlay">
+		<h3 class="tetris__sectionTitle">Let’s Play Tetris</h3>
+		<p>
+			All right, so, do you want to check out Tetris on Nintendo Game Boy?
+			I have not played this game in many years.
+			My Dad still has the Game Boy and Game Pak from when he originally bought it for us back when it came out in the fall of 1989.
+			I remember we would be taking a long road trip for our annual family vacation and each of us would take turns to see who could get the Top Score for that leg of the trip.
+			If you remember, the game did not allow the scores to be saved after the Game Boy was powered off.
+			Anyway, we would always poke fun at my Dad for starting at Level 0 because his turns would always last a long longer!
+			I don’t think he knew at the time that each Level serves a multiplier for bonus points awarded to line clears.
+		</p>
+		<figure class="tetris__figure gameboy">
+			<a class="tetris__imageLink gameboy"
+				href="images/Game%20Boy.png">
+				<img class="tetris__image gameboy"
+						src="images/Game%20Boy.png"
+						alt="An original Nintendo Game Boy showing the Tetris title screen."/>
+			</a>
+			<figcaption class="tetris__caption gameboy">
+				<span class="tetris__citeTitle">Game Boy,</span>
+				<cite class="tetris__citePublication">Nintendo,</cite>
+				<span class="tetris__citeExtra">Model DMG-01,</span>
+				<span class="tetris__citeExtra">Classic Gray,</span>
+				<time class="tetris__citeDate" datetime="1989-07-31">1989.</time>
+			</figcaption>
+		</figure>
+		<p>
+			This time, I am going to be playing on the original classic gray version that was released in the United States on July 31, 1989 bundled with Tetris or Super Mario Land.
+			As a successor to Nintendo’s Game &amp; Watch electronic games, the 8-Bit “Dot Matrix Game (DMG)” system featured a four-color 160-by-144 pixel monochrome <abbr title="liquid crystal display">LCD</abbr> screen that had a green tint to it.
+		</p>
+		<p>
+			Originally created by Russian game designer Alexey Pajitnov for personal computers, the Game Boy version of Tetris was developed internally at Nintendo.
+			It was produced by Gunpei Yokoi, creator of Nintendo’s Game &amp; Watch Series and the original Game Boy.
+			He is also responsible for inventing the cross-style Control Pad.
+		</p>
+		<p>
+			The music for Tetris on Game Boy is superb and it’s no wonder why.
+			The soundtrack was composed by an accomplished veteran of Nintendo, Hirokazu Tanaka, who is credited for other great works such as Metroid, Super Mario Land and EarthBound.
+			He’s currently the President of Creatures, the Japanese video game development company responsible for Pokémon.
+		</p>
+		<p>
+			Once you pick out a starting level, the game begins as you race to drop one of seven different shaped “Tetrads” into a pile, clearing complete lines as you go.
+			You can move and rotate the pieces and, once you have them in place, drop them down from as high as you can to maximize your score.
+			You can even “slide” blocks into place by moving them as they fall and settle in to their final resting place.
+		</p>
+		<p>
+			Clearing multiple lines earns even more points.
+			Try for a double, a triple or a Tetris: four lines cleared at once.
+			The seven different blocks are dropped at random and you can toggle the next block display for and added challenge.
+			The goal of the Type A game mode is survive the longest and get the highest score possible.
+		</p>
+		<blockquote class="tetris__blockquote wozniak"
+						cite="https://www.youtube.com/watch?v=n6gzcjyNkHs">
+			<p>
+				Now, I’ve met people that can play better than I do.
+				But, in my timeframe, when they kept track in Nintendo Power magazine, I always had the high score and I’m very proud of that.
+			</p>
+			<p>— Apple Co-Founder Steve Wozniak</p>
+			<footer class="tetris__caption">
+				<span class="tetris__citeTitle">Full Interview: Steve Wozniak Talks Video Games,</span>
+				<cite class="tetris__citePublication">Game Informer,</cite>
+				<time class="tetris__citeDate" datetime="2013-06-27">2013.</time>
+			</footer>
+		</blockquote>
+		<p>
+			I have pretty much always played the survival game mode.
+			One of my favorite stories about high scores has always been the tale of Apple co-founder Steve Wozniak becoming the top player for Tetris on Game Boy.
+			He famously submitted a high score with his name spelled backwards, “Evets Kainzow,” after being recognized in consecutive issues of Nintendo Power in order to circumvent being blacklisted for being “too good.”
+			His original submissions are still officially recognized on Twin Galaxies, ranked #8 overall with a score of 507,110 points.
+		</p>
+		<p>
+			Now I’m certain I will not be getting any scores remotely close that and, even if I did, they certainly would not be recognized by Twin Galaxies.
+			That’s because I prefer to transfer the <abbr title="read-only memory chips">ROMs</abbr> on my Game Paks to my computer and play the games using an emulator, like RetroArch.
+			I created this classic gray Game Boy overlay and paired it with a video filter shader to give us a way to enjoy some of these titles the way they were originally designed.
+		</p>
+		<figure class="tetris__figure strategy">
+			<div class="tetris__container">
+				<img class="tetris__image"
+					src="images/Strategy.jpg"
+					alt="A screenshot shows when it is time to change strategies."
+					height="256"/>
+				<div class="tetris__region danger">Red Alert!</DIV>
+				<div class="tetris__region warning">Lower<BR>The Stack</DIV>
+				<div class="tetris__region safe">Safe Area</DIV>
+			</div>
+			<figcaption class="tetris__caption">
+				<span class="tetris__citeTitle">Tetris: The Lines Form Here,</span>
+				<cite class="tetris__citePublication">Nintendo Game Boy Player’s Guide,</cite>
+				<time class="tetris__citeDate" datetime="1991">1991.</time>
+			</figcaption>
+		</figure>
+		<p>
+			When it comes to strategies, I am certain Mr. Wozniak would agree that most important strategy was outlined in the Nintendo Game Boy Player’s Guide, where they show when it is safe to try for Tetrises and when it is time to start thinking about bailing and getting the pile back to a more manageable state.
+			Inevitably, though, the gaps will simply be too much to overcome and it is time for another Game Over.
+			What I always enjoyed was reaching that minimum threshold to get treated to an ending cut-scene that is dynamic based on the score achieved.
+		</p>
+		<p>
+			As you can see, every time I come back, my high scores are still there.
+			That is thanks to an incredible <abbr title="read-only memory chip">ROM</abbr> patch that enables a sort of battery-backup system and keeps track of the scores in a save file that can be restored after the system is powered off.
+			I will be including links for you to download the patch, as well as my classic gray Game Boy overlay and shader pack for RetroArch, so you can enjoy them, too!
+		</p>
+		<p>
+			Now, that’s about the best I can do for now.
+			I’m sure I will get better as I get reacquainted with it, but it was nice to take a short look at one of the most iconic games of all time and see what made it so special.
+			That’s all for now. Thanks and have a wonderful day!
+		</p>
+		<figure class="tetris__figure evaluation">
+			<form class="tetris__form">
+				<h3 class="tetris__formTitle">Nintendo Power Player’s Evaluation Form</h3>
+				<dl class="tetris__dataList">
+					<div class="tetris__formField">
+						<dt class="tetris__formLabel">Name of Game</dt>
+						<dd class="tetris__formInput">Tetris</dd>
+					</div>
+					<div class="tetris__formField">
+						<dt class="tetris__formLabel">System</dt>
+						<dd class="tetris__formInput">Game Boy</dd>
+					</div>
+					<div class="tetris__formField">
+						<dt class="tetris__formLabel">Company</dt>
+						<dd class="tetris__formInput">Nintendo</dd>
+					</div>
+					<div class="tetris__formField">
+						<dt class="tetris__formLabel">Game Type</dt>
+						<dd class="tetris__formInput">Puzzle</dd>
+					</div>
+					<div class="tetris__formField">
+						<dt class="tetris__formLabel">Evaluator</dt>
+						<dd class="tetris__formInput">Jeff Jenkins</dd>
+					</div>
+					<div class="tetris__formField">
+						<dt class="tetris__formLabel">Date</dt>
+						<dd class="tetris__formInput"><time datetime="2020-02-13">Feb 13 2020</time></dd>
+					</div>
+					<div class="tetris__formField">
+						<dt class="tetris__formLabel">
+							Issue Reviewed<br/>
+							in Nintendo Power
+						</dt>
+						<dd class="tetris__formInput">
+							<time datetime="1989-09">Sept/Oct 1989</time>
+						</dd>
+					</div>
+				</dl>
+				<svg class="tetris__image"
+						xmlns="http://www.w3.org/2000/svg"
+						width="500" height="400" viewbox="0 -50 400 500">
+					<rect width="400" height="400"
+							fill="transparent"
+							stroke="black" stroke-width="1" stroke-dasharray="6,4"/>
+
+					<clipPath id="ct"><rect x="-100" y="-5" width="600" height="220"/></clipPath>
+					<clipPath id="cb"><rect x="-100" y="185" width="600" height="220"/></clipPath>
+					
+					<circle cx="200" cy="0" r="188" clip-path="url(#ct)" stroke="white" stroke-width="20" fill="transparent" />
+					<circle cx="200" cy="400" r="188" clip-path="url(#cb)" stroke="white" stroke-width="20" fill="transparent" />
+					<circle cx="200" cy="0" r="198" clip-path="url(#ct)" stroke="black" stroke-width="5" fill="transparent" />
+					<circle cx="200" cy="400" r="198" clip-path="url(#cb)" stroke="black" stroke-width="5" fill="transparent" />
+
+					<text x="200" y="175" text-anchor="middle" alignment-baseline="baseline" font-size="18" fill="black">0</text>
+					<text x="200" y="225" text-anchor="middle" alignment-baseline="hanging" font-size="18" fill="black">0</text>
+					<line x1="200" y1="200" x2="200" y2="180" stroke="black" stroke-width="3"/>
+					<line x1="200" y1="200" x2="200" y2="220" stroke="black" stroke-width="3"/>
+
+					<text x="160" y="168" text-anchor="middle" alignment-baseline="baseline" font-size="18" fill="black">1</text>
+					<text x="160" y="232" text-anchor="middle" alignment-baseline="hanging" font-size="18" fill="black">1</text>
+					<text x="240" y="168" text-anchor="middle" alignment-baseline="baseline" font-size="18" fill="black">1</text>
+					<text x="240" y="232" text-anchor="middle" alignment-baseline="hanging" font-size="18" fill="black">1</text>
+					<line x1="160" y1="193" x2="160" y2="175" stroke="black" stroke-width="3"/>
+					<line x1="160" y1="207" x2="160" y2="225" stroke="black" stroke-width="3"/>
+					<line x1="240" y1="193" x2="240" y2="175" stroke="black" stroke-width="3"/>
+					<line x1="240" y1="207" x2="240" y2="225" stroke="black" stroke-width="3"/>
+
+					<text x="120" y="154" text-anchor="middle" alignment-baseline="baseline" font-size="18" fill="black">2</text>
+					<text x="120" y="246" text-anchor="middle" alignment-baseline="hanging" font-size="18" fill="black">2</text>
+					<text x="280" y="154" text-anchor="middle" alignment-baseline="baseline" font-size="18" fill="black">2</text>
+					<text x="280" y="246" text-anchor="middle" alignment-baseline="hanging" font-size="18" fill="black">2</text>
+					<line x1="120" y1="159" x2="120" y2="179" stroke="black" stroke-width="3"/>
+					<line x1="120" y1="221" x2="120" y2="241" stroke="black" stroke-width="3"/>
+					<line x1="280" y1="159" x2="280" y2="179" stroke="black" stroke-width="3"/>
+					<line x1="280" y1="221" x2="280" y2="241" stroke="black" stroke-width="3"/>
+
+					<text x="80" y="131" text-anchor="middle" alignment-baseline="baseline" font-size="18" fill="black">3</text>
+					<text x="80" y="269" text-anchor="middle" alignment-baseline="hanging" font-size="18" fill="black">3</text>
+					<text x="320" y="131" text-anchor="middle" alignment-baseline="baseline" font-size="18" fill="black">3</text>
+					<text x="320" y="269" text-anchor="middle" alignment-baseline="hanging" font-size="18" fill="black">3</text>
+					<line x1="80" y1="136" x2="80" y2="156" stroke="black" stroke-width="3"/>
+					<line x1="80" y1="244" x2="80" y2="264" stroke="black" stroke-width="3"/>
+					<line x1="320" y1="136" x2="320" y2="156" stroke="black" stroke-width="3"/>
+					<line x1="320" y1="244" x2="320" y2="264" stroke="black" stroke-width="3"/>
+
+					<text x="40" y="90" text-anchor="middle" alignment-baseline="baseline" font-size="18" fill="black">4</text>
+					<text x="40" y="310" text-anchor="middle" alignment-baseline="hanging" font-size="18" fill="black">4</text>
+					<text x="360" y="90" text-anchor="middle" alignment-baseline="baseline" font-size="18"  fill="black">4</text>
+					<text x="360" y="310" text-anchor="middle" alignment-baseline="hanging" font-size="18" fill="black">4</text>
+					<line x1="40" y1="95" x2="40" y2="115" stroke="black" stroke-width="3"/>
+					<line x1="40" y1="285" x2="40" y2="305" stroke="black" stroke-width="3"/>
+					<line x1="360" y1="95" x2="360" y2="115" stroke="black" stroke-width="3"/>
+					<line x1="360" y1="285" x2="360" y2="305" stroke="black" stroke-width="3"/>
+
+					<text x="2" y="-10" text-anchor="middle" alignment-baseline="baseline" font-size="18" fill="black">5</text>
+					<text x="2" y="410" text-anchor="middle" alignment-baseline="hanging" font-size="18" fill="black">5</text>
+					<text x="398" y="-10" text-anchor="middle" alignment-baseline="baseline" font-size="18" fill="black">5</text>
+					<text x="398" y="410" text-anchor="middle" alignment-baseline="hanging" font-size="18" fill="black">5</text>
+
+					<text class="quadrantIdentifier" x="-25" y="0" text-anchor="end" alignment-baseline="baseline" font-size="48" fill="black">G</text>
+					<text class="quadrantIdentifier" x="425" y="0" text-anchor="start" alignment-baseline="baseline" font-size="48" fill="black">P</text>
+					<text class="quadrantIdentifier" x="-25" y="400" text-anchor="end" alignment-baseline="hanging" font-size="48" fill="black">C</text>
+					<text class="quadrantIdentifier" x="425" y="400" text-anchor="start" alignment-baseline="hanging" font-size="48" fill="black">T</text>
+
+					<polygon points="40,115 360,115 400,400 80,244" stroke="dodgerblue" stroke-width="4" fill="transparent" stroke-linejoin="round"/>
+				</svg>
+				<table class="tetris__table">
+					<colgroup>
+						<col class="tetris__tableColumn category"/>
+						<col class="tetris__tableColumn score"/>
+						<col class="tetris__tableColumn score"/>
+						<col class="tetris__tableColumn comments"/>
+					</colgroup>
+					<thead>
+						<tr>
+							<th>Evaluation</th>
+							<th>Power<br/>Player</th>
+							<th>Power<br/>Meter</th>
+							<th>Evaluators Comments</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th><abbr>G</abbr> Graphics<BR>&amp; Sound</th>
+							<td class="">4</td>
+							<td>3.4</td>
+							<td class="tetris__tableCell comments" rowspan="4">
+								Tetris and Game Boy go hand in hand!
+								Catchy tunes, quick games and endless fun for people of all ages!
+							</td>
+						</tr>
+						<tr><th><abbr>P</abbr><span>Play Control</span></th><td>4</td><td>4.2</td></tr>
+						<tr><th><abbr>C</abbr><span>Challenge</span></th><td>3</td><td>3.5</td></tr>
+						<tr><th><abbr>T</abbr><span>Theme &amp; Fun</span></th><td>5</td><td>3.9</td></tr>
+					</tbody>
+				</table>
+			</form>
+			<figcaption class="tetris__caption evaluation">
+				<span class="tetris__citeTitle">Behind the Scenes at Nintendo,</span>
+				<cite class="tetris__citePublication">Nintendo Power,</cite>
+				<abbr class="tetris__citeExtra" title="Issue #44, Super Power Club Edition">#44,</abbr>
+				<time class="tetirs__citeDate" datetime="1993-01">1993.</time>
+			</figcaption>
+		</figure>
+	</section>
+	<hr class="tetris__divider" />
+	<section class="tetris__section callToAction">
+		<h3 class="tetris__sectionTitle">Final Thoughts</h3>
+		<p>
+			Hello, world!
+			I’m Jeff Jenkins and I just wanted to say “Thanks!” for taking some time to let me share this with you.
+			What games have had some of the biggest impact in your lives?
+			What are some of your favorite memories about Tetris and the Nintendo Game Boy?
+			Let me know and I will do my best to provide updates on my future projects.
+			If you have any suggestions or feedback, I would love to continue creating cool content like this and taking a look into some more obscure games that I missed out on growing up and the media surrounding them.
+			Until next time, Game On!
+		</p>
+		<figure class="tetris__figure jeff">
+			<img class="tetris__image jeff"
+					src="images/Jeff.jpg"
+					alt="A profile caricature of Jeff Jenkins" />
+		</figure>
+		<p>Jeff Jenkins<br/>@webdevkit</p>
+	</section>
+	<section class="tetris__section reference">
+		<h3 class="tetris__sectionTitle">Additional Resources</h3>
+		<ul class="tetris__resources">
+			<li class="tetris__resource">
+				<a href="https://www.tetris.com">
+					<span class="tetris__citeTitle">The Addictive Puzzle Game that Started It All!,</span></a>
+				<span class="tetris__citePerson">Alexey Pajitnov and Henk Rogers,</span>
+				<cite class="tetris__citePublication">Tetris.com,</cite> 
+				<time class="tetris__citeDate" datetime="2020-02-13">Accessed February 13 2020.</time>
+			</li>
+			<li class="tetris__resource">
+				<a href="https://www.mobygames.com/game/gameboy/tetris_gb">
+					<span class="tetris__citeTitle">Tetris for Game Boy,</span></a>
+				<cite class="tetris__citePublication">Nintendo,</cite>
+				<time class="tetris__citeDate" datetime="1989-07-31">July 31 1989.</time>
+				<span class="tetris__citeExtra">Archived by</span>
+				<span class="tetris__citePerson">雷堂嬢太朗</span>
+				<span class="tetris__citePerson">(Jotaro Raido),</span>
+				<span class="tetris__citeExtra">Moby Games.</span>
+			</li>
+			<li class="tetris__resource">
+				<a href="https://www.youtube.com/watch?v=2xS5nhogZVA">
+					<span class="tetris__citeTitle">Tetris Instruction Booklet,</span></a>
+				<cite class="tetris__citePublication">Nintendo,</cite>
+				<time class="tetris__citeDate" datetime="1989-07-31">July 31 1989.</time>
+				<span class="tetris__citeExtra">Archived by</span>
+				<span class="tetris__citeExtra">Raccoon’s Cave,</span>
+				<span class="tetris__citeExtra">YouTube.</span>
+			</li>
+			<li class="tetris__resource">
+				<a href="https://www.youtube.com/watch?v=E-ej_8XBwmI">
+					<span class="tetris__citeTitle">Nintendo Game Boy Commercial,</span></a>
+				<cite class="tetris__citePublication">Nintendo,</cite>
+				<time class="tetris__citeDate" datetime="1989">1989.</TIME>
+				<span class="tetris__citeExtra">Archived by</span>
+				<span class="tetris__citeExtra">Betamax King,</span>
+				<span class="tetris__citeExtra">YouTube.</span>
+			</li>
+			<li class="tetris__resource">
+				<a href="https://www.retromags.com/magazines/usa/nintendo-power/nintendo-power-issue-7">
+					<span class="tetris__citeTitle">Pak Watch: A Look into the Future of <abbr title="Nintendo Entertainment System">NES</abbr> Game Paks,</span></a>
+				<cite class="tetris__citePublication">Nintendo Power,</cite>
+				<span class="tetris__citeExtra">Issue #7,</span>
+				<span class="tetris__citeExtra">Page 84,</span>
+				<time class="tetris__citeDate" datetime="1989-07">July/August 1989.</time>
+				<span class="tetris__citeExtra">Archived by</span>
+				<span class="tetris__citeExtra">Phillyman,</span>
+				<span class="tetris__citeExtra">RetroMags.</span>
+			</li>
+			<li class="tetris__resource">
+				<a href="https://www.retromags.com/magazines/usa/nintendo-power/nintendo-power-issue-8">
+					<span class="tetris__citeTitle">Game Boy. What Is It?,</span></a>
+				<cite class="tetris__citePublication">Nintendo Power,</cite>
+				<span class="tetris__citeExtra">Issue #8,</span>
+				<span class="tetris__citeExtra">Pages 51–58,</span>
+				<time class="tetris__citeDate" datetime="1989-09">September/October 1989.</time>
+				<span class="tetris__citeExtra">Archived by</span>
+				<span class="tetris__citeExtra">Phillyman,</span>
+				<span class="tetris__citeExtra">RetroMags.</span>
+			</li>
+			<li class="tetris__resource">
+				<a href="https://www.retromags.com/magazines/usa/nintendo-power/nintendo-power-issue-44">
+					<span class="tetris__citeTitle">Behind the Scenes at Nintendo,</span></a>
+				<cite class="tetris__citePublication">Nintendo Power,</cite>
+				<span class="tetris__citeExtra">Issue #44,</span>
+				<span class="tetris__citeExtra">Super Power Club Special Edition,</span>
+				<span class="tetris__citeExtra">Pages 18–21,</span>
+				<time class="tetris__citeDate" datetime="1993-01">January 1993.</time>
+				<span class="tetris__citeExtra">Archived by</span>
+				<span class="tetris__citeExtra">Phillyman,</span>
+				<span class="tetris__citeExtra">RetroMags.</span>
+			</li>
+			<li class="tetris__resource">
+				<a href="https://www.retromags.com/strategy-guides/nintendo-of-america/game-boy-player39s-guide-r48">
+					<span class="tetris__citeTitle">Tetris: The Lines Form Here,</span></a>
+				<cite class="tetris__citePublication">Nintendo Game Boy Player’s Guide,</cite>
+				<span class="tetris__citeExtra">Pages 68–71,</span>
+				<time class="tetris__citeDate" datetime="1991">1991.</time>
+				<span class="tetris__citeExtra">Archived by</span>
+				<span class="tetris__citeExtra">Phillyman,</span>
+				<span class="tetris__citeExtra">RetroMags.</span>
+			</li>
+			<li class="tetris__resource">
+				<a href="https://www.ign.com/videos/2009/06/12/alexey-pajitnov-stars-video-interview-alexey-pajitnov-pt-1?objectid=919431">
+					<span class="tetris__citeTitle">Video Feature with The Tetris Company,</span></a>
+				<span class="tetris__citeExtra">Part 1,</span>
+				<span class="tetris__citeExtra">Timecodes 6:58–7:47,</span>
+				<cite class="tetris__citePublication">IGN,</cite>
+				<time class="tetris__citeDate" datetime="2009-06-12">June 12 2009.</time>
+			</li>
+			<li class="tetris__resource">
+				<a href="https://www.neogaf.com/threads/nintendo-historical-shipment-data-1983-present.701305">
+					<span class="tetris__citeTitle">Nintendo Historical Shipment Data,</span></a>
+				<cite class="tetris__citePublication">任天堂 (Nintendo),</cite>
+				<span class="tetris__citeLocation">Kyoto Japan,</span>
+				<time class="tetris__citeDate" datetime="1983">1983–2013.</time>
+				Information provided by
+				<span class="tetris__citePerson">Aquamarine,</span>
+				<span class="tetris__citeExtra">NeoGAF Forums,</span>
+				<time class="tetris__citeDate" datetime="2013">2013.</time>
+			</li>
+			<li class="tetris__resource">
+				<a href="https://www.github.com/webdevkit/retroarch">
+					<span class="tetris__citeTitle">RetroArch,</span></a>
+				<span class="tetris__citeExtra">Classic gray Game Boy Overlay + Shader,</span>
+				<span class="tetris__citePerson">Jeff Jenkins,</span>
+				<cite class="tetris__citePublication">Web Developer’s Toolkit,</cite>
+				<span class="tetris__citeExtra">GitHub (webdevkit),</span>
+				<time class="tetris__citeDate" datetime="2020-02-13">February 13 2020.</time>
+			</li>
+			<li class="tetris__resource">
+				<a href="https://www.youtube.com/watch?v=_fQtxKmgJC8">
+					<span class="tetris__citeTitle">The Story of Tetris,</span></a>
+				<span class="tetris__citePerson">Norman Caruso,</span>
+				<cite class="tetris__citePublication">The Gaming Historian,</cite>
+				<span class="tetris__citeExtra">YouTube,</span>
+				<time class="tetris__citeDate" datetime="2018-02-02">February 2 2018.</time>
+				Quoted in
+				<span class="tetris__citeExtra">Telephone interview with The Tetris Company founder Henk Rogers,</span>
+				<time class="tetris__citeDate" datetime="2017-11-19">November 19 2017.</time>
+			</li>
+			<li class="tetris__resource">
+				<a href="https://www.romhacking.net/hacks/4545">
+					<span class="tetris__citeTitle">Tetris High Score Save Patch,</span></a>
+				<span class="tetris__citePerson">Ben Grimmett,</span>
+				<cite class="tetris__citePublication">ROM Hacking .net,</cite>
+				<time class="tetris__citeDate" datetime="2019-06-06">June 6 2019.</time>
+			</li>
+			<li class="tetris__resource">
+				<a href="https://www.youtube.com/watch?v=8OK8_tHeCIA">
+					<span class="tetris__citeTitle">Code-It-Yourself! Tetris Programming from Scratch,</span></a>
+				<span class="tetris__citePerson">David Barr,</span>
+				<cite class="tetris__citePublication">One Lone Coder,</cite>
+				<span class="tetris__citeExtra">YouTube (javidx9),</span>
+				<time class="tetris__citeDate" datetime="2017-04-23">April 23 2017.</time>
+			</li>
+			<li class="tetris__resource">
+				<a href="https://www.youtube.com/watch?v=7TJ7IUNWGl4">
+					<span class="tetris__citeTitle">Jimmy Fallon Debuts the Nintendo Switch,</span></a>
+				<span class="tetris__citePerson">Shigeru Miyamoto,</span>
+				<span class="tetris__citeExtra">Timecodes 04:00–04:10</span>
+				<cite class="tetris__citePublication">The Tonight Show Starring Jimmy Fallon,</cite>
+				<span class="tetris__citeExtra">YouTube.</span>
+				<time class="tetris__citeDate" datetime="2016-12-07">December 7 2016.</time>
+			</li>
+			<li class="tetris__resource">
+				<a href="https://www.youtube.com/watch?v=n6gzcjyNkHs">
+					<span class="tetris__citeTitle">Full Interview: Steve Wozniak Talks Video Games,</span></a>
+				<span class="tetris__citeExtra">Timecomes 41:45–42:00,</span>
+				<cite class="tetris__citePublication">Game Informer,</cite>
+				<span class="tetris__citeExtra">YouTube,</span>
+				<time class="tetris__citeDate" datetime="2013-06-27">June 27 2013.</time>
+			</li>
+			<li class="tetris__resource">
+				<a href="http://www.woz.org/letters/evets-kainzow">
+					<span class="tetris__citeTitle">Evets Kainzow,</span></a>
+				<span class="tetris__citePerson">Steve Wozniak,</span>
+				<cite class="tetris__citePublication">Woz.org,</cite>
+				<time class="tetris__citeDate" datetime="2018-01-03">January 3 2018.</time>
+			</li>
+			<li class="tetris__resource">
+				<a href="https://www.twingalaxies.com/game/tetris/game-boy-game-boy-color/points/page/1">
+					<span class="tetris__citeTitle">Tetris Performances: Points,</span></a>
+				<span class="tetris__citeExtra">Game Boy/Game Boy Color,</span>
+				<cite class="tetris__citePublication">Twin Galaxies,</cite>
+				<time class="tetris__citeDate" datetime="2020-02-13">Accessed February 13 2020.</time>
+			</li>
+			<li class="tetris__resource">
+				<a href="https://flickr.com/photos/wwarby/3295094685/in/photostream">
+					<span class="tetris__citeTitle">Nintendo Gameboy,</span></a>
+				<span class="tetris__citePerson">William Warby,</span>
+				<cite class="tetris__citePublication">Flickr,</cite>
+				<span class="tetris__citeLocation">London England,</span>
+				<time class="tetris__citeDate" datetime="2009-02-20">February 20 2009.</time>
+				<span class="tetris__citeExtra">Used to make RetroArch overlay.</span>
+			</li>
+			<li class="tetris__resource">
+				<a href="https://deviantart.com/robinle/art/Tetris-NES-Box-Artwork-without-text-801954931">
+					<span class="tetris__citeTitle">Tetris <abbr title="Nintendo Entertainment System">NES:</abbr> Box Artwork without Text,</span></a>
+				<span class="tetris__citePerson">Robin Le,</span>
+				<cite class="tetris__citePublication">Deviant Art,</cite>
+				<time class="tetris__citeDate" datetime="2019-06-16">June 16 2019.</time>
+				<span class="tetris__citeExtra">Used to make 3-D cover art.</span>
+			</li>
+			<li class="tetris__resource">
+				<a href="https://deke.com/content/drawing-hal-9000-from-2001-a-space-odyssey-in-illustrator-in-2017">
+					<span class="tetris__citeTitle">Drawing HAL 9000 from 2001: A Space Odyssey in Illustrator (in 2017),</span></a>
+				<span class="tetris__citePerson">Colleen Wheeler,</span>
+				<cite class="tetris__citePublication">Deke’s Techniques,</cite>
+				<time class="tetris__citeDate" datetime="2017-11-07">November 7 2017.</time>
+				<span class="tetris__citeExtra">Used to make battery light indicator on RetroArch overlay.</span>
+			</li>
+		</ul>
+	</section>
+	<aside>
+		<label class="tetris__toggle colorScheme">
+			<input class="tetris__toggleInput" type="checkbox"/>
+			<span class="tetris__toggleIcon" title="Toggle Dark Color Scheme">◓</span>
+			<span class="tetris__toggleText">Toggle Dark Color Scheme</span>
+		</label>
+	</aside>
+	<footer>
+		<p>
+			Created <time datetime="2020-02-13">February 13 2020.</time>
+			Last modified <time datetime="2020-02-25">February 25 2020.</time>
+		</p>
+	</footer>
+</article>
+
