@@ -1,14 +1,5 @@
 width = 12
 height = 18
-field = Array(width * height).fill(0)
-for (y=0; y<height; y++)
-	for (x=0; x<width; x++) {
-		field[y * width + x] = 0
-		if (x === 0 || x === width - 1) field[y * width + x] = 13
-		if (y === height - 1) field[y * width + x] = 15
-		if (x === 0 && y == height - 1) field[y * width + x] = 14
-		if (x === width - 1 && y == height - 1) field[y * width + x] = 16
-	}
 
 tetrads = []
 tetrads[0] =
@@ -83,28 +74,44 @@ function nextPiece() {
 	return Math.floor(Math.random() * 7) % 7
 }
 
-started = false
-gameOver = false
-screen = Array(width * height).fill(' ')
-currentPiece = nextPiece()
-currentRotation = 0
-currentX = width / 2 - 2
-currentY = 0
-rotateHold = false
-forceDown = false
-clearLines = false
-piecesPlaced = 0
-counter = 0
-speed = 1
-score = 0
-lines = []
+let field, started, gameOver, screen, currentPiece, currentRotation, currentX, currentY, rotateHold, forceDown, clearLines, piecesPlaced, counter, speed, score, lines, input, loopTimer
 
-input = []
-input[0] = 0
-input[1] = 0
-input[2] = 0
-input[3] = 0
-input[4] = 0
+function start() {
+	started = false
+	gameOver = false
+	screen = Array(width * height).fill(' ')
+	currentPiece = nextPiece()
+	currentRotation = 0
+	currentX = width / 2 - 2
+	currentY = 0
+	rotateHold = false
+	forceDown = false
+	clearLines = false
+	piecesPlaced = 0
+	counter = 0
+	speed = 1
+	score = 0
+	lines = []
+
+	input = []
+	input[0] = 0
+	input[1] = 0
+	input[2] = 0
+	input[3] = 0
+	input[4] = 0
+
+	field = Array(width * height).fill(0)
+	for (y=0; y<height; y++)
+		for (x=0; x<width; x++) {
+			field[y * width + x] = 0
+			if (x === 0 || x === width - 1) field[y * width + x] = 13
+			if (y === height - 1) field[y * width + x] = 15
+			if (x === 0 && y == height - 1) field[y * width + x] = 14
+			if (x === width - 1 && y == height - 1) field[y * width + x] = 16
+		}
+
+	loop()
+}
 
 keys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "KeyD", "KeyF", "KeyZ", "KeyX", "Space"]
 function handleInput(event) {
@@ -243,7 +250,8 @@ function loop() {
 		}))
 		.match(new RegExp(`.{1,${width*2}}`, 'g')).join("\n") + renderScore())
 
-	setTimeout(loop, 125)
+	if (loopTimer) clearTimeout(loopTimer)
+	loopTimer = setTimeout(loop, 125)
 }
-function start() { started = true; loop() }
 document.addEventListener("keyup", event => { if (!started && event.ctrlKey && event.code === "KeyT") start() })
+console.info("%c/* Gain focus on the `window` and press CTRL + T for a fun surprise. */", "color: green")
