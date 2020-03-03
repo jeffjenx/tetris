@@ -101,7 +101,6 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 .tetris__sectionTitle {
 	text-align: center;
 	text-transform: uppercase }
-
 .tetris__citeTitle::before,
 .tetris__citeTitle::after,
 .tetris__quote::before,
@@ -168,17 +167,14 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 	min-height: 100vh;
 	display: grid; grid-template: min-content min-content; 
 	justify-content: center; align-content: center;
-	transform: translateY(-5vh) }
-.tetris__articleHeader.focused { 
-	transition: transform 0.25s ease-in-out;
-	transform: translateY(-5vh) scale(1.1) }
+	transform: translateY(-2vmin) }
 .tetris__articleTitle,
 .tetris__articleSubtitle {
 	margin: 0; display: inline-flex }
 .tetris__articleSubtitle {
 	margin-block-start: -100% }
 .boxArt.tetris__image {
-	width: 75vw; height: 75vw;
+	width: 75vmin; height: 75vmin;
 	max-width: 20em; max-height: 20em }
 .boxArt.tetris__image.front { opacity: 0 } /* hide flat image to replace with layered effect */
 .boxArt.tetris__imageLink {
@@ -214,8 +210,8 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 	left: 0; top: 0;
 	width: 100%; height: 100%;
 	filter: drop-shadow(calc(var(--offsetX) * -3px) calc(var(--offsetY) * -3px) 1px rgba(0,0,0,0.2));
-	transform: perspective(100vmin)
-	           translateX(calc(var(--stack) * var(--offsetX) * var(--maxX) * 0.1vmin))
+	perspective: 100vmin;
+	transform: translateX(calc(var(--stack) * var(--offsetX) * var(--maxX) * 0.1vmin))
 	           translateY(calc(var(--stack) * var(--offsetY) * var(--maxY) * 0.1vmin)) }
 .boxArt.tetris__imageLink.front::before {
 	--stack: 1;
@@ -273,6 +269,7 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 	position: absolute;
 	left: 0; top: 0;
 	width: 100%; height: 100%;
+	background-color: transparent;
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center }
@@ -281,18 +278,18 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 	transition: filter 0.5s ease-in-out, opacity 0.5s ease-in-out;
 	content: "";
 	position: absolute;
-	left: 36%; top: 35%;
-	width: 44px; height: 44px;
+	left: 38%; top: 36%;
+	width: 8.75%; height: 11.75%;
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;
 	opacity: 0;
 	filter: grayscale(1) }
 .commercial.tetris__imageLink.paused:not(.off)::after {
-	opacity: 0.5 }
+	opacity: 0.75 }
 .commercial.tetris__imageLink.paused:not(.off):hover::after {
 	transition-duration: 0.25s;
-	opacity: 0.75;
+	opacity: 0.95;
 	filter: grayscale(0) }
 .commercial.tetris__imageLink.start::after,
 .commercial.tetris__imageLink.loading::after,
@@ -315,14 +312,15 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 .commercial.tetris__video > * {
 	width: 100%; height: 100% }
 .commercial.tetris__spinner {
-	width: 17%; height: 17%;
-	left: 35%; top: 35% }
+	width: 14%; height: 14%;
+	left: 36%; top: 36% }
 .commercial.loading .tetris__spinner {
 	opacity: 1 }
 .commercial .tetris__videoDisplay[data-channel]::before {
 	z-index: 5; opacity: 0.75;
 	position: absolute; top: 15%; left: 15%; font-size: 200%;
 	width: auto; height: auto;
+	font-family: "IBM Plex Sans", sans-serif;
 	color: var(--colorChannel, lime);
 	content: attr(data-channel) }
 .commercial .tetris__videoDisplay[data-volume]::after {
@@ -333,7 +331,7 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 	transform: translateX(-50%);
 	content: attr(data-volume);
 	text-align: left;
-	font-size: 100%; letter-spacing: 0.25em;
+	font-size: 0.5em; letter-spacing: 0.25em;
 	color: rgba(255,255,255,0.85);
 	text-shadow: 0 0 1px #000, 0 0 2px #000,
 	             -1px 0 1px #FFF, 0 1px 1px #FFF }
@@ -742,9 +740,12 @@ body {
 
 /* Extra Small (Small Phone) */
 @media screen and (max-width: 600px) {
+	.tetris__article {
+		font-size: 10pt }
 	.tetris__figure.nester {
 		float: right;
-    	margin-inline-start: 3em }
+		margin-inline-end: -2em; margin-inline-start: 2em;
+		margin-block-start: 1em; margin-block-end: 1em }
 	.tetris__image.nester {
 		max-width: 15em }
 	.tetris__image.gameboy {
@@ -757,6 +758,12 @@ body {
 		margin-inline-start: auto; margin-inline-end: auto }
 	.strategy .tetris__image {
 		height: 160px }
+	.scoring .tetris__form {
+		font-size: 8pt }
+	.scoring .tetris__toggle {
+   	margin-inline-end: 1.75em }
+	.tetris__figure.evaluation,
+	.miyamoto { font-size: 2.5vmin }
 	.tetris__blockquote.miyamoto {
 		float: left; width: 50% }
 	.tetris__figure.miyamoto {
@@ -808,7 +815,7 @@ body {
 		grid-area: 3 / 1 / auto / span 7;
 		margin-inline-start: 1.5em; margin-inline-end: 1.5em }
 	.tetris__figure.nester { grid-area: 3 / 8 / auto / span 5; margin-block-start: 0 }
-	.tetris__figure.commercial { grid-area: 7 / 1 / auto / span 13; margin-inline-end: 3em }
+	.tetris__figure.commercial { grid-area: 7 / 1 / auto / span 13 }
 	.tetris__figure.tetrads { grid-area: 2 / 8 / auto / 13; grid-template-columns: auto }
 	.tetris__figure.tetrads .tetris__image { width: 100% }
 	.tetris__section.review > h3 + p { grid-area: 2 / 1 / auto / 7 }
@@ -835,7 +842,9 @@ body {
 	.tetris__figure.gameboy + p + p { grid-area: 4 / 7 / auto / 13 }
 	.tetris__figure.gameboy + p + p + p { grid-area: 5 / 7 / auto / 13 }
 	.tetris__imageLink.gameboy { width: 15em }
-	.tetris__image.nester { max-width: 11em }
+	.tetris__image.nester {
+		max-width: 11em;
+		margin-inline-start: 1em; margin-inline-end: 1em }
 	.tetris__image.gameboy { width: 100%; height: 100% }
 	.tetris__blockquote.wozniak { grid-area: 8 / 7 / auto / 13 }
 	.tetris__blockquote.wozniak + p { grid-area: 8 / 1 / auto / 7 }
@@ -853,7 +862,9 @@ body {
 	.tetris__figure.evaluation {
 		transform: scale(0.75);
 		margin-block-start: -12.5%; margin-block-end: -12.5% } }
-
+@media screen and (min-width: 755px) {
+	.tetris__blockquote.miyamoto {
+		margin-block-start: 3em } }
 @media screen and (max-width: 1000px),
        print {
 	.tetris__table.scoring,
@@ -894,7 +905,9 @@ body {
 		max-width: 25em;
 		margin-inline-start: auto;
 		margin-inline-end: auto }
-	.tetris__figure.commercial { grid-area: 7 / 1 / auto / span 7 }
+	.tetris__figure.commercial {
+		grid-area: 7 / 1 / auto / span 7;
+		margin-inline-end: 3em }
 	.tetris__figure.commercial + p { grid-area: 7 / 8 / auto / span 13 }
 	.tetris__figure.versus + p + p { grid-area: 8 / 1 / auto / span 6 }
 	.tetris__blockquote.instructions { grid-area: 8 / 7 / 10 / span 13 }

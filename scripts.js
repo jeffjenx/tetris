@@ -63,18 +63,10 @@ on($header, "mousemove", () => {
 	$tetris.style.setProperty("--y", Mouse.y)
 })
 
-setTimeout(() => { localStorage.setItem("tetris", true) }, 4500)
-if (localStorage.getItem("tetris")) $tetris.classList.add("visited")
-
-// Delay the mouse events for box art
-let headerMouseTimeout
-for (const $boxArt of $boxArts)
-	on($boxArt, "mouseenter mouseleave", event => {
-		if (headerMouseTimeout) clearTimeout(headerMouseTimeout)
-		headerMouseTimeout = setTimeout(
-			() => $header.classList.toggle("focused", event.type === "mouseenter"),
-			event.type === "mouseenter" ? 0 : 1000)
-	})
+try {
+	setTimeout(() => { localStorage.setItem("tetris", true) }, 4500)
+	if (localStorage.getItem("tetris")) $tetris.classList.add("visited")
+} catch (e) { console.warn("Unable to use localStorage.") }
 
 on($boxArtLinks, "click", (event) => {
 	let normalize = (value, range) => (value * 2 - range) / range
@@ -305,8 +297,41 @@ on(document, "DOMContentLoaded", event => {
 	if (window.matchMedia("(prefers-color-scheme: dark)"))
 		document.body.classList.toggle("color-scheme-inverted", true) })
 
+// Metadata
+let data = {
+	site: "Web Developer's Toolkit",
+	author: "Jeff Jenkins",
+	username: "@webdevkit",
+	url: "https://webdevkit.net/tetris",
+	image: "https://webdevkit.net/tetris/images/Artwork.jpg",
+	imageAlt: "Tetris box artwork showing colored Tetrads falling from above.",
+	title: "Tetris",
+	description: "Ahhh… Tetris. The relentless building block video puzzle game that launched with Nintendo’s Game Boy in 1989." }
+let metas = {
+	"og:title": data.title,
+	"og:description": data.description,
+	"og:image": data.image,
+	"og:url": data.url,
+	"og:site_name": data.site,
+	"og:app_id": "665326600903127",
+	"twitter.card": "summary_large_image",
+	"twitter:site": data.username,
+	"twitter:image:alt": data.imageAlt
+}
+for (let property of Object.keys(metas)) {
+	let $meta = document.createElement("meta")
+	$meta.setAttribute("property", property)
+	$meta.setAttribute("content", metas[property])
+	document.head.appendChild($meta)
+}
+
 // Global site tag (gtag.js) - Google Analytics
 window.dataLayer = window.dataLayer || []
 function gtag(){ dataLayer.push(arguments) }
 gtag('js', new Date())
 gtag('config', 'UA-155363758-1')
+
+
+window.addEventListener("deviceorientation", function (event) {
+	console.log(event)
+}, true);
