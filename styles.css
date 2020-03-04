@@ -766,11 +766,11 @@ body {
 }
 
 /* Feature Detection */
-:not(.media-webp-false) .boxArt.tetris__imageLink.front { background-image: url("images/Artwork/Background.webp") }
-:not(.media-webp-false) .boxArt.tetris__imageLink.front::before { background-image: url("images/Artwork/Logo Shadow.webp") }
-:not(.media-webp-false) .boxArt.tetris__imageLink.front::after { background-image: url("images/Artwork/Logo Fill.webp") }
-:not(.media-webp-false) .commercial .tetris__imageMap::before { background-image: url("images/Commercial/Keyframe.webp") }
-:not(.media-webp-false) .commercial .tetris__imageMap::after { background-image: url("images/Commercial/Overlay.webp") }
+:root:not(.media-webp-false) .boxArt.tetris__imageLink.front { background-image: url("images/Artwork/Background.webp") }
+:root:not(.media-webp-false) .boxArt.tetris__imageLink.front::before { background-image: url("images/Artwork/Logo Shadow.webp") }
+:root:not(.media-webp-false) .boxArt.tetris__imageLink.front::after { background-image: url("images/Artwork/Logo Fill.webp") }
+:root:not(.media-webp-false) .commercial .tetris__imageMap::before { background-image: url("images/Commercial/Keyframe.webp") }
+:root:not(.media-webp-false) .commercial .tetris__imageMap::after { background-image: url("images/Commercial/Overlay.webp") }
 
 /* Responsive Screen */
 @media screen { }
