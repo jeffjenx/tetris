@@ -697,7 +697,7 @@ body {
 
 @media not print and (prefers-color-scheme: dark) {
 	@media screen and (prefers-color-scheme: dark) {
-		body.color-scheme-inverted { background-color: var(--gray100) } }
+		body.color-scheme-inverted { background-color: var(--gray100) }
 		.color-scheme-inverted .tetris__article {
 			--colorBackground: var(--gray100); --colorText: var(--gray10);
 			--colorHighlight: var(--magenta90); --colorShading: var(--gray90);
@@ -759,7 +759,7 @@ body {
 			.evaluation .tetris__formInput {
 				color: var(--cyan90, dodgerblue) }
 	}
-} /* IDK why VSCode doesn't like nested @media */
+}
 
 /* Feature Detection */
 .media-webp-true .boxArt.tetris__imageLink.front { background-image: url("images/Artwork/Background.webp") }
