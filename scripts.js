@@ -312,6 +312,44 @@ on(document, "DOMContentLoaded", event => {
 	if (window.matchMedia("(prefers-color-scheme: dark)"))
 		document.body.classList.toggle("color-scheme-inverted", true) })
 
+// Optimization Support
+// Webp images
+new Promise(res => {
+	const webp = new Image()
+	webp.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA'
+	webp.onload = webp.onerror = function () {
+		res(webp.height === 2)
+	}
+}).then(supportsWebp => document.documentElement.classList.add(supportsWebp ? "media-webp-true" : "media-webp-false"))
+// Lazy-loaded images
+on(document, "DOMContentLoaded", event => {
+	let imageObserver
+	let $images = $("[data-src], [data-srcset]")
+	let loadImage = function ($image) {
+		if ($image.dataset.srcset) $image.srcset = $image.dataset.srcset
+		if ($image.dataset.src) $image.src = $image.dataset.src
+		$image.removeAttribute("data-src")
+		$image.removeAttribute("data-srcset")
+	}
+	if ("IntersectionObserver" in window) {
+		imageObserver = new IntersectionObserver((entries, observer) => {
+			for (let entry of entries) {
+				if (entry.isIntersecting) {
+					loadImage(entry.target)
+					imageObserver.unobserve(entry.target)
+				}
+			}
+		}, { rootMargin: '50%'})
+	}
+
+	for (let $image of $images) {
+		if (imageObserver)
+			imageObserver.observe($image)
+		else
+			loadImage($image)
+	}
+})
+
 // Global site tag (gtag.js) - Google Analytics
 window.dataLayer = window.dataLayer || []
 function gtag(){ dataLayer.push(arguments) }

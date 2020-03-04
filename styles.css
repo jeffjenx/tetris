@@ -202,7 +202,11 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 .boxArt.tetris__imageLink.flipped { --flipped: 1 }
 .boxArt.tetris__imageLink.back { --flipped: -1 }
 .boxArt.tetris__imageLink.back.flipped { --flipped: 0 }
-.boxArt.tetris__imageLink.front { background: url("images/Artwork/Background.jpg") no-repeat; background-size: contain; z-index: 1 }
+.boxArt.tetris__imageLink.front {
+	z-index: 1;
+	background-image: url("images/Artwork/Background.jpg");
+	background-repeat: no-repeat;
+	background-size: contain }
 .boxArt.tetris__imageLink.front::before,
 .boxArt.tetris__imageLink.front::after {
 	--stack: 0;
@@ -217,11 +221,13 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 	           translateY(calc(var(--stack) * var(--offsetY) * var(--maxY) * 0.1vmin)) }
 .boxArt.tetris__imageLink.front::before {
 	--stack: 1;
-	background: url("images/Artwork/Logo Shadow.png") center no-repeat;
+	background-image: url("images/Artwork/Logo Shadow.png");
+	background-position: center; background-repeat: no-repeat;
 	background-size: 100% 100% }
 .boxArt.tetris__imageLink.front::after {
 	--stack: 2;
-	background: url("images/Artwork/Logo Fill.png") center no-repeat;
+	background-image: url("images/Artwork/Logo Fill.png");
+	background-position: center; background-repeat: no-repeat;
 	background-size: 100% 100% }
 
 /* Video Player */
@@ -451,7 +457,7 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 	display: grid;
 	grid-template-columns: min-content auto; grid-template-rows: 27% 27% 46%;
 	box-shadow: 0 0 0 2px var(--black, black) }
-.strategy .tetris__image { grid-row: 1 / 4 }
+.strategy .tetris__picture { display: grid; grid-row: 1 / 4 }
 .strategy .tetris__region {
 	display: grid; box-sizing: border-box;
 	align-content: center;
@@ -754,6 +760,13 @@ body {
 				color: var(--cyan90, dodgerblue) }
 	}
 } /* IDK why VSCode doesn't like nested @media */
+
+/* Feature Detection */
+.media-webp-true .boxArt.tetris__imageLink.front { background-image: url("images/Artwork/Background.webp") }
+.media-webp-true .boxArt.tetris__imageLink.front::before { background-image: url("images/Artwork/Logo Shadow.webp") }
+.media-webp-true .boxArt.tetris__imageLink.front::after { background-image: url("images/Artwork/Logo Fill.webp") }
+.media-webp-true .commercial .tetris__imageMap::before { background-image: url("images/Commercial/Keyframe.webp") }
+.media-webp-true .commercial .tetris__imageMap::after { background-image: url("images/Commercial/Overlay.webp") }
 
 /* Responsive Screen */
 @media screen { }
