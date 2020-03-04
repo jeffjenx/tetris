@@ -418,6 +418,7 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 	text-align: center }
 
 /* Game Boy */
+.tetris__figure.gameboy { position: relative }
 .tetris__imageLink.gameboy {
 	overflow: hidden;
 	padding-top: 33%; padding-bottom: 31%;
@@ -426,6 +427,23 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 	transform: scale(2) translateX(-0.6%) }
 .tetris__caption.gameboy {
 	transform: scale(1) } /* for filter: drop-shadow stacking */
+.tetris__gameboyMusic { display: none }
+.tetris__imageLink.gameboy::after {
+	will-change: opacity, filter;
+	transition: opacity 0.25s, filter 0.25s;
+	content: ""; display: grid; position: absolute;
+	align-content: center; justify-content: center;
+	left: 24%; top: 13%;
+	height: 29%; width: 53%;
+	background-image: url("images/Commercial/Play.svg");	
+   background-repeat: no-repeat;
+	background-position: center;
+	background-size: 25%;
+	opacity: 0.25; filter: grayscale(1); }
+.tetris__imageLink.gameboy:hover::after {
+	opacity: 0.75; filter: grayscale(0) }
+.tetris__imageLink.gameboy.playing::after {
+	opacity: 0 }
 
 /* Strategy Chart */
 .strategy .tetris__container {

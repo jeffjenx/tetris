@@ -288,6 +288,19 @@ on($toggleScoring, "change", event => {
 	updateScoringTable($toggleScoring.checked)
 })
 
+// Game Boy Music
+let $gameboy = $(".tetris__imageLink.gameboy")
+on($gameboy, "click touchend", event => {
+	event.preventDefault()
+	if (event.type === "touchend")
+		return window.location = "https://youtu.be/9g_xeqB7ofQ?start=12&autoplay=1"
+	$gameboy.classList.toggle("playing")
+	if ($gameboy.classList.contains("playing"))
+		$gameboy.innerHTML = $gameboy.innerHTML
+		+ `<iframe class="tetris__gameboyMusic" width="560" height="315" src="https://www.youtube.com/embed/qYT9fl5cbao?start=10&end=49&autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+	else
+		$(".tetris__gameboyMusic").remove() })
+
 // Color Scheme Toggle
 let $toggleColorScheme = $(".tetris__toggle.colorScheme input")
 on($toggleColorScheme, "change", event => {
@@ -302,8 +315,3 @@ window.dataLayer = window.dataLayer || []
 function gtag(){ dataLayer.push(arguments) }
 gtag('js', new Date())
 gtag('config', 'UA-155363758-1')
-
-
-window.addEventListener("deviceorientation", function (event) {
-	console.log(event)
-}, true);
