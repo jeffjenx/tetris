@@ -1,6 +1,9 @@
 body { margin: 0; background-color: var(--backgroundColor, black) }
 
-@font-face { font-family: "Handwriting"; src: url("fonts/Handwriting.woff2") }
+@font-face { font-family: "Handwriting";
+	font-style: normal; font-weight: 400;
+	src: local('Pacifico Regular'), local('Pacifico-Regular'), url("fonts/Handwriting.woff2") format('woff2');
+	font-display: swap }
 
 @keyframes tetris__spinLinear {
 	to { transform:rotate(360deg) } }
@@ -90,6 +93,7 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 .tetris__image {
 	margin-inline-start: auto; margin-inline-end: auto;
 	height: auto; max-width: 90vmin }
+.tetris__image:not([src]) { opacity: 0 }
 
 /* Typography */
 .tetris__article {
