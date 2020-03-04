@@ -72,6 +72,7 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 .tetris__figure,
 .tetris__blockquote {
 	margin-block-start: 3em; margin-block-end: 3em }
+.tetris__figure picture { display: contents }
 .tetris__blockquote > p:last-of-type:not(:last-child) {
 	margin-block-end: 0 }
 .tetris__caption {
