@@ -93,7 +93,7 @@ body { margin: 0; background-color: var(--backgroundColor, black) }
 .tetris__image {
 	margin-inline-start: auto; margin-inline-end: auto;
 	height: auto; max-width: 90vmin }
-.tetris__image:not([src]) { opacity: 0 }
+.tetris__article img:not([src]) { opacity: 0 }
 
 /* Typography */
 .tetris__article {
