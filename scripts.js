@@ -297,34 +297,6 @@ on(document, "DOMContentLoaded", event => {
 	if (window.matchMedia("(prefers-color-scheme: dark)"))
 		document.body.classList.toggle("color-scheme-inverted", true) })
 
-// Metadata
-let data = {
-	site: "Web Developer's Toolkit",
-	author: "Jeff Jenkins",
-	username: "@webdevkit",
-	url: "https://webdevkit.net/tetris",
-	image: "https://webdevkit.net/tetris/images/Artwork.jpg",
-	imageAlt: "Tetris box artwork showing colored Tetrads falling from above.",
-	title: "Tetris",
-	description: "Ahhh… Tetris. The relentless building block video puzzle game that launched with Nintendo’s Game Boy in 1989." }
-let metas = {
-	"og:title": data.title,
-	"og:description": data.description,
-	"og:image": data.image,
-	"og:url": data.url,
-	"og:site_name": data.site,
-	"og:app_id": "665326600903127",
-	"twitter.card": "summary_large_image",
-	"twitter:site": data.username,
-	"twitter:image:alt": data.imageAlt
-}
-for (let property of Object.keys(metas)) {
-	let $meta = document.createElement("meta")
-	$meta.setAttribute("property", property)
-	$meta.setAttribute("content", metas[property])
-	document.head.appendChild($meta)
-}
-
 // Global site tag (gtag.js) - Google Analytics
 window.dataLayer = window.dataLayer || []
 function gtag(){ dataLayer.push(arguments) }
