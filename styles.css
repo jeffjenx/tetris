@@ -942,10 +942,11 @@ body {
 		max-width: 25em;
 		margin-inline-start: auto;
 		margin-inline-end: auto }
-	.tetris__figure.commercial {
-		grid-area: 7 / 1 / auto / span 7;
-		margin-inline-end: 3em }
-	.tetris__figure.commercial + p { grid-area: 7 / 8 / auto / span 13 }
+	.tetris__figure.commercial { grid-area: 7 / 1 / auto / span 6 }
+	.tetris__figure.commercial + p {
+		grid-area: 7 / 7 / auto / span 13;
+		margin-inline-start: 3em
+	}
 	.tetris__figure.versus + p + p { grid-area: 8 / 1 / auto / span 6 }
 	.tetris__blockquote.instructions { grid-area: 8 / 7 / 10 / span 13 }
 	.tetris__blockquote.instructions + p { grid-area: 9 / 1 / auto / span 6 }
