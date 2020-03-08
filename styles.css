@@ -947,6 +947,7 @@ body {
 		grid-area: 7 / 7 / auto / span 13;
 		margin-inline-start: 3em
 	}
+	.tetris__image.versus { width: 256px }
 	.tetris__figure.versus + p + p { grid-area: 8 / 1 / auto / span 6 }
 	.tetris__blockquote.instructions { grid-area: 8 / 7 / 10 / span 13 }
 	.tetris__blockquote.instructions + p { grid-area: 9 / 1 / auto / span 6 }
